@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('welcome');
-});
+}); */
+Route::get('/', 'arunikaController@index');
 
 Route::get('register', 'registerController@index')->name('register')->middleware('isNotLogin');
 Route::post('validate-input', 'registerController@validateNIP')->name('validate-nip')->middleware('isNotLogin');
