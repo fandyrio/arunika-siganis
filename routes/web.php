@@ -24,6 +24,7 @@ Route::post('validate-input', 'registerController@validateNIP')->name('validate-
 Route::get('login', function(){
     cas()->authenticate();
 });
+Route::get('sso', 'loginController@sso')->name('sso')->middleware('isNotLogin');
 Route::post('login', 'loginController@login')->name('check-login')->middleware('isNotLogin');
 Route::get('logout', 'loginController@logout')->name('logout')->middleware('auth');
 

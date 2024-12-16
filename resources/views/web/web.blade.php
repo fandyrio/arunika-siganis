@@ -137,7 +137,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>

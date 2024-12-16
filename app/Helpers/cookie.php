@@ -24,7 +24,7 @@
                 }   
                 //if user is from the remote address   
                 else{   
-                    $ip_address=$_SERVER['REMOTE_ADDR'];   
+                    $ip_address=request()->ip();   
                 }
 
                 $unique_visitor=new Unique_visitor;

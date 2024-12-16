@@ -66,4 +66,9 @@ class loginController extends Controller
         return redirect('login');
     }
 
+    public function sso() {
+        cas()->authenticate();
+        dd(cas()->getAttributes());
+    }
+
 }
