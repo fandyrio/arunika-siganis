@@ -137,8 +137,10 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
-            {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
+          {{-- <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> --}}
+          <a href="{{ isset(Session::get('cas')['nama']) ? route('logout') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
+            {{-- {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} --}}
+            {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
           </a>
         </li>
       </ul>

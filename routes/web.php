@@ -21,12 +21,13 @@ Route::get('/', 'arunikaController@index');
 Route::get('register', 'registerController@index')->name('register')->middleware('isNotLogin');
 Route::post('validate-input', 'registerController@validateNIP')->name('validate-nip')->middleware('isNotLogin');
 //Route::get('login', 'loginController@index')->name('login')->middleware('isNotLogin');
-Route::get('login', function(){
+/* Route::get('login', function(){
     cas()->authenticate();
-});
+}); */
 Route::get('sso', 'loginController@sso')->name('sso')->middleware('isNotLogin');
-Route::post('login', 'loginController@login')->name('check-login')->middleware('isNotLogin');
-Route::get('logout', 'loginController@logout')->name('logout')->middleware('auth');
+Route::get('login', 'loginController@login')->name('check-login')->middleware('isNotLogin');
+// Route::get('logout', 'loginController@logout')->name('logout')->middleware('auth');
+Route::get('logout', 'loginController@logoutSso')->name('logout');
 
 
 Route::get('dashboard', 'dashboardController@index')->name('dashboard')->middleware('cas.auth');
