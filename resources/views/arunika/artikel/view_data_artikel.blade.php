@@ -30,7 +30,7 @@
         </tr>
         <tr>
             <th>eDoc</th>
-            <td><a href="download/{!! Crypt::encrypt($artikel['edoc_artikel']) !!}/edoc_artikel">Download</a></td>
+            <td><a href="download/{!! Crypt::encrypt($artikel['edoc_artikel']) !!}/edoc_artikel_doc">Download</a></td>
         </tr>
     </table>
     <hr />

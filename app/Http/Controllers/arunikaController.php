@@ -45,7 +45,7 @@ class arunikaController extends Controller
                             $join->on('statistik_baca.id_artikel', '=', 'artikel.id')
                                 ->whereRaw('statistik_baca.jumlah > 0');
                         })
-                        ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori')
+                        ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.code_issue')
                         ->whereRaw('publish_artikel.code_issue is not null')
                         ->orderBy('statistik_baca.jumlah', 'desc')
                         ->get();
@@ -70,6 +70,7 @@ class arunikaController extends Controller
             $data_artikel_populer[$x]['nama']=$list_artikel_populer['nama'];
             $data_artikel_populer[$x]['kategori_artikel']=$list_artikel_populer['kategori'];
             $data_artikel_populer[$x]['token_a']=Crypt::encrypt($list_artikel_populer['id']);
+            $data_artikel_populer[$x]['code_issue']=$list_artikel_populer['code_issue'];
             $x++;
         }
         $jumlah_publish=$get_publish_populer->count();
@@ -79,7 +80,7 @@ class arunikaController extends Controller
                         ->join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
                         ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
                         ->join("statistik_baca", 'statistik_baca.id_artikel', '=', 'artikel.id')
-                        ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori')
+                        ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.code_issue')
                         ->whereRaw('publish_artikel.code_issue is not null')
                         ->orderBy('artikel.id', 'desc')
                         ->skip(0)->take(5)
@@ -102,6 +103,7 @@ class arunikaController extends Controller
             $data_new_artikel[$x]['nama']=$list_new_artikel['nama'];
             $data_new_artikel[$x]['kategori_artikel']=$list_new_artikel['kategori'];
             $data_new_artikel[$x]['token_a']=Crypt::encrypt($list_new_artikel['id']);
+            $data_new_artikel[$x]['code_issue']=$list_new_artikel['code_issue'];
             $x++;
         }
         $jumlah_new_artikel=$get_new_artikel->count();
@@ -183,60 +185,72 @@ class arunikaController extends Controller
         return view('web/web', ['artikel'=>$data_artikel_populer, 'issue'=>$get_issue, 'jumlah_issue'=>$jumlah_issue, 'jumlah_publish'=>$jumlah_publish, 'jumlah_persiapan'=>$jumlah_early_view, 'kategori_artikel'=>$kategori, 'logo'=>$this->data, 'editorial_team'=>$list_team, 'jumlah_editorial'=>$jumlah_editorial, 'early_view'=>$early_view, 'jlh_early_view'=>$jumlah_early_view, 'new_artikel'=>$data_new_artikel, 'data_penulis'=>$get_penulis, 'jumlah_data_penulis'=>$jumlah_data_penulis, 'jumlah_pengumuman'=>$jumlah_pengumuman, 'pengumuman'=>$get_pengumuman]);
     }
     
-    public function bacaArtikel($judul, $id_artikel){
-        try{
-            $artikel_id=Crypt::decrypt($id_artikel);
-            $edoc_pdf="upload/edoc/artikel/pdf/".$judul.".pdf";
-            $get_artikel=Publish_artikel::where('id_artikel', $artikel_id)
-                            ->join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')
-                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                            ->select('artikel.id', 'artikel.judul', 'artikel.tentang_artikel', 'publish_artikel.text_tulisan', 'artikel.foto_penulis', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'publish_artikel.code_issue', 'publish_artikel.edoc_pdf')
-                            ->where('edoc_pdf', $edoc_pdf)
-                            ->whereRaw('publish_at is not null')
-                            ->first();
-            $keyword=[];
-            if(!is_null($get_artikel)){
-                $x=0;
-                $get_keyword=Keyword::where('id_artikel', $artikel_id)->get();
-                foreach($get_keyword as $list_keyword){
-                    $keyword[$x]=$list_keyword['keyword'];
-                    $x++;
-                }
+    public function bacaArtikel($judul, $code_issue){
+        $code_issue_explode=explode("-", $code_issue);
+        if(count($code_issue_explode) === 2){
+            $id_artikel_explode=explode('arn', $code_issue_explode[1]);
+            if(count($id_artikel_explode) === 2){
+                $artikel_id=$id_artikel_explode[0];
+                $code_issue=$id_artikel_explode[1];
 
-                $get_similar=Artikel::join('keyword_artikel', 'keyword_artikel.id_artikel', 'artikel.id')
-                                ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                $edoc_pdf="upload/edoc/artikel/pdf/".$judul.".pdf";
+                $get_artikel=Publish_artikel::join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')
                                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                                ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf')
-                                ->whereIn("keyword_artikel.keyword", $keyword)
-                                ->whereRaw('publish_artikel.publish_at is not null')
-                                ->where('artikel.id', '<>', $artikel_id)
-                                ->take(0)->limit(5)
-                                ->orderBy('artikel.id', 'desc')
-                                ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf')
-                                ->get();
-                $jumlah_similar=$get_similar->count();
+                                ->join('issue_artikel', function($join) use ($code_issue){
+                                            $join->on('issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
+                                            ->where("issue_artikel.code_issue", $code_issue);
+                                        })
+                                ->select('artikel.id', 'artikel.judul', 'artikel.tentang_artikel', 'publish_artikel.text_tulisan', 'artikel.foto_penulis', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'publish_artikel.code_issue', 'publish_artikel.edoc_pdf')
+                                ->where('id_artikel', $artikel_id)
+                                ->where('edoc_pdf', $edoc_pdf)
+                                ->whereRaw('publish_at is not null')
+                                ->first();
+                $keyword=[];
+                if(!is_null($get_artikel)){
+                    $x=0;
+                    $get_keyword=Keyword::where('id_artikel', $artikel_id)->get();
+                    foreach($get_keyword as $list_keyword){
+                        $keyword[$x]=$list_keyword['keyword'];
+                        $x++;
+                    }
 
-                $get_other=Artikel::join('keyword_artikel', 'keyword_artikel.id_artikel', 'artikel.id')
-                                ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                                ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                                ->join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
-                                ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama')
-                                ->whereRaw('publish_artikel.publish_at is not null')
-                                ->where('artikel.id', '<>', $artikel_id)
-                                ->take(0)->limit(5)
-                                ->orderBy('artikel.id', 'desc')
-                                ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama')
-                                ->get();
-                $jlh_other=$get_other->count();
+                    $get_similar=Artikel::join('keyword_artikel', 'keyword_artikel.id_artikel', 'artikel.id')
+                                    ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                                    ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                                    ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
+                                    ->whereIn("keyword_artikel.keyword", $keyword)
+                                    ->whereRaw('publish_artikel.publish_at is not null')
+                                    ->where('artikel.id', '<>', $artikel_id)
+                                    ->take(0)->limit(5)
+                                    ->orderBy('artikel.id', 'desc')
+                                    ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
+                                    ->get();
+                    $jumlah_similar=$get_similar->count();
 
-                $get_keyword=Keyword::where('id_artikel', $artikel_id)->get();
-                return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other]);
+                    $get_other=Artikel::join('keyword_artikel', 'keyword_artikel.id_artikel', 'artikel.id')
+                                    ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                                    ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                                    ->join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
+                                    ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama', 'publish_artikel.code_issue')
+                                    ->whereRaw('publish_artikel.publish_at is not null')
+                                    ->where('artikel.id', '<>', $artikel_id)
+                                    ->take(0)->limit(5)
+                                    ->orderBy('artikel.id', 'desc')
+                                    ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama', 'publish_artikel.code_issue')
+                                    ->get();
+                    $jlh_other=$get_other->count();
+
+                    $get_keyword=Keyword::where('id_artikel', $artikel_id)->get();
+                    return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other]);
+                }else{
+                    return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);    
+                }  
             }else{
-                return view('web/404');    
-            }
-        }catch(DecryptException $e){
-            return view('web/404');
-        }
+                return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);
+            } 
+        }else{
+            return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);
+        }    
     }
     public function downloadFile($file, $type){
         try{
@@ -260,7 +274,7 @@ class arunikaController extends Controller
         $real_tag=str_replace('-', ' ', $tag);
         $get_data=Artikel::join('keyword_artikel', 'keyword_artikel.id_artikel', 'artikel.id')
                         ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                        ->select('artikel.*', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf')
+                        ->select('artikel.*', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
                         ->whereRaw("keyword_artikel.keyword like '%".$real_tag."%' ")
                         ->get();
         return view('web/list_artikel_by_tema', ['artikel'=>$get_data, 'issue'=>"#".$real_tag, 'logo'=>$this->data, 'title'=>'Daftar Artikel '.$real_tag]);
@@ -268,7 +282,7 @@ class arunikaController extends Controller
     public function getListArtikelByIssue($code_issue){
         $get_data=Publish_artikel::join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')
                                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                                ->select('artikel.judul', 'artikel.id', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'artikel.foto_penulis', 'artikel.tentang_artikel', 'publish_artikel.edoc_pdf')
+                                ->select('artikel.judul', 'artikel.id', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'artikel.foto_penulis', 'artikel.tentang_artikel', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
                                 ->where('step', 8)
                                 ->get();
         // foreach($get_data as $list_data){
@@ -307,7 +321,7 @@ class arunikaController extends Controller
                                 ->where('issue_artikel.status', 2);
                             })
                             ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                            ->select('artikel.judul', 'artikel.id', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'artikel.foto_penulis', 'artikel.tentang_artikel', 'publish_artikel.edoc_pdf')
+                            ->select('artikel.judul', 'artikel.id', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'artikel.foto_penulis', 'artikel.tentang_artikel', 'publish_artikel.edoc_pdf', 'issue_artikel.code_issue')
                     ->where('artikel.step', 8)
                     ->get();
         $get_publish_issue=Issue_artikel::where('status', 2)->first();
@@ -353,7 +367,7 @@ class arunikaController extends Controller
                         })
                         ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
                         ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                        ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id')
+                        ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id', 'publish_artikel.code_issue')
                         ->get();
                 foreach($kata_kunci as $list_data){
                     // $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_data['edoc_pdf']);
@@ -363,6 +377,7 @@ class arunikaController extends Controller
                     $result[$x]['edoc_pdf']=$link;
                     $result[$x]['penulis']=$list_data['nama'];
                     $result[$x]['id']=Crypt::encrypt($list_data['id']);
+                    $result[$x]['code_issue']=$list_data['code_issue'];
                     $x++;
                 }
             }
@@ -372,7 +387,7 @@ class arunikaController extends Controller
                                             ->whereRaw("penulis_artikel.nama like '%".$nama."%' ");
                                     })
                         ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                        ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id')
+                        ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id', 'publish_artikel.code_issue')
                         ->get();
                 foreach($get_penulis as $list_data_penulis){
                     $replace_1=str_replace('upload/edoc/artikel/pdf/', '', strtolower($list_data_penulis['edoc_pdf']));
@@ -381,6 +396,7 @@ class arunikaController extends Controller
                     $result[$x]['edoc_pdf']=$link;
                     $result[$x]['penulis']=$list_data_penulis['nama'];
                     $result[$x]['id']=Crypt::encrypt($list_data_penulis['id']);
+                    $result[$x]['code_issue']=$list_data_penulis['code_issue'];
                     $x++;
                 }
             }
@@ -388,7 +404,7 @@ class arunikaController extends Controller
             if($judul !== null){
                 $get_judul=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                                     ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                                    ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id')
+                                    ->select('artikel.judul', 'publish_artikel.edoc_pdf', 'penulis_artikel.nama', 'artikel.id', 'publish_artikel.code_issue')
                                     ->whereRaw("judul like '%".$judul."%'")
                                     ->get();
                 foreach($get_judul as $list_data_judul){
@@ -399,6 +415,7 @@ class arunikaController extends Controller
                     $result[$x]['edoc_pdf']=$link;
                     $result[$x]['penulis']=$list_data_judul['nama'];
                     $result[$x]['id']=Crypt::encrypt($list_data_judul['id']);
+                    $result[$x]['code_issue']=$list_data_judul['code_issue'];
                     $x++;
                 }
             }
@@ -557,6 +574,7 @@ class arunikaController extends Controller
         }else{
             $content="not_found";
         }
+        // var_dump($x);
         return view('web/list_artikel_by_category', ['category'=>ucwords($category), 'artikel'=>$data_artikel, 'title'=>'Daftar Artikel Arunika - Kategori : '.ucwords($category), 'jumlah_halaman'=>$jumlah_halaman, 'page'=>$page, 'total'=>$total, 'jumlah_data'=>$x, 'content'=>$content, 'kategori_artikel'=>$kategori_artikel, 'category_link'=>$key, 'logo'=>$this->data]);
     }
     public function resizeImageView(Request $request){

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+require '../resources/vendor/autoload.php';
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -234,8 +234,8 @@ class artikelController extends Controller
         list($width, $height) = getimagesize($path);
 
         // Define new dimensions (200x200 pixels)
-        $newWidth = 300;
-        $newHeight = 450;
+        $newWidth = 450;
+        $newHeight = 250;
 
         // Create a new image
         $thumb = imagecreatetruecolor($newWidth, $newHeight);
@@ -538,7 +538,7 @@ class artikelController extends Controller
                                     // 'odt' => 'application/vnd.oasis.opendocument.text',
                                     // 'txt' => 'text/plain',
                                     // 'pdf' => 'application/pdf',
-                                    if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "pplication/msword"){
+                                    if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "application/msword" || $type === "text/rtf"){
                                         $destination="upload/edoc/artikel";
                                         $filename=date('YmdHis')."-".$edoc_artikel->getClientOriginalName();
                                         $edoc_artikel->move($destination, $filename);
@@ -578,27 +578,27 @@ class artikelController extends Controller
                     }
                 }catch(ValidationException $e){
                     $msg="";
-                    $obj_msg=json_decode($e->validator->errors());
-                    $count=count(array($obj_msg));
-                    $x=0;
-                    for($x=0;$x<$count;$x++){
-                        if(isset($obj_msg->judul_artikel[$x])){
-                            $msg=$obj_msg->judul_artikel[$x];
-                            break;
-                        }
-                        if(isset($obj_msg->kategori_artikel[$x])){
-                            $msg=$obj_msg->kategori_artikel[$x];
-                            break;
-                        }
-                        if(isset($obj_msg->tentang_artikel[$x])){
-                            $msg=$obj_msg->tentang_artikel[$x];
-                            break;
-                        }
-                        if(isset($obj_msg->file_artikel[$x])){
-                            $msg=$obj_msg->file_artikel[$x];
-                            break;
-                        }   
-                    }
+                    $msg=$e->validator->errors()->first();
+                    // $count=count(array($obj_msg));
+                    // $x=0;
+                    // for($x=0;$x<$count;$x++){
+                    //     if(isset($obj_msg->judul_artikel[$x])){
+                    //         $msg=$obj_msg->judul_artikel[$x];
+                    //         break;
+                    //     }
+                    //     if(isset($obj_msg->kategori_artikel[$x])){
+                    //         $msg=$obj_msg->kategori_artikel[$x];
+                    //         break;
+                    //     }
+                    //     if(isset($obj_msg->tentang_artikel[$x])){
+                    //         $msg=$obj_msg->tentang_artikel[$x];
+                    //         break;
+                    //     }
+                    //     if(isset($obj_msg->file_artikel[$x])){
+                    //         $msg=$obj_msg->file_artikel[$x];
+                    //         break;
+                    //     }   
+                    // }
                 }
             }else{
                 $msg="Anda tidak dapat melakukan perubahan data.";
@@ -611,16 +611,21 @@ class artikelController extends Controller
     public function downloadFile($file, $type){
         try{
             $file_path=Crypt::decrypt($file);
-            // var_dump($file_path);die();
+            //var_dump($file_path);die();
             if(File::exists($file_path)){
                 if($type === "edoc_artikel"){
                     $prefix_path="upload/edoc/artikel/pdf/";
+                }elseif($type === "edoc_artikel_doc"){
+                    $prefix_path="upload/edoc/artikel/";
                 }elseif($type === "edoc_pengumuman"){
                     $prefix_path="upload/pengumuman/";
                 }elseif($type === "image_config"){
                     $prefix_path="upload/config/";
+                }else{
+                    echo "<center><h2>404</h2><h5>File not Found</h5></center>";die();
                 }
                 $file_name=str_replace($prefix_path, '', $file_path);
+                // var_dump($file_name);die();
                 return response()->download($file_path, $file_name);
             }else{
                 echo "<center><h2>404</h2><h5>File not Found</h5></center>";
@@ -638,22 +643,21 @@ class artikelController extends Controller
             $id_keyword=$explode[1];
             if(isYourArtikel($id_artikel)){
                 $step_id=[2, 5];
-                $get_keyword=Keyword::join('artikel', function($q) use($step_id){
-                                    $q->on('artikel.id', '=', 'keyword_artikel.id_artikel')
-                                    ->whereIn('artikel.step', $step_id);
-                                })
-                ->where('keyword_artikel.id_artikel', $id_artikel)
+                $get_keyword=Keyword::where('keyword_artikel.id_artikel', $id_artikel)
                 ->where('keyword_artikel.id', $id_keyword)
                 ->first();
-                if(!is_null($get_keyword)){
+
+                $get_artikel=Artikel::where('id', $id_artikel)->first();
+
+                if(!is_null($get_keyword) && ($get_artikel['step'] === 2 || $get_artikel['step'] === 5)){
                     $delete=$get_keyword->delete();
                     if($delete){
-                        $msg="Keyword berhasil dihapus";
+                        $msg="Keyword berhasil dihapus ".$id_artikel." ".$id_keyword;
                     }else{
                         $msg="Terjadi kesalahan saat menghapus keyword";
                     }
                 }else{
-                    $msg="Tidak dapat menghapus Keyword";
+                    $msg="Tidak dapat menghapus Keyword ";
                 }
             }else{
                 $msg="Anda tidak dapat melakukan penghapusan data ini";
@@ -930,7 +934,8 @@ class artikelController extends Controller
                             $q->on('review_stage.id', '=', 'reviewer_artikel.id_review')
                                 ->where('reviewer_artikel.status', true);
                         })
-                        ->select('pegawai.*', 'reviewer_artikel.tgl_pilih', 'reviewer_artikel.tgl_mulai', 'reviewer_artikel.tgl_estimasi_selesai', 'reviewer_artikel.status', 'review_stage.review_ke')
+                        ->join('artikel', 'artikel.id', '=', 'review_stage.id_artikel')
+                        ->select('pegawai.*', 'reviewer_artikel.tgl_pilih', 'reviewer_artikel.tgl_mulai', 'reviewer_artikel.tgl_estimasi_selesai', 'reviewer_artikel.status', 'review_stage.review_ke', 'artikel.edoc_artikel', 'review_stage.edoc_perbaikan_penulis')
                         ->where('reviewer_artikel.id_artikel', $artikel_id)
                         ->where('reviewer_artikel.status', true)
                         ->orderBy('reviewer_artikel.id', 'desc')
@@ -939,8 +944,8 @@ class artikelController extends Controller
             $data_review=$this->getDataReview($artikel_id);
             //var_dump(count($data_review->data_review));die();
             //$get_hasil_review=Catatan_hasil_review::where('id_review', )
-
-            return view('arunika/artikel/view_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review]);
+            $blind_reviewer=true;
+            return view('arunika/artikel/view_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review, 'blind_review'=>true]);
         }catch(DecryptException $e){
             echo "Token tidak valid";
         }
@@ -2465,6 +2470,46 @@ public function removeHasilReview(Request $request){
             $msg=$get_data->msg;
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
-    }
-    
+    } 
+    public function updateFotoPenuls(Request $request){
+        $update=false;
+        try{
+            $artikel_id=Crypt::decrypt($request->token_a);
+            $get_artikel=Artikel::where('id', $artikel_id)->first();
+            if(!is_null($get_artikel)){
+                $file=$request->foto_penulis;
+                $size=$file->getSize();
+                $type=$file->getMimeType();
+                if($size <= 3145728){
+                    if($type === "image/png" || $type === "image/jpeg" || $type === "image/jpg"){
+                        $destination="upload/image";
+                        $filename=date("YmdHis").'-'.$file->getClientOriginalName();
+                        $file->move($destination, $filename);
+                        $path=$destination."/".$filename;
+                        if(File::exists($path)){
+                            $generateThumbnail=$this->createThumbnail($filename, $path);
+                            $get_artikel->foto_penulis=$path;
+                            $update=$get_artikel->update();
+                            if($update){
+                                $msg="Berhasil mengubah foto penulis";
+                            }else{
+                                $msg="Terjadi kesalahan saat update foto penulis";
+                            }
+                        }else{
+                            $msg="Terjadi kesalahan sistem, saat upload foto";
+                        }
+                    }else{
+                        $msg="Tipe file harus JPG / PNG /JPEG";
+                    }
+                }else{
+                    $msg="File size maksimal 3MB";
+                }
+            }else{
+                $msg="Artikel yang anda maksud tidak ditemukan";
+            }
+        }catch(DecryptException $e){
+            $msg="Undefined token";
+        }
+        return response()->json(['status'=>$update, 'msg'=>$msg]);
+    }  
 }

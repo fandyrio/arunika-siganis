@@ -14,7 +14,7 @@
         </p>
         <div class='row'>
             @foreach($artikel as $list_artikel)
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 mb-3">
                 <div class="card card-plain">
                     <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
                         <a class="d-block blur-shadow-image">
@@ -22,12 +22,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-9 col-sm-6">
+            <div class="col-lg-9 col-sm-6 mb-3">
                 <div class="card-body px-0">
                     @php
                         $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
                         $explode=explode('.pdf', $clean);
                         $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
+                        $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
                     @endphp
                     <span class='text-purple fn-sz-1  text-bold'>{!! $list_artikel['nama'] !!}</span>
                     <h6>
@@ -91,7 +92,7 @@ async function setPhoto(width, height, target, type, x, prefix, skleton){
         $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
         $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
         // console.log("background-image:url('img/20241210031407-ari.jpg')");
-        $(skleton[x]).css({"background-image":"url({!! url('"+data.background+"') !!})"});
+        $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
         }
     })
 }

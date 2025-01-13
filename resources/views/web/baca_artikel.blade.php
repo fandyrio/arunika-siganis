@@ -45,7 +45,7 @@
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
       <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom">
-        Arunika (Artikel Hukum Hakim Indonesia)
+        Arunika (Artikel Hukum Hakim Nusantara)
       </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon mt-2">
@@ -143,9 +143,9 @@
       <div class="container">
         <div class="row">
           <div class="col-12 mx-auto">
-            <div class="mt-n8 mt-md-n9 text-center">
+            <!-- <div class="mt-n8 mt-md-n9 text-center">
               <img class="avatar avatar-xxl shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy">
-            </div>
+            </div> -->
             <div class="row py-5">
               <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
                     <nav aria-label="breadcrumb">
@@ -167,7 +167,13 @@
                     <span><a class="text-info icon-move-right">{!! $artikel['nama'] !!}</a></span>
                   </div>
                 </div>
+                <div class="row mb-4">
+                  <div class="col-lg-12">
+                  <img class="shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy" width="100%">
+                  </div>
+                </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
+                  <center><i class="material-icons opacity-6 me-2" style='font-size:5rem;'>format_quote</i></center>
                   {!! $artikel['tentang_artikel'] !!}
                   <hr />
                     <p class="text-lg">
@@ -203,13 +209,13 @@
                   @php $x=0; @endphp
                   @foreach($similar as $list_similar)
                     @php
-                      $replace_1=str_replace('../resources/upload/edoc/artikel/pdf/', '', $list_similar['edoc_pdf']);
+                      $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_similar['edoc_pdf']);
                       $edoc=str_replace(".pdf", "", $replace_1);
                     @endphp
                     <div class="row" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
                         <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('../../{!! $list_similar['foto_penulis'] !!}');height:100px;"></div>
                         <div class="col-lg-9">
-                          <a href="{!! url('baca-artikel/'.strtolower($edoc).'/'.Crypt::encrypt($list_similar['id'])) !!}">
+                          <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_similar['id'].'arn'.$list_similar['code_issue']) !!}">
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_similar['judul'])) !!}</span></a>
                         </div>
 
@@ -236,7 +242,7 @@
                     <div class="row" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
                         <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! str_replace('upload/image/', '', $list_other['foto_penulis']) !!}" data-prefix="artikel-img" style="height:100px;width:30%"></div>
                         <div class="col-lg-9" style='width:70%;'>
-                          <a href="{!! url('baca-artikel/'.strtolower($edoc).'/'.Crypt::encrypt($list_other['id'])) !!}">
+                          <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_other['id'].'arn'.$list_other['code_issue']) !!}">
                             <span class='text-red text-bold'>{!! $list_other['kategori'] !!}</span><br />
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_other['judul'])) !!}</span></a>
                         </div>
@@ -543,7 +549,7 @@
             $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
             $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
             // console.log("background-image:url('img/20241210031407-ari.jpg')");
-            $(skleton[x]).css({"background-image":"url({!! url('"+data.background+"') !!})"});
+            $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
           }
         })
     }

@@ -131,7 +131,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<span class="menu-text">Dashboard</span>
 									</a>
 								</li>
-								@if(Auth::user()->role !== 2)
+								<!-- @if(Auth::user()->role !== 2) -->
 								<li class="menu-section">
 									<h4 class="menu-text">Submission</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -197,7 +197,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
-								@endif
+								<!-- @endif -->
 								@if(isReviewer())
 									<li class="menu-section">
 										<h4 class="menu-text">Reviewer</h4>
@@ -304,7 +304,8 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</li>
 								@endif
-								@if(Auth::user()->role === 2 || isJM())
+								<!-- @if(Auth::user()->role === 2 || isJM()) -->
+								@if(isJM())
 								<li class="menu-section">
 									<h4 class="menu-text">Admin</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -1000,9 +1001,15 @@ License: You must have a valid license purchased only from themeforest(the above
 								<div class="topbar-item">
 									<div class="btn btn-icon w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
 										<span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
-										<span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{!! Auth::user()->name !!}</span>
+										<span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">
+											<!-- {!! Auth::user()->name !!} -->
+											 {!! Session::get('cas')['nama'] !!}
+										</span>
 										<span class="symbol symbol-35 symbol-light-success">
-											<span class="symbol-label font-size-h5 font-weight-bold">{!! Auth::user()->name[0] !!}</span>
+											<span class="symbol-label font-size-h5 font-weight-bold">
+												<!-- {!! Auth::user()->name[0] !!} -->
+												 {!! Session::get('cas')['nama'] !!}
+											</span>
 										</span>
 									</div>
 								</div>
@@ -1390,8 +1397,14 @@ License: You must have a valid license purchased only from themeforest(the above
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{!! Auth::user()->name !!}</a>
-						<div class="text-muted mt-1">{!! Auth::user()->nip !!}</div>
+						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
+							<!-- {!! Auth::user()->name !!} -->
+							 {!! Session::get('cas')['nama'] !!}
+						</a>
+						<div class="text-muted mt-1">
+							<!-- {!! Auth::user()->nip !!} -->
+							 {!! Session::get('cas')['nip'] !!}
+						</div>
 						<div class="navi mt-2">
 							<a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">

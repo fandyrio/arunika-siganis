@@ -60,7 +60,7 @@
 <nav class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4 bg-white-transparent">
   <div class="container-fluid px-0">
     <a class="navbar-brand font-weight-bolder ms-sm-3 logo-top" href="{!! url('/home') !!}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
-    <img src="{!! $logo['logo_arunika'] !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Nusantara</span></span>
+    <img src="{!! $logo['logo_arunika'] !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Indonesia</span></span>
     </a>
     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon mt-2">
@@ -138,7 +138,7 @@
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
           {{-- <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> --}}
-          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
+          <a href="{{ isset(Session::get('cas')['nama']) ? route('logout') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
             {{-- {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} --}}
             {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
           </a>
@@ -261,7 +261,7 @@
           </div>
           @php $index=1 @endphp
           @foreach($artikel as $list_artikel)
-            <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/a-'.Crypt::decrypt($list_artikel['token_a']).'arn'.$list_artikel['code_issue']) !!}">
+            <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/'.$list_artikel['token_a']) !!}">
               <div class="row justify-content-start mb-4">
                 <div class="col-md-12">
                   <div class="row">
@@ -311,7 +311,7 @@
           @php $x=1 @endphp
           @foreach($new_artikel as $list_artikel)
           <div class="col-lg-3">
-            <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/a-'.Crypt::decrypt($list_artikel['token_a']).'arn'.$list_artikel['code_issue']) !!}">
+            <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/'.$list_artikel['token_a']) !!}">
               <div class="row" style='padding:3%;'>
                 <div class="col-lg-12 skleton_loading foto_penulis_grid img artikel_terbaru_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style=""></div>
                 <div class="col-lg-12 text-judul text-hover" data-target='artikel_terbaru' data-idx="{!! $x !!}" style='padding:0'>
@@ -735,8 +735,8 @@ $.ajaxSetup({
           console.log(x);
           $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
           $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-          console.log("background-image:url('"+data.background+"')");
-          $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
+          // console.log("background-image:url('img/20241210031407-ari.jpg')");
+          $(skleton[x]).css({"background-image":"url("+data.background+")"});
         }
       })
   }

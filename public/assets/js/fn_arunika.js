@@ -67,11 +67,16 @@ function readURLFile(input, type, className){
     if(input.files && input.files[0]){
         var reader=new FileReader();
         if(type === "image"){
+            var width="50%";
+            if(className === "changePhotoPenulis"){
+                var width="100%"
+            }
             var allowedType=["image/png", "image/jpeg", "image/jpg"];
             if(allowedType.includes(input.files[0].type) && input.files[0].size <= 3145728 ){
                 reader.onload = function(f){
-                    $(".imagePreview").html("<center><img src='"+f.target.result+"' width='50%'></center>");
+                    $(".imagePreview").html("<center><img src='"+f.target.result+"' width='"+width+"'></center>");
                 }
+                
             }else{
                 Swal.fire({
                     icon: "error",

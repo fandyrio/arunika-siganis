@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <th>eDoc</th>
-                <td><a href="download/{!! Crypt::encrypt($data['edoc_artikel']) !!}/edoc_artikel" target="_blank">Download</a></td>
+                <td><a href="download/{!! Crypt::encrypt($data['edoc_artikel']) !!}/edoc_artikel_doc" target="_blank">Download</a></td>
             </tr>
         </table>
     </div>

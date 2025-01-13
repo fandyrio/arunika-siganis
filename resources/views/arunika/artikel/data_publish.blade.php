@@ -66,7 +66,15 @@
         </table>
     </div>
     <div class='col-4'>
-        <img src="{!! $data['foto_penulis'] !!}" width='100%'>
+        <span class='imagePreview'><img src="{!! $data['foto_penulis'] !!}" width='100%'></span>
+        <br /><br />
+        @if($data['step'] === 7 && isJM())
+            <form id="updateFotoPenulis">
+                <input type='hidden' name='token_a' value="{!! Crypt::encrypt($data['id']) !!}">
+                <input type='file' class='form-control changePhotoPenulis' name='foto_penulis' style='display:none;'>
+                <button class='btn btn-info btn-sm col-12 changePhoto'>Ganti Foto</button>
+            </form>
+        @endif
     </div>
 </div>
 <div class='row mb-3'>
@@ -93,8 +101,8 @@
         @endif   
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js?q=5') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=3') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js?q=8') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=4') !!}"></script>
 <script>
     $(document).ready(function(){
         $("#textTulisan").summernote({

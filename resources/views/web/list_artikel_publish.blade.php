@@ -23,9 +23,10 @@
                     </div>
                     <div class="card-body px-0">
                         @php
-                            $clean=str_replace('../resources/upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
+                            $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
                             $explode=explode('.pdf', $clean);
                             $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
+                            $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
                         @endphp
                         <span style='font-size:0.8rem'>
                         <a href="{!! url($link) !!}" class="text-dark font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="top">
@@ -84,8 +85,10 @@
             for(var x=0;x<jumlah_skleton;x++){
                 console.log(x);
                 var target=$(skleton[x]).data('target');
-                var width=$(skleton[x]).width();
-                var height=$(skleton[x]).height();
+                var width=450;
+                var height=250;
+                // var width=$(skleton[x]).width();
+                // var height=$(skleton[x]).height();
                 var prefix=$(skleton[x]).data('prefix');
                 var type="artikel-img";
                 //alert(width+"x"+height);
@@ -103,7 +106,7 @@
                 $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
                 $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
                 // console.log("background-image:url('img/20241210031407-ari.jpg')");
-                $(skleton[x]).css({"background-image":"url({!! url('"+data.background+"') !!})"});
+                $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
                 }
             })
         }

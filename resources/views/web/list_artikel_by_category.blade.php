@@ -21,21 +21,22 @@
                         </div>
                     @else
                         @for($x=0;$x<$jumlah_data;$x++)
-                        <div class="col-lg-3 col-sm-6" >
+                        <div class="col-lg-4 col-sm-6 mb-3" >
                             <div class="card card-plain">
                                 <div class="card-header p-0 position-relative" style="min-height:5rem;">
                                     <a class="d-block blur-shadow-image">
-                                        <img src="{!! asset($artikel[$x]['foto_penulis']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy">
+                                        <img src="{!! asset($artikel[$x]['foto_penulis']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy" width="100%;">
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-9 col-sm-6" >
+                        <div class="col-lg-8 col-sm-6 mb-3" >
                             <div class="card-body px-0">
                                 @php
-                                $clean=str_replace('../resources/upload/edoc/artikel/pdf/', '', $artikel[$x]['edoc_pdf']);
-                                $explode=explode('.pdf', $clean);
-                                $link='baca-artikel/'.strtolower($explode[0]).'/'.$artikel[$x]['token_a'];
+                                    $clean=str_replace('../resources/upload/edoc/artikel/pdf/', '', $artikel[$x]['edoc_pdf']);
+                                    $explode=explode('.pdf', $clean);
+                                    $link='baca-artikel/'.strtolower($explode[0]).'/'.$artikel[$x]['token_a'];
+                                    $link='baca-artikel/'.strtolower($explode[0]).'/a-'.Crypt::decrypt($artikel[$x]['token_a']);
 
                                 @endphp
                                 <span class='text-purple fn-sz-1  text-bold'>{!! $artikel[$x]['nama'] !!}</span>
@@ -55,6 +56,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endfor
                         <div class='col-lg-12'>
                             <hr />
                             Halaman<br />
@@ -69,7 +71,6 @@
                                 <a href="{!! url('/category/'.$category_link.'/'.$x+1) !!}"><button class='btn btn-{!! $class_info !!} btn-sm'>{!! $x+1 !!}</button></a>
                             @endfor
                         </div>
-                        @endfor
                     @endif
                 </div>
             </div></div>

@@ -45,7 +45,7 @@
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
       <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom">
-        Arunika (Artikel Hukum Hakim Indonesia)
+        Arunika (Artikel Hukum Hakim Nusantara)
       </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon mt-2">
@@ -143,9 +143,9 @@
       <div class="container">
         <div class="row">
           <div class="col-12 mx-auto">
-            <div class="mt-n8 mt-md-n9 text-center">
+            <!-- <div class="mt-n8 mt-md-n9 text-center">
               <img class="avatar avatar-xxl shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy">
-            </div>
+            </div> -->
             <div class="row py-5">
               <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
                     <nav aria-label="breadcrumb">
@@ -165,6 +165,11 @@
                   <div class="col-lg-12">
                     <span class="h6">Date of Publish</span> | 
                     <span><a class="text-info icon-move-right">{!! $artikel['nama'] !!}</a></span>
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-lg-12">
+                  <img class=" z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" width="100%" alt="bruce" loading="lazy">
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black !important;font-size:1rem;'>

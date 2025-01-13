@@ -735,4 +735,40 @@ $(".edit").click(function(e){
         }
     })
 });
-
+$(".changePhoto").click(function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    $(".changePhotoPenulis").trigger('click');
+});
+$(".changePhotoPenulis").change(function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var read=readURLFile(this, "image", "changePhotoPenulis");  
+    if(read === false){
+        return false;
+    }
+    var form=$("#updateFotoPenulis")[0];
+    var data=new FormData(form);
+    $.ajax({
+        beforeSend:function(){
+            showLoading();        
+        },
+        url:'update-foto-penulis',
+        data:data,
+        type:'POST',
+        dataType:'JSON',
+        cache:false,
+        contentType:false,
+        processData:false,
+        success:function(data){
+            closeLoading();
+            var icon="error";
+            if(data.status){
+                icon = "success";
+            }
+            callSwal(icon, data.msg, true);
+        }
+    })
+})

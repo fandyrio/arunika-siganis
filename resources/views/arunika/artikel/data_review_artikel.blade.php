@@ -76,9 +76,9 @@
                                         <h6><span style='color:;font-weight:bold;'>Dokumen yang direview</span></h6>
                                     @endif
                                     @if((int)$data_review->data_review[$x]->review_ke > 1)
-                                    <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan) !!}/edoc_artikel"><span class='fas fa-file-download'></span>  Download</a>
+                                    <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span>  Download</a>
                                     @else
-                                    <a href="download/{!! Crypt::encrypt($data_review->artikel->edoc_artikel) !!}/edoc_artikel"><span class='fas fa-file-download'></span>  Download</a>
+                                    <a href="download/{!! Crypt::encrypt($data_review->artikel->edoc_artikel) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span>  Download</a>
                                     @endif
                                 </span>
                                 <span class="text-muted text-right">
@@ -201,7 +201,7 @@
                                         @if($data_review->data_review[$x]->sent_at === null)
                                             <span class='btn_place'>
                                                 <button class='btn btn-success btn-sn sendReviewToAuthor' data-link='send-review-result' data-token="{!! Crypt::encrypt($token_a) !!}" data-target="{!! Crypt::encrypt($token_r) !!}">
-                                                <span class='fab fa-telegram-plane'></span> Kirim Hasil Review ke Author</button></span>
+                                                <span class='fab fa-telegram-plane'></span> Kirim Hasil Review</button></span>
                                             </span>
                                         @else
                                             <span class='btn_place'>
@@ -223,7 +223,7 @@
                                             <span style='color:red;'>Menunggu Perbaikan dilakukan oleh penulis</span>
                                         @else
                                             <b>Dokumen perbaikan : </b>
-                                            <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan_penulis) !!}/edoc_artikel">Download</a> <br />
+                                            <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan_penulis) !!}/edoc_artikel_doc">Download</a> <br />
                                             <b>Tanggal Kirim Perbaikan : </b> {!! date('d M Y', strtotime($data_review->data_review[$x]->send_reviewer_at)) !!}  - Pukul {!! date('H:i', strtotime($data_review->data_review[$x]->send_reviewer_at)) !!} wib
                                         @endif
                                     </span>

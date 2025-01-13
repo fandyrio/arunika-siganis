@@ -77,15 +77,32 @@ class loginController extends Controller
             // // Dapatkan atribut tambahan
             $cas = cas()->getAttributes();
             Session::put('cas', $cas);
-
+            $check_user_local=$this->userLocal(Session::get('cas')['nip']);
             // Debug hasil
             /* dd([
                 'username' => $username,
                 'attributes' => $cas,
             ]); */
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         } catch (\Throwable $th) {
             dd($th->getMessage());
+        }
+    }
+
+    public function userLocal($nip){
+        $get_data=User::where('nip', $nip)->first();
+        if(is_null($get_data)){
+            $user=new User;
+            $user->name=Session::get('cas')['name'];
+            $user->nip=Session::get('cas')['nip'];
+            $user->password=Hash::make('redirfromssomahkamahagung');
+            $user->role=1;
+            $save->$user->save();
+            if($save){
+                $this->userLocal($nip);
+            }
+        }else{
+            Auth::login($get_data);
         }
     }
 

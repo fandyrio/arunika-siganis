@@ -44,7 +44,7 @@
                         <br />
                         @if($jumlah > 0)
                             @for($x=0;$x<$jumlah;$x++)
-                                <a href="{!! url('/baca-artikel/'.$hasil_search[$x]['edoc_pdf'].'/'.$hasil_search[$x]['id']) !!}">
+                                <a href="{!! url('/baca-artikel/'.$hasil_search[$x]['edoc_pdf'].'/a-'.Crypt::decrypt($hasil_search[$x]['id']).'arn'.$hasil_search[$x]['code_issue']) !!}">
                                 <div class="row mb-2" style='border-bottom:0.1rem solid #684DF4'>
                                     <div class="col-lg-12">
                                         <h6>{!! $hasil_search[$x]['judul'] !!}</h6>

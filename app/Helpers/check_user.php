@@ -6,6 +6,8 @@
     use App\Artikel;
     use App\Resize;
     use App\Reviewer_artikel;
+    use Illuminate\Support\Facades\Session;
+
     if(!function_exists('checkUserByNip')){
         function checkUserByNip($nip, $action){
             $get_user=User::where('nip', $nip)->first();
@@ -18,7 +20,8 @@
     }
     if(!function_exists('isReviewer')){
         function isReviewer(){
-            $nip=Auth::user()->nip;
+            //$nip=Auth::user()->nip;
+            $nip=Session::get('cas')['nip'];
             $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->where('editorial_team.active', true)
                             ->where('editorial_team.sebagai', 'editor')
@@ -32,7 +35,8 @@
     }
     if(!function_exists('isYourReviewArtikel')){
         function isYourReviewArtikel($review_id, $artikel_id){
-            $nip=Auth::user()->nip;
+            // $nip=Auth::user()->nip;
+            $nip=Session::get('cas')['nip'];
             $get_data=Reviewer_artikel::join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
                         ->where('reviewer_artikel.id_review', $review_id)
                         ->where('reviewer_artikel.id_artikel', $artikel_id)
@@ -48,7 +52,8 @@
     }
     if(!function_exists('isJM')){
         function isJM(){
-            $nip=Auth::user()->nip;
+            // $nip=Auth::user()->nip;
+            $nip=Session::get('cas')['nip'];
             $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->where('editorial_team.active', true)
                             ->where('editorial_team.sebagai', 'jurnal_manager')
@@ -64,7 +69,7 @@
         function isYourArtikel($artikel_id){
             $get_data=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                     ->where('artikel.id', $artikel_id)
-                    ->where('penulis_artikel.nip', Auth::user()->nip)
+                    ->where('penulis_artikel.nip', Session::get('cas')['nip'])
                     ->first();
             if(isset($get_data)){
                 return true;
