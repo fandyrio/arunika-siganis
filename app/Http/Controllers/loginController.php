@@ -93,7 +93,7 @@ class loginController extends Controller
         $get_data=User::where('nip', $nip)->first();
         if(is_null($get_data)){
             $user=new User;
-            $user->name=Session::get('cas')['name'];
+            $user->name=Session::get('cas')['nama'];
             $user->nip=Session::get('cas')['nip'];
             $user->password=Hash::make('redirfromssomahkamahagung');
             $user->role=1;
