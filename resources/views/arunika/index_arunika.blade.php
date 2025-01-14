@@ -131,7 +131,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<span class="menu-text">Dashboard</span>
 									</a>
 								</li>
-								<!-- @if(Auth::user()->role !== 2) -->
+								<!-- if(Auth::user()->role !== 2) -->
 								<li class="menu-section">
 									<h4 class="menu-text">Submission</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -197,7 +197,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
-								<!-- @endif -->
+								<!-- endif -->
 								@if(isReviewer())
 									<li class="menu-section">
 										<h4 class="menu-text">Reviewer</h4>
@@ -304,7 +304,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</li>
 								@endif
-								<!-- @if(Auth::user()->role === 2 || isJM()) -->
+								<!-- if(Auth::user()->role === 2 || isJM()) -->
 								@if(isJM())
 								<li class="menu-section">
 									<h4 class="menu-text">Admin</h4>
