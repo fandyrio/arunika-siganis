@@ -161,7 +161,7 @@
           <p class="lead text-white mt-3" style=''>{!! $issue[$jumlah_issue-1]['description'] !!} </p>
         </div>
         <div class="col-lg-2" style="padding-top:5%;">
-        <a href="{!! url('/login') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+        <a href="{!! url('/dashboard') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
         </div>
       </div>
     </div>
