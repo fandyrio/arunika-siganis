@@ -97,7 +97,7 @@ class loginController extends Controller
             $user->nip=Session::get('cas')['nip'];
             $user->password=Hash::make('redirfromssomahkamahagung');
             $user->role=1;
-            $save->$user->save();
+            $save = $user->save();
             if($save){
                 $this->userLocal($nip);
             }
