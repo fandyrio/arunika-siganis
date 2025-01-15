@@ -1,6 +1,7 @@
 .tabs{
-    color:black !important;
+    color:black;
 }
 .active{
-    color:white !important;
+    color:#6993FF !important;
+    font-weight: bold;
 }

@@ -2471,6 +2471,26 @@ public function removeHasilReview(Request $request){
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
     } 
+    public function deletePengumuman(Request $request){
+        $delete=false;
+        try{
+            $pengumuman_id=Crypt::decrypt($request->token_i);
+            $get_pengumuman=Pengumuman_arunika::where('id', $pengumuman_id)->first();
+            if(!is_null($get_pengumuman)){
+                $delete=$get_pengumuman->delete();
+                if($delete){
+                    $msg="Berhasil menghapus pengumuman";
+                }else{
+                    $msg="Terjadi kesalahan sistem saat menghapus data";
+                }
+            }else{
+                $msg="Data tidak ditemukan";
+            }
+        }catch(DecryptException $e){
+            $msg="Invalid token";
+        }
+        return response()->json(['status'=>$delete, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
+    }
     public function updateFotoPenuls(Request $request){
         $update=false;
         try{

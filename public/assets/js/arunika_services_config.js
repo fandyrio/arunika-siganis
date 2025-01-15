@@ -219,6 +219,8 @@ $(".delete").click(function(e){
     var token_i=$(this).data('token_i');
     if(pattern === "issue_artikel"){
         var url="delete-issue-artikel";
+    }else if(pattern === "pengumuman_arunika"){
+        var url="delete-pengumuman";
     }
     swal.fire({
         title: "Apakah anda yakin menghapus data ini?",

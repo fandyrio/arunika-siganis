@@ -51,6 +51,7 @@ Route::post('remove-editor', 'editorialTeamController@removeEditor')->name('remo
 
 Route::get('list-config-web', 'configController@listConfig')->name('list-config-web')->middleware('cas.auth');
 Route::get('list-pengumuman', 'artikelController@listPengumuman')->name('list-pengumuman')->middleware('cas.auth');
+Route::post('delete-pengumuman', 'artikelController@deletePengumuman')->name('delete-pengumuman')->middleware('cas.auth');
 Route::post('add-pengumuman-arunika', 'artikelController@addPengumuman')->name('add-pengumuman-arunika')->middleware('cas.auth');
 Route::post('save-pengumuman', 'artikelController@savePengumuman')->name('save-pengumuman')->middleware('cas.auth');
 Route::post('edit-pengumuman', 'artikelController@editPengumuman')->name('edit-pengumuman')->middleware('cas.auth');

@@ -13,6 +13,7 @@ use App\Detil_statistik_baca;
 use App\Unique_visitor;
 use App\Penulis_artikel;
 use App\Pengumuman_arunika;
+use App\Checklist_review;
 use File;
 use Illuminate\Support\Facades\Cookie;
 use App\Kategori_artikel;
@@ -241,7 +242,16 @@ class arunikaController extends Controller
                     $jlh_other=$get_other->count();
 
                     $get_keyword=Keyword::where('id_artikel', $artikel_id)->get();
-                    return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other]);
+                    $keyword_string="";
+                    $x=0;
+                    foreach($get_keyword as $keyword){
+                        if($x>0){
+                            $keyword_string.=",";
+                        }
+                        $keyword_string.=$keyword['keyword'];
+                        $x++;
+                    }
+                    return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other, 'keyword_string'=>$keyword_string]);
                 }else{
                     return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);    
                 }  
@@ -545,7 +555,7 @@ class arunikaController extends Controller
                                                                 ->where('artikel.kategori_artikel_kode', $kode_kategori);
                                                     })
                             ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                            ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori')
+                            ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.code_issue')
                             ->whereRaw('publish_artikel.code_issue is not null')
                             ->join("statistik_baca", 'statistik_baca.id_artikel', '=', 'artikel.id')
                             ->skip($skip)->take($limit)
@@ -569,6 +579,7 @@ class arunikaController extends Controller
                 $data_artikel[$x]['nama']=$list_artikel['nama'];
                 $data_artikel[$x]['kategori_artikel']=$list_artikel['kategori'];
                 $data_artikel[$x]['token_a']=Crypt::encrypt($list_artikel['id']);
+                $data_artikel[$x]['code_issue']=$list_artikel['code_issue'];
                 $x++;
             }
         }else{
@@ -588,10 +599,10 @@ class arunikaController extends Controller
     }
     public function getSyaratPenulisan(){
         $get_data=Config::where('config_name', 'Syarat Penulisan')->first();
-        return view('web/content_static', ['syarat'=>$get_data, 'logo'=>$this->data, 'title'=>'Syarat Penulisan Arunika']);
+        return view('web/content_static', ['syarat'=>$get_data, 'logo'=>$this->data, 'title'=>'Syarat Penulisan Arunika', 'source'=>'config']);
     }
     public function getChecklistPenilaian(){
-        $get_data=Config::where('config_name', 'Checklist Penilaian')->first();
-        return view('web/content_static', ['syarat'=>$get_data, 'logo'=>$this->data, 'title'=>'Daftar Penilaian Arunika']);
+        $get_data=Checklist_review::where('active', true)->get();
+        return view('web/content_static', ['syarat'=>$get_data, 'logo'=>$this->data, 'title'=>'Checklist Penilaian Arunika', 'source'=>'checklist']);
     }
 }

@@ -18,8 +18,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
-  <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('web/assets/img/apple-icon.png') !!}">
-  <link rel="icon" type="image/png" href="{!! asset('web/assets/img/favicon.png') !!}">
+  <meta name="description" content="{!! $artikel['tentang_artikel'] !!}">
+  <meta name="title" content="{!! $artikel['judul'] !!}">
+  <meta name="originalTitle" content="{!! $artikel['judul'] !!}">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{!! $artikel['judul'] !!}" />
+  <meta property="og:description" content="{!! $artikel['tentang_artikel'] !!}" />
+  <meta property="og:image" content="{!! url($artikel['foto_penulis']) !!}" />
+  <meta name="author" content="{!! $artikel['nama'] !!}">
+  <meta name="keyword" content="{!! $keyword_string !!}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $artikel['judul'] !!}
   </title>
@@ -60,7 +69,7 @@
           <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="material-icons opacity-6 me-2 text-md">dashboard</i>
             Artikel
-            <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+            <img src="{!! asset('web/assets/img/down-arrow-white.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
           </a>
             <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
                 <div class="d-none d-lg-block">
@@ -95,12 +104,12 @@
   <li class="nav-item dropdown dropdown-hover mx-2">
     <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="material-icons opacity-6 me-2 text-md">view_day</i>
-            Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+            Penulisan <img src="{!! asset('web/assets/img/down-arrow-white.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
     </a>
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
         <div class="d-none d-lg-block">
           <li class="nav-item dropdown dropdown-hover dropdown-subitem">
-            <a class="dropdown-item py-2 ps-3 border-radius-md" href="./presentation.html">
+            <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
               <div class="w-100 d-flex align-items-center justify-content-between">
                 <div>
                   <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
@@ -110,10 +119,10 @@
               </div>
             </a>
             <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="./sections/page-sections/hero-sections.html">
+              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
                 Syarat Penulisan
               </a>
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="./sections/page-sections/features.html">
+              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
                 Checklist Penilaian Penulisan
               </a>
             </div>
@@ -121,8 +130,10 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
-            {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
+          {{ --<a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> -- }}
+          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
+            {{ --{!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} -- }}
+            {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
           </a>
         </li>
       </ul>

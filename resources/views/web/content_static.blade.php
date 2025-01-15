@@ -9,15 +9,20 @@
         </div>
         </div>
         <div class="card-body">
-        <p class="pb-3 text" style='font-size:1rem;'>
-            Syarat dalam penulisan Arunika.
-        </p>
-        <div class='row'>
+        <div class='row' style='color:black;'>
             <div class="col-md-12">
                 @if(is_null($syarat))
                     <center>Kontent Belum dimuat</center>
                 @else
-
+                    @if($source === "config")
+                        {!! $syarat['config_value'] !!}
+                    @endif($source === "checklist")
+                        <ol>
+                        @foreach($syarat as $list)
+                            <li>{!! $list['pertanyaan'] !!}</li>
+                        @endforeach
+                        </ol>
+                        <span style='font-size:0.6rem;color:grey;'>* <i>Checklist dapat berubah, sesuai dengan kebutuhan</i> </span>
                 @endif
             </div>
         </div>
@@ -26,12 +31,3 @@
 </div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-<script>
-
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-})
-
-</script>

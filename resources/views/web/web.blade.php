@@ -116,7 +116,7 @@
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
         <div class="d-none d-lg-block">
           <li class="nav-item dropdown dropdown-hover dropdown-subitem">
-            <a class="dropdown-item py-2 ps-3 border-radius-md" href="./presentation.html">
+            <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
               <div class="w-100 d-flex align-items-center justify-content-between">
                 <div>
                   <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
@@ -138,7 +138,7 @@
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
           {{-- <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> --}}
-          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
+          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {{-- {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} --}}
             {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
           </a>
