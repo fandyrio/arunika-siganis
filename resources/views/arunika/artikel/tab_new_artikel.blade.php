@@ -2,7 +2,8 @@
     <div class="card-body">
         <div class="row">
             <div class='col-md-12'>
-                <h5>Form New Artikel</h5>
+            <h5><span class='fas fa-angle-left' style='cursor:pointer;'></span>
+                Form New Artikel</h5>
             </div>
             <div class='col-md-12'>
                 @php $no=1 @endphp
@@ -68,8 +69,8 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="{!! asset('../resources/views/assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('../resources/views/assets/js/arunika_services.js?q=1') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=1') !!}"></script>
 <script>
     // setTimeout(function(){
     //     loadDataPribadi();

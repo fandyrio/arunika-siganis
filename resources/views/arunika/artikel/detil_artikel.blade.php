@@ -8,7 +8,7 @@
         </div>
         <div class="row mb-6">
             <div class="col-12">
-                <ul class="nav nav-tabs nav-pills" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-tabs-bordered" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active tabs data_detil_artikel" data-target="data_detil_artikel" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">Detil Artikel</button>
                     </li>
@@ -16,7 +16,7 @@
                         <button class="nav-link tabs review" id="profile-tab" data-target="review" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Review</button>
                     </li>
                     <span class='append'>
-                    @if($step >= 7)
+                    @if($step >= 7 && $step < 9)
                     <li class="nav-item" role="presentation">
                         <button class="nav-link tabs publsih" data-target="publsih" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Publsih</button>
                     </li>

@@ -739,6 +739,7 @@ class artikelController extends Controller
                                 ->join('step_master', 'step_master.id', '=', 'artikel.step')
                                 ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
                                 ->whereIn('artikel.step', $step_draft)
+                                ->orderBy('artikel.id', 'desc')
                                 ->get();
         $jumlah_draft=$get_data->count();
         return view('arunika/artikel/list_draft', ['data'=>$get_data, 'jumlah'=>$jumlah_draft, 'class'=>'list_menu', 'target'=>'artikel_baru', 'title'=>'Artikel Anda', 'keterangan_title'=> 'Dafar Draft Artikel']);
@@ -757,6 +758,7 @@ class artikelController extends Controller
                         ->where('pegawai.nip', $nip)
                         ->whereRaw('artikel.step >= 3')
                         ->whereRaw('artikel.step <= 6')
+                        ->orderBy('review_stage.updated_at', 'desc')
                         ->get();
         $jumlah=$get_data->count();
         return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses', 'keterangan_title'=> 'Dafar artikel yang sedang anda review']);
@@ -781,14 +783,14 @@ class artikelController extends Controller
         $nip=Auth::user()->nip;
         $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
                             ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                            ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
-                            ->join('issue_artikel', 'issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
+                            ->leftJoin('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                            ->leftJoin('issue_artikel', 'issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'issue_artikel.name')
-                            ->where('artikel.step', 8)
+                            ->whereIn('artikel.step', [8,9])
                             ->where('penulis_artikel.nip', $nip)
                             ->get();
         $jumlah=$get_data->count();
-        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Publish', 'keterangan_title'=> 'Dafar artikel anda yang Publish']);
+        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Proses Artikel Selesai', 'keterangan_title'=> 'Dafar artikel anda yang telah selesai direview']);
     }
     public function linkArtikelPublishJM(){
         if(isJM()){
@@ -827,14 +829,15 @@ class artikelController extends Controller
                                         $q->on('review_stage.id_artikel', '=', 'artikel.id')
                                         ->on('review_stage.id', '=', 'reviewer_artikel.id_review');
                                     })
-                            ->join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('step_master', 'step_master.step_id', '=', 'review_stage.step')
                             ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                             ->join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
                             ->where('pegawai.nip', Auth::user()->nip)
+                            ->orderBy('review_stage.updated_at', 'desc')
                             ->get();
             $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses', 'keterangan_title'=>'List Artikel yang selesai direview']);
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'list-artikel-selesai-review', 'title'=> 'Artikel Proses', 'keterangan_title'=>'List Artikel yang selesai direview']);
         }else{
             echo "Akses ditolak";
         }
@@ -858,7 +861,7 @@ class artikelController extends Controller
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'kategori_artikel.kategori')
                             ->where('artikel.id', $artikel_id_dec)
                             ->whereRaw('step >= 3')
-                            ->whereRaw('step <= 8')
+                            ->whereRaw('step <= 9')
                             ->first();
             if(!is_null($get_data)){
                 $get_keyword=Keyword::where('id_artikel', $artikel_id_dec)->get();
@@ -1437,7 +1440,7 @@ public function removeHasilReview(Request $request){
                                             ->join('step_master', 'step_master.step_id', '=', 'review_stage.step')
                                             ->select('review_stage.*', 'step_master.step_text', 'step_master.step_id')
                                             ->where('review_stage.id', $review_id)
-                                            ->whereIn('review_stage.step', [5,6])
+                                            ->whereIn('review_stage.step', [5,6,9])
                                             ->whereRaw('catatan_reviewer is not null')
                                             ->first();
                         if(!is_null($get_review_stage)){
@@ -1487,7 +1490,7 @@ public function removeHasilReview(Request $request){
                                         }
                                     }
                                 }else{
-                                    $msg="Form Hasil Review harus diisi terelbih dahulu";
+                                    $msg="Form Hasil Review harus diisi terlebih dahulu";
                                 }
                             }else{
                                 $msg="Form Checklist harus dilengkapi terlebih dahulu";
@@ -2082,7 +2085,8 @@ public function removeHasilReview(Request $request){
                             $statistik->jumlah=0;
                             $statistik->save();
 
-                            Issue_artikel::where('status', 2)->update(array('status'=>3));
+                            Issue_artikel::where('status', 2)->update(array('status'=>3));//set issue yang sedang publish menjadi archive
+
                             $get_issue=Issue_artikel::where('code_issue', $code_issue)->first();
                             $get_issue->status=2;//set to publish
                             $get_issue->update();
@@ -2270,16 +2274,19 @@ public function removeHasilReview(Request $request){
             $msg.=PHP_EOL."Silahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.".PHP_EOL;
             
         }else if($category === "assign_reviewer"){
-            $msg="Anda telah ditunjuk untuk melakukan review artikel dengan judul : ".$data_wa['judul'].PHP_EOL;
+            $msg="Anda telah ditunjuk untuk melakukan review artikel dengan judul _: ".$data_wa['judul']."_".PHP_EOL;
             $msg.="Silahkan login untuk melihat lebih lanjut.".PHP_EOL;
             $judul=$data_wa['judul'];
             $no_wa=$data_wa['no_handphone'];
             $nama_penerima=$data_wa['nama_penerima'];
         }else if($category === "reviewer_result"){    //hasil review reviewer kepada author
             $judul=$data_wa['judul'];
-            $msg="Artikel anda dengan judul ".$judul." telah selesai direview,  dengan hasil : _".$data_wa['hasil_reviewer'].'_'.PHP_EOL;
-            $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil";
-            
+            $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  dengan hasil : _".$data_wa['hasil_reviewer'].'_'.PHP_EOL;
+            if($data_wa['hasil_reviewer']){
+                $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika";
+            }else{
+                $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.".PHP_EOL;
+            }
             $nama_penerima=$data_wa['nama_penerima'];
             $no_wa=$data_wa['no_wa'];
             $nama_penerima=$data_wa['nama_penerima'];
@@ -2307,7 +2314,7 @@ public function removeHasilReview(Request $request){
             //$no_wa=$data_wa['no_handphone'];
             $no_wa="081273861528";
             $msg="Artikel anda dengan judul ".$judul." telah publish.".PHP_EOL;
-            $msg.="Silahkan kunjungi halaman arunika";
+            $msg.="Silahkan kunjungi halaman arunika".PHP_EOL;
         }
         
         $msg.="Terimakasih";

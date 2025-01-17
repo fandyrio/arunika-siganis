@@ -6,8 +6,9 @@
             <label>Status Artikel</label>
             <select class='form-control required_field' name='status_artikel'>
                 <option value="">Pilih Status</option>
+                <option value="{!! Crypt::encrypt('6') !!}" {!! $step === 6 ? 'selected' : '' !!}>Diterima</option>
                 <option value="{!! Crypt::encrypt('5') !!}" {!! $step === 5 ? 'selected' : '' !!}>Perbaikan</option>
-                <option value="{!! Crypt::encrypt('6') !!}" {!! $step === 6 ? 'selected' : '' !!}>>Diterima</option>
+                <option value="{!! Crypt::encrypt('9') !!}" {!! $step === 9 ? 'selected' : '' !!}>Ditolak</option>
             </select>
         </div>
     </div>

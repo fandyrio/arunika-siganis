@@ -191,7 +191,7 @@ License: You must have a valid license purchased only from themeforest(the above
 													<i class="menu-bullet menu-bullet-dot">
 														<span></span>
 													</i>
-													<span class="menu-text">Published</span>
+													<span class="menu-text">Selesai</span>
 												</a>
 											</li>
 										</ul>
