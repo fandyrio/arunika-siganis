@@ -13,43 +13,47 @@
             Daftar Artikel Berdasarkan Kategori.
         </p>
         <div class='row'>
-            @foreach($artikel as $list_artikel)
-            <div class="col-lg-3 col-sm-6 mb-3">
-                <div class="card card-plain">
-                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
-                        <a class="d-block blur-shadow-image">
+            @if($jumlah > 0)
+                @foreach($artikel as $list_artikel)
+                <div class="col-lg-3 col-sm-6 mb-3">
+                    <div class="card card-plain">
+                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
+                            <a class="d-block blur-shadow-image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-6 mb-3">
+                    <div class="card-body px-0">
+                        @php
+                            $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
+                            $explode=explode('.pdf', $clean);
+                            $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
+                            $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
+                        @endphp
+                        <span class='text-purple fn-sz-1  text-bold'>{!! $list_artikel['nama'] !!}</span>
+                        <h6>
+                            <a href="{!! url($link) !!}" class="text-dark font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="top" title="{!! $list_artikel['judul'] !!}">
+                                @php
+                                    $text=ucwords(strtolower($list_artikel['judul']));
+                                    echo $text;
+                                @endphp
+                            </a>
+                        </h6>
+                        <p class='fn-sz-sm'>
+                        {!! substr(strip_tags($list_artikel['tentang_artikel']), 0,500) !!} ...
+                        </p>
+                        <a href="{!! url($link) !!}" class="text-info text-sm icon-move-right">Read More
+                        <i class="fas fa-arrow-right text-xs ms-1"></i>
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-9 col-sm-6 mb-3">
-                <div class="card-body px-0">
-                    @php
-                        $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
-                        $explode=explode('.pdf', $clean);
-                        $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
-                        $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
-                    @endphp
-                    <span class='text-purple fn-sz-1  text-bold'>{!! $list_artikel['nama'] !!}</span>
-                    <h6>
-                        <a href="{!! url($link) !!}" class="text-dark font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="top" title="{!! $list_artikel['judul'] !!}">
-                            @php
-                                $text=ucwords(strtolower($list_artikel['judul']));
-                                echo $text;
-                            @endphp
-                        </a>
-                    </h6>
-                    <p class='fn-sz-sm'>
-                    {!! substr(strip_tags($list_artikel['tentang_artikel']), 0,500) !!} ...
-                    </p>
-                    <a href="{!! url($link) !!}" class="text-info text-sm icon-move-right">Read More
-                    <i class="fas fa-arrow-right text-xs ms-1"></i>
-                    </a>
-                </div>
-            </div>
 
-            
-            @endforeach
+                
+                @endforeach
+            @else
+                <center><h3>Mohon maaf, Saat ini Belum ada artikel yang di Publish</h3></center>
+            @endif
         </div>
     </div>
     </div>

@@ -66,7 +66,7 @@
                             }else{
                                 $required_field="";
                                 $display="none";
-                                $path="download/".Crypt::encrypt($artikel['edoc_artikel'])."/edoc_artikel";
+                                $path="download/".Crypt::encrypt($artikel['edoc_artikel'])."/edoc_artikel_doc";
                                 echo "<br /><a href='".$path."' target='_blank'>Download eDoc</a>";
                                 echo "<button class='btn btn-danger btn-sm changeDoc' style='float:right;' type='button'>Ganti Dokumen</button>";
                             }

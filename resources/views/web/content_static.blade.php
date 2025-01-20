@@ -16,13 +16,14 @@
                 @else
                     @if($source === "config")
                         {!! $syarat['config_value'] !!}
-                    @endif($source === "checklist")
+                    @elseif($source === "checklist")
                         <ol>
                         @foreach($syarat as $list)
                             <li>{!! $list['pertanyaan'] !!}</li>
                         @endforeach
                         </ol>
                         <span style='font-size:0.6rem;color:grey;'>* <i>Checklist dapat berubah, sesuai dengan kebutuhan</i> </span>
+                    @endif
                 @endif
             </div>
         </div>

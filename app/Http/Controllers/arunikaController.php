@@ -294,6 +294,7 @@ class arunikaController extends Controller
                                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                                 ->select('artikel.judul', 'artikel.id', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'artikel.foto_penulis', 'artikel.tentang_artikel', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
                                 ->where('step', 8)
+                                ->where('publish_artikel.code_issue', $code_issue)
                                 ->get();
         // foreach($get_data as $list_data){
         //     $replace=str_replace('upload/image/', '', $list_data['foto_penulis']);
@@ -302,7 +303,7 @@ class arunikaController extends Controller
         //     }
         // }
         $get_issue=Issue_artikel::where('code_issue', $code_issue)->first();
-        return view('web/list_artikel_by_tema', ['title'=>'Daftar Artikel '.$get_issue['name'], 'issue'=>$get_issue['name'], 'artikel'=>$get_data, 'logo'=>$this->data]);
+        return view('web/list_artikel_by_tema', ['title'=>'Daftar Artikel '.$get_issue['name'], 'issue'=>$get_issue['name'], 'artikel'=>$get_data, 'logo'=>$this->data, 'jumlah'=>$get_data->count()]);
     }
     public function err404(){
 

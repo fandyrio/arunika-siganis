@@ -36,7 +36,7 @@
                                     $clean=str_replace('../resources/upload/edoc/artikel/pdf/', '', $artikel[$x]['edoc_pdf']);
                                     $explode=explode('.pdf', $clean);
                                     $link='baca-artikel/'.strtolower($explode[0]).'/'.$artikel[$x]['token_a'];
-                                    $link='baca-artikel/'.strtolower($explode[0]).'/a-'.Crypt::decrypt($artikel[$x]['token_a']);
+                                    $link='baca-artikel/'.strtolower($explode[0]).'/a-'.Crypt::decrypt($artikel[$x]['token_a']).'arn'.$artikel[$x]['code_issue'];
 
                                 @endphp
                                 <span class='text-purple fn-sz-1  text-bold'>{!! $artikel[$x]['nama'] !!}</span>
