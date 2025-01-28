@@ -42,7 +42,7 @@
                     <td style='font-weight:bold;'>Dokumen yang direview</td>
                     <td>
                         @if($data_review->data_review[$x]->review_ke > 1)
-                            <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan_penulis) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span>  Download</a>
+                            <a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span>  Download</a>
                         @else
                             <a href="download/{!! Crypt::encrypt($data_review->artikel->edoc_artikel) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span>  Download</a>
                         @endif
@@ -56,7 +56,7 @@
                                 <span style='color:orange;font-weight:bold;'>Sedang direview</span>
                             @elseif($data_review->data_review[$x]->step_id === 5)
                                 <span style='color:orange;font-weight:bold;'>Perbaikan</span>
-                            @elseif($data_review->data_review[$x]->step_id === 6)
+                            @elseif($data_review->data_review[$x]->step_id >= 6)
                                 <span style='color:green;font-weight:bold;'>Diterima</span>
                             @endif
                         @else
@@ -204,7 +204,8 @@
                                         <div class="col-12">
                                             <hr />
                                             <center>
-                                            <button class='btn btn-success btn-sm saveArtikel'>Simpan</button>
+                                            <button class='btn btn-success btn-sm saveArtikel'>Simpan</button><br />
+                                            <span style='color:red;font-weight:bold;font-size:0.8rem;'>*Jika sudah menyimpan, silahkan menekan tombol kirim. <br />Tombol kirim akan aktif bila anda telah menyimpan dokumen perbaikan</span>
                                             </center>
                                         </div>
                                     </div>

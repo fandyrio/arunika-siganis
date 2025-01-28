@@ -256,7 +256,7 @@ function loadDataConfirmation(){
                 loadDataPribadi('view');
             }else{
                 $(".tab-content-artikel").html(data);
-                $(".confirmation_form").addClass('active');
+                $(".confirmation").addClass('active');
             }
         }
     })

@@ -1,4 +1,11 @@
 
+@php
+    if($artikel['tentang_artikel'] === null){
+        $tentang_artikel="";
+    }else{
+        $tentang_artikel=$artikel['tentang_artikel'];
+    }
+@endphp
 <div class="card card-custom">
     <div class="card-header">
         <h3 class="card-title">
@@ -35,7 +42,7 @@
                 <div class='row mb-6'>
                     <div class='col-lg-10'>
                         <label>Tentang artikel</label>
-                        <textarea name='tentang_artikel' id="textStatement"></textarea>
+                        <textarea name='tentang_artikel' id="textStatement">{!! $tentang_artikel !!}</textarea>
                     </div>
                 </div>
                 <div class='row mb-6'>
@@ -68,7 +75,7 @@
                                 $display="none";
                                 $path="download/".Crypt::encrypt($artikel['edoc_artikel'])."/edoc_artikel_doc";
                                 echo "<br /><a href='".$path."' target='_blank'>Download eDoc</a>";
-                                echo "<button class='btn btn-danger btn-sm changeDoc' style='float:right;' type='button'>Ganti Dokumen</button>";
+                                echo "<button class='btn btn-success btn-sm changeDoc' style='float:right;' type='button'>Ganti Dokumen</button>";
                             }
                         ?>
                         <input type='file' class='form-control edoc_artikel <?= $required_field ?>' name='file_artikel' style="display:<?= $display; ?>">
@@ -88,28 +95,30 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=123123') !!}"></script>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script>
-    $(document).ready(function(){
+<script type="text/javascript">
+$(document).ready(function(){
     $("#textStatement").summernote({
-        height: "500px",
-      lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'video']],
-        ['view', ['fullscreen', 'help']],
-        ['height', ['height']],
-      ],
-      codeviewFilter: false,
-      codeviewIframeFilter: true
+        height:400,
+        minHeight: 400,             // set minimum height of editor
+        maxHeight: 400,  
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'help']],
+            ['height', ['height']],
+        ],
+        codeviewFilter: false,
+        codeviewIframeFilter: true
     });
 });
-$("#textStatement").summernote("code", "<?php echo filter_var(str_replace(array("\n","\r"), '', (str_replace('"', "'", $artikel['tentang_artikel']))), FILTER_SANITIZE_STRING) ?>");
+$("#textStatementssss").summernote("code", "<?php echo filter_var(str_replace(array("\n","\r"), '', (str_replace('"', "'", $tentang_artikel))), FILTER_SANITIZE_STRING) ?>");
 $(document).on('keypress', '.keyword', function(e){
     var value=$(this).val();
     if(value !== ""){

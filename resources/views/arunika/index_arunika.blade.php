@@ -46,7 +46,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
 			<!--begin::Logo-->
 			<a href="{!! url('/dashboard') !!}">
-				ARUNIKA - BADILUM
+				<span class='gradient_text'>ARUNIKA - BADILUM</span>
 			</a>
 			<!--end::Logo-->
 			<!--begin::Toolbar-->
@@ -89,7 +89,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="brand flex-column-auto" id="kt_brand">
 						<!--begin::Logo-->
 						<a href="{!! url('/dashboard') !!}" class="brand-logo">
-							<img src="{!! asset('assets/image/loading.gif') !!}" width="30%"><br />ARUNIKA - BADILUM
+							<img src="{!! asset('assets/image/loading.gif') !!}" width="30%"><br /><span class='gradient_text' style='color:white;font-weight:bold;margin-top:5%;'>ARUNIKA - BADILUM</span>
 						</a>
 						<!--end::Logo-->
 						<!--begin::Toggle-->
@@ -131,7 +131,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<span class="menu-text">Dashboard</span>
 									</a>
 								</li>
-								<!-- if(Auth::user()->role !== 2) -->
+								@if(Auth::user()->role !== 2)
 								<li class="menu-section">
 									<h4 class="menu-text">Submission</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -149,7 +149,14 @@ License: You must have a valid license purchased only from themeforest(the above
 											</svg>
 											<!--end::Svg Icon-->
 										</span>
-										<span class="menu-text">Artikel</span>
+										<span class="menu-text">
+											Artikel &nbsp&nbsp&nbsp
+										</span>
+										@if($data['total_artikel_personal'] > 0)
+											<div style='border-radius:50%;width:10px;height:10px;background-color:red;color:white;position:relative;margin-top:4%;'>
+												<span style='position:absolute;left:27%;font-size:1rem;font-weight:bold;'>&nbsp</span>
+											</div>
+										@endif
 										<i class="menu-arrow"></i>
 									</a>
 									<div class="menu-submenu">
@@ -175,6 +182,11 @@ License: You must have a valid license purchased only from themeforest(the above
 														<span></span>
 													</i>
 													<span class="menu-text">Draft</span>
+													@if($data['jumlah_artikel_personal_draft'] > 0)
+														<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
+															<span style='position:absolute;left:30%;font-size:1rem;font-weight:bold;'>{!! $data['jumlah_artikel_personal_draft'] !!}</span>
+														</div>
+													@endif
 												</a>
 												
 											</li>
@@ -184,6 +196,11 @@ License: You must have a valid license purchased only from themeforest(the above
 														<span></span>
 													</i>
 													<span class="menu-text">Proses</span>
+													@if($data['jumlah_artikel_personal_proses_all'] > 0)
+														<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
+															<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['jumlah_artikel_personal_proses_all'] !!}</span>
+														</div>
+													@endif
 												</a>
 											</li>
 											<li class="menu-item menu-item-submenu list_menu" data-target="list_artikel_publish" aria-haspopup="true" data-menu-toggle="hover">
@@ -197,7 +214,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
-								<!-- endif -->
+								@endif
 								@if(isReviewer())
 									<li class="menu-section">
 										<h4 class="menu-text">Reviewer</h4>
@@ -217,6 +234,11 @@ License: You must have a valid license purchased only from themeforest(the above
 												<!--end::Svg Icon-->
 											</span>
 											<span class="menu-text">Review Artikel</span>
+											@if($data['jumlah_artikel_reviewer'] > 0)
+												<div style='width:10px;height:10px;background-color:red;color:white;position:relative;border-radius:50%;margin-top:5%;'>
+													<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>&nbsp</span>
+												</div>
+											@endif
 											<i class="menu-arrow"></i>
 										</a>
 										<div class="menu-submenu">
@@ -233,6 +255,11 @@ License: You must have a valid license purchased only from themeforest(the above
 															<span></span>
 														</i>
 														<span class="menu-text">Proses</span>
+														@if($data['jumlah_artikel_reviewer'] > 0)
+															<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
+																<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['jumlah_artikel_reviewer'] !!}</span>
+															</div>
+														@endif
 													</a>
 												</li>
 												<li class="menu-item menu-item-submenu list_menu" data-target="list_artikel_selesai_review" aria-haspopup="true" data-menu-toggle="hover">
@@ -266,6 +293,11 @@ License: You must have a valid license purchased only from themeforest(the above
 												<!--end::Svg Icon-->
 											</span>
 											<span class="menu-text">Artikel Masuk</span>
+											@if($data['total_artikel_jm'] > 0)
+												<div style='border-radius:50%;width:10px;height:10px;background-color:red;color:white;position:relative;margin-top:4%;'>
+													<span style='position:absolute;left:27%;font-size:1rem;font-weight:bold;'></span>
+												</div>
+											@endif
 											<i class="menu-arrow"></i>
 										</a>
 										<div class="menu-submenu">
@@ -282,6 +314,11 @@ License: You must have a valid license purchased only from themeforest(the above
 															<span></span>
 														</i>
 														<span class="menu-text">Proses</span>
+														@if($data['total_artikel_proses_jm'] > 0)
+															<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
+																<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['total_artikel_proses_jm'] !!}</span>
+															</div>
+														@endif
 													</a>
 												</li>
 												<li class="menu-item menu-item-submenu list_menu" data-target="list_artikel_waiting_publish_jm" aria-haspopup="true" data-menu-toggle="hover">
@@ -290,6 +327,11 @@ License: You must have a valid license purchased only from themeforest(the above
 															<span></span>
 														</i>
 														<span class="menu-text">Menunggu dipublish</span>
+														@if($data['jumlah_siap_publish'] > 0)
+															<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
+																<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['jumlah_siap_publish'] !!}</span>
+															</div>
+														@endif
 													</a>
 												</li>
 												<li class="menu-item menu-item-submenu list_menu" data-target="list_artikel_publish_jm" aria-haspopup="true" data-menu-toggle="hover">
@@ -304,8 +346,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</li>
 								@endif
-								<!-- if(Auth::user()->role === 2 || isJM()) -->
-								@if(isJM())
+								@if(Auth::user()->role === 2 || isJM())
 								<li class="menu-section">
 									<h4 class="menu-text">Admin</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -1001,15 +1042,9 @@ License: You must have a valid license purchased only from themeforest(the above
 								<div class="topbar-item">
 									<div class="btn btn-icon w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
 										<span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
-										<span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">
-											<!-- {!! Auth::user()->name !!} -->
-											{!! Session::get('cas')['nama'] !!}										
-										</span>
+										<span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{!! Auth::user()->name !!}</span>
 										<span class="symbol symbol-35 symbol-light-success">
-											<span class="symbol-label font-size-h5 font-weight-bold">
-												<!-- {!! Auth::user()->name[0] !!} -->
-												{!! Session::get('cas')['nama'][0] !!}
-											</span>
+											<span class="symbol-label font-size-h5 font-weight-bold">{!! Auth::user()->name[0] !!}</span>
 										</span>
 									</div>
 								</div>
@@ -1067,7 +1102,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<div class="card card-custom card-stretch gutter-b">
 											<!--begin::Header-->
 											<div class="card-header border-0 pt-5">
-												<h3 class="card-title font-weight-bolder">Action Needed</h3>
+												<h3 class="card-title font-weight-bolder">Statistik Artikel</h3>
 												<div class="card-toolbar">
 													<div class="dropdown dropdown-inline">
 													</div>
@@ -1076,10 +1111,10 @@ License: You must have a valid license purchased only from themeforest(the above
 											<!--end::Header-->
 											<!--begin::Body-->
 											<div class="card-body d-flex flex-column">
-												<div class="flex-grow-1">
-													<!-- <div id="kt_mixed_widget_14_chart" style="height: 200px"></div> -->
-												</div>
+												
 												<div class="pt-5">
+													@if(isJM())
+													<h3>Jurnal Manager</h3>
 													<div class="d-flex align-items-center bg-light-success rounded p-5 gutter-b">
 														<span class="svg-icon svg-icon-success mr-5">
 															<span class="svg-icon svg-icon-lg">
@@ -1098,8 +1133,26 @@ License: You must have a valid license purchased only from themeforest(the above
 															<a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Artikel Masuk</a>
 															<span class="text-muted font-size-sm">Menunggu Penetapan Reviewer</span>
 														</div>
-														<span class="font-weight-bolder text-success py-1 font-size-lg">+50%</span>
+														<span class="font-weight-bolder text-success py-1 font-size-lg">{!! $data['jumlah_masuk'] !!}</span>
 													</div>
+
+													<div class="d-flex align-items-center bg-light-success rounded p-5 gutter-b">
+														<span class="svg-icon svg-icon-success mr-5">
+															<span class="svg-icon svg-icon-lg">
+																<!--resources/views/assets/media/svg/icons/Communication/Write.svg-->
+																<i class="fa fa-cog text-primary"></i>
+																<!--end::Svg Icon-->
+															</span>
+														</span>
+														<div class="d-flex flex-column flex-grow-1 mr-2">
+															<a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Artikel Proses</a>
+															<span class="text-muted font-size-sm">Menunggu Proses Reviewer</span>
+														</div>
+														<span class="font-weight-bolder text-success py-1 font-size-lg">{!! $data['jumlah_proses_review'] !!}</span>
+													</div>
+
+
+
 													<div class="d-flex align-items-center bg-light-info rounded p-5 gutter-b">
 														<span class="svg-icon svg-icon-info mr-5">
 															<span class="svg-icon svg-icon-lg">
@@ -1120,7 +1173,7 @@ License: You must have a valid license purchased only from themeforest(the above
 															<a href="#" class="font-weight-normel text-dark-75 text-hover-primary font-size-lg mb-1">Artikel Siap Dipublish</a>
 															<span class="text-muted font-size-sm">Menunggu Publish</span>
 														</div>
-														<span class="font-weight-bolder text-info py-1 font-size-lg">+8%</span>
+														<span class="font-weight-bolder text-info py-1 font-size-lg">{!! $data['jumlah_siap_publish'] !!}</span>
 													</div>
 													<div class="d-flex align-items-center bg-light-warning rounded p-5 gutter-b">
 														<span class="svg-icon svg-icon-warning mr-5">
@@ -1140,20 +1193,13 @@ License: You must have a valid license purchased only from themeforest(the above
 															<a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Artikel disetujui Reviewer</a>
 															<span class="text-muted font-size-sm">Pemeriksaan kembali</span>
 														</div>
-														<span class="font-weight-bolder text-warning py-1 font-size-lg">+28%</span>
-													</div>
+														<span class="font-weight-bolder text-warning py-1 font-size-lg">{!! $data['jumlah_diterima'] !!}</span>
 												</div>
 												<div class="d-flex align-items-center bg-light-danger rounded p-5 gutter-b">
 													<span class="svg-icon svg-icon-danger mr-5">
 														<span class="svg-icon svg-icon-lg">
 															<!--resources/views/assets/media/svg/icons/Communication/Group-chat.svg-->
-															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																	<rect x="0" y="0" width="24" height="24" />
-																	<path d="M16,15.6315789 L16,12 C16,10.3431458 14.6568542,9 13,9 L6.16183229,9 L6.16183229,5.52631579 C6.16183229,4.13107011 7.29290239,3 8.68814808,3 L20.4776218,3 C21.8728674,3 23.0039375,4.13107011 23.0039375,5.52631579 L23.0039375,13.1052632 L23.0206157,17.786793 C23.0215995,18.0629336 22.7985408,18.2875874 22.5224001,18.2885711 C22.3891754,18.2890457 22.2612702,18.2363324 22.1670655,18.1421277 L19.6565168,15.6315789 L16,15.6315789 Z" fill="#000000" />
-																	<path d="M1.98505595,18 L1.98505595,13 C1.98505595,11.8954305 2.88048645,11 3.98505595,11 L11.9850559,11 C13.0896254,11 13.9850559,11.8954305 13.9850559,13 L13.9850559,18 C13.9850559,19.1045695 13.0896254,20 11.9850559,20 L4.10078614,20 L2.85693427,21.1905292 C2.65744295,21.3814685 2.34093638,21.3745358 2.14999706,21.1750444 C2.06092565,21.0819836 2.01120804,20.958136 2.01120804,20.8293182 L2.01120804,18.32426 C1.99400175,18.2187196 1.98505595,18.1104045 1.98505595,18 Z M6.5,14 C6.22385763,14 6,14.2238576 6,14.5 C6,14.7761424 6.22385763,15 6.5,15 L11.5,15 C11.7761424,15 12,14.7761424 12,14.5 C12,14.2238576 11.7761424,14 11.5,14 L6.5,14 Z M9.5,16 C9.22385763,16 9,16.2238576 9,16.5 C9,16.7761424 9.22385763,17 9.5,17 L11.5,17 C11.7761424,17 12,16.7761424 12,16.5 C12,16.2238576 11.7761424,16 11.5,16 L9.5,16 Z" fill="#000000" opacity="0.3" />
-																</g>
-															</svg>
+															<i class="fa fa-exclamation-triangle text-danger"></i>
 															<!--end::Svg Icon-->
 														</span>
 													</span>
@@ -1161,13 +1207,45 @@ License: You must have a valid license purchased only from themeforest(the above
 														<a href="#" class="font-weight-normel text-dark-75 text-hover-primary font-size-lg mb-1">Perbaikan Artikel</a>
 														<span class="text-muted font-size-sm">Perlu Revisi Artikel</span>
 													</div>
-													<span class="font-weight-bolder text-danger py-1 font-size-lg">1</span>
+													<span class="font-weight-bolder text-danger py-1 font-size-lg">{!! $data['jumlah_perbaikan'] !!}</span>
+												</div>
+												@endif
+												<hr />
+												<h3>Artikel Personal</h3>
+												<div class="d-flex align-items-center bg-light-info rounded p-5 gutter-b">
+													<span class="svg-icon svg-icon-success mr-5">
+														<span class="svg-icon svg-icon-lg">
+															<!--resources/views/assets/media/svg/icons/Communication/Write.svg-->
+															<i class="fa fa-clone text-primary"></i>
+															<!--end::Svg Icon-->
+														</span>
+													</span>
+													<div class="d-flex flex-column flex-grow-1 mr-2">
+														<a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Draft Artikel</a>
+														<span class="text-muted font-size-sm">Penulisan Artikel Belum selesai</span>
+													</div>
+													<span class="font-weight-bolder text-success py-1 font-size-lg">{!! $data['jumlah_artikel_personal_draft'] !!}</span>
+												</div>
+												<div class="d-flex align-items-center bg-light-success rounded p-5 gutter-b">
+													<span class="svg-icon svg-icon-success mr-5">
+														<span class="svg-icon svg-icon-lg">
+															<!--resources/views/assets/media/svg/icons/Communication/Write.svg-->
+															<i class="fa fa-cog text-primary"></i>
+															<!--end::Svg Icon-->
+														</span>
+													</span>
+													<div class="d-flex flex-column flex-grow-1 mr-2">
+														<a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Artikel Proses</a>
+														<span class="text-muted font-size-sm">Menunggu Reviewer / Sedang Direview</span>
+													</div>
+													<span class="font-weight-bolder text-success py-1 font-size-lg">{!! $data['jumlah_artikel_personal_proses'] !!}</span>
 												</div>
 											</div>
 											<!--end::Body-->
 										</div>
 										<!--end::Mixed Widget 14-->
 									</div>
+</div>
 									<div class="col-lg-8">
 										<!--begin::Advance Table Widget 4-->
 										<div class="card card-custom card-stretch gutter-b">
@@ -1299,14 +1377,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
-							<!-- {!! Auth::user()->name !!} -->
-							{!! Session::get('cas')['nama'] !!}
-						</a>
-						<div class="text-muted mt-1">
-							<!-- {!! Auth::user()->nip !!} -->
-							{!! Session::get('cas')['nip'] !!}
-						</div>
+						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{!! Auth::user()->name !!}</a>
+						<div class="text-muted mt-1">{!! Auth::user()->nip !!}</div>
 						<div class="navi mt-2">
 							<a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">

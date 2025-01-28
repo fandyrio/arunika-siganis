@@ -36,7 +36,7 @@
             <tr>
                 <th>Edoc</th>
                 <td>
-                    <a href="download/{!! Crypt::encrypt($data['edoc']) !!}/edoc_artikel">
+                    <a href="download/{!! Crypt::encrypt($data['edoc']) !!}/edoc_artikel_doc">
                         <span class='far fa-file-word'></span> Download Doc</a>
                     @if($data['step'] === 7)
                         @if(isJM())
@@ -60,6 +60,9 @@
                     <th>Tema</th>
                     <td>
                         <span style='color:green;font-size:1.2rem;font-weight:bold;'>{!! $data['name'] !!}</span>
+                        @if(isJM() && $data['step'] === 7)
+                            <button class='btn btn-success btn-sm addTema' data-target="{!! Crypt::encrypt($data['id']) !!}" style='float:right;'>Ganti Tema</button>
+                        @endif
                     </td>
                 </tr>
             @endif

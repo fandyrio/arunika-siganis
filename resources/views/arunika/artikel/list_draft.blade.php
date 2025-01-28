@@ -39,7 +39,7 @@
                                     {!! $list_data['name'] === null ? "" : "<span style='color:green;font-weight:bold;font-size:1rem'>Tema : ".$list_data['name']."</span>" !!}
                                 </td>
                                 <td class='mt-6'><b>{!! $list_data['step_text'] !!}</b></td>
-                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
+                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
                             </tr>
                         @endforeach
                     @endif

@@ -34,9 +34,11 @@
         </tr>
     </table>
     <hr />
-        <button class='btn btn-info btn-md tabs' data-target="data_pribadi" style='float:left;'>< Sebelumnya</button> &nbsp
-        <button class='btn btn-danger btn-md edit' onClick="loadDataArtikel('form')">Edit</button>
-        <button class='btn btn-info btn-md tabs' data-target="confirmation" style='float:right;'>Selanjutnya ></button>
+        <button class='btn btn-default btn-sm tabs' data-target="data_pribadi" style='float:left;color:black;'>< Sebelumnya</button> &nbsp
+        @if($artikel['step'] < 3)
+            <button class='btn btn-danger btn-sm edit' onClick="loadDataArtikel('form')">Edit</button>
+        @endif
+        <button class='btn btn-info btn-sm tabs' data-target="confirmation" style='float:right;'>Selanjutnya ></button>
 </div>
 <!-- <script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script> -->

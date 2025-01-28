@@ -5,7 +5,7 @@
         @if(isJM())
             <button class='btn btn-success btn-xs addReviewer' style='float:right;'>Tambah Reviewer</button>
             <br /><br /><br />
-            @if($data_review->artikel->step <= 6)
+            @if($data_review->artikel->step === 3)
                 <button class='btn btn-warning btn-sm directPublish' style='float:right;' data-target='{!! Crypt::encrypt($artikel_id) !!}'><span class='fas fa-check'></span> Langsung Publish</button>
             @endif
         @endif
@@ -19,13 +19,23 @@
                     <th>Status</th>
                 </tr>
                 @foreach($reviewer as $list_reviewer)
-                    <tr>
-                        <td>{!! $list_reviewer['nama'] !!}  <br /> <span style='color:orange;font-weight:bold;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span> </td>
-                        <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_pilih'])) !!}</td>
-                        <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_mulai'])) !!}</td>
-                        <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_estimasi_selesai'])) !!}</td>
-                        <td>{!!  $list_reviewer['status'] === 1 ? 'Aktif' : 'Tidak aktif' !!}</td>
-                    </tr>
+                    @if(($list_reviewer['status'] === 0 || $list_reviewer['status'] === 1) && isJM())
+                        <tr>
+                            <td>{!! $list_reviewer['nama'] !!}  <br /> <span style='color:orange;font-weight:bold;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span> </td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_pilih'])) !!}</td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_mulai'])) !!}</td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_estimasi_selesai'])) !!}</td>
+                            <td>{!!  $list_reviewer['status'] === 1 ? 'Aktif' : "<span style='color:red;'>Diganti</span>" !!}</td>
+                        </tr>
+                    @elseif($list_reviewer['status'] === 1 && isReviewer())
+                        <tr>
+                            <td>{!! $list_reviewer['nama'] !!}  <br /> <span style='color:orange;font-weight:bold;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span> </td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_pilih'])) !!}</td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_mulai'])) !!}</td>
+                            <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_estimasi_selesai'])) !!}</td>
+                            <td>{!!  $list_reviewer['status'] === 1 ? 'Aktif' : 'Tidak aktif' !!}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         @else
@@ -89,8 +99,29 @@
                                 </span>
                             </div>
                         </div>
+                        @php
+                            $background_color_checklist="white";
+                            $background_color_hasil="white";
+                            $background_color_catatan="white";
+                            $background_color_kirim="white";
+                            if($data_review->data_review[$x]->jumlah_checklist_result > 0){
+                                $background_color_checklist="antiquewhite";
+                            }
+
+                            if($data_review->data_review[$x]->jumlah_hasil_review > 0){
+                                $background_color_hasil="cornsilk";
+                            }
+
+                            if($data_review->data_review[$x]->catatan_reviewer !== null){
+                                $background_color_catatan="lavenderblush";
+                            }
+
+                            if($data_review->data_review[$x]->sent_at !== null){
+                                $background_color_kirim="aliceblue";
+                            }
                         
-                        <div class="timeline-item" style='margin-top:30px;'>
+                        @endphp
+                        <div class="timeline-item" style='margin-top:30px;background-color:{!! $background_color_checklist !!}'>
                             <div class="timeline-badge bg-success"></div>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
                                 <span class="mr-3">
@@ -123,7 +154,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="timeline-item" style='margin-top:30px;'>
+                        <div class="timeline-item" style='margin-top:30px;background-color:{!! $background_color_hasil !!}'>
                             <span class="timeline-badge bg-success"></span>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
                                 <span class="mr-3">
@@ -156,7 +187,8 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="timeline-item" style='margin-top:30px;'>
+                        
+                        <div class="timeline-item" style='margin-top:30px;background-color:{!! $background_color_catatan !!}'>
                             <span class="timeline-badge bg-success"></span>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
                                 <span class="mr-3">
@@ -184,7 +216,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="timeline-item" style='margin-top:30px;'>
+                        <div class="timeline-item" style='margin-top:30px;background-color:{!! $background_color_kirim !!}'>
                             <span class="timeline-badge bg-success"></span>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
                                 <span class="mr-3">

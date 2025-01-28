@@ -88,7 +88,7 @@ Route::post('send-review-result', 'artikelController@sendReviewResult')->name('s
 Route::post('cancel-review-result', 'artikelController@cancelReviewResultSent')->name('cancel-review-result')->middleware('cas.auth');
 Route::post('save-perbaikan-artikel', 'artikelController@savePerbaikanArtikel')->name('save-perbaikan-artikel')->middleware('cas.auth');
 Route::post('remove-edoc-perbaikan', 'artikelController@removeEdocPerbaikan')->name('remove-edoc-perbaikan')->middleware('cas.auth');
-Route::post('update-foto-penulis', 'artikelController@updateFotoPenuls')->name('update-foto-penulis')->middleware('cas.auth');
+Route::post('update-foto-penulis', 'artikelController@updateFotoPenulis')->name('update-foto-penulis')->middleware('cas.auth');
 Route::post('send-perbaikan-penulis', 'artikelController@sendPerbaikanPenulis')->name('send-perbaikan-penulis')->middleware('cas.auth');
 Route::post('form-cancel-publish', 'artikelController@formCancelPublish')->name('form-cancel-publish')->middleware('cas.auth');
 Route::post('cancel-publish', 'artikelController@cancelPublish')->name('cancel-publish')->middleware('cas.auth');

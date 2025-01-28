@@ -11,12 +11,17 @@ $(document).on("click",".list_menu", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    $(".list_menu").removeClass('menu-item-active');
-    $(this).addClass('menu-item-active');
     var target=$(this).data('target');
+    $(".list_menu").removeClass('menu-item-active');
+    $(".list_menu[data-target='"+target+"']").addClass('menu-item-active');
     if(target === "artikel_baru"){
         var endpoint=$(this).data('endpoint');
-        var url="form-new-artikel/"+endpoint;
+        if(typeof $(this).data('v_init') !== "undefined"){
+            var v_init=$(this).data('v_init');
+            var url="form-new-artikel/"+endpoint+"/"+v_init;
+        }else{
+            var url="form-new-artikel/"+endpoint;
+        }
         setHeader('Artikel', 'Tambah Artikel');
     }else if(target === "editorial_team"){
         var url='list-editorial-team'
@@ -210,6 +215,16 @@ $("form").submit(function(e){
                 }
             }
             callSwal(icon, data.msg, true);
+            const list=[...document.querySelectorAll('.tab_menus')];
+            var active=document.querySelector('.tab_menus.active');
+            var index=list.indexOf(active);
+            var next_active=index+=1;
+            var selector=$(".tab_menus");
+            var next_target=$(selector[next_active]).data('target');
+            console.log(next_active+" : "+next_target);
+            $(selector[next_active]).removeClass('alertMsg');
+            $(selector[next_active]).addClass("tabs");
+            $(selector[next_active]).addClass(next_target);
         }
     })
 });
@@ -291,6 +306,16 @@ $(".btn-send").click(function(e){
                 loadDataFinish();
             }
             callSwal(icon, data.msg, true);
+            const list=[...document.querySelectorAll('.tab_menus')];
+            var active=document.querySelector('.tab_menus.active');
+            var index=list.indexOf(active);
+            var next_active=index+=1;
+            var selector=$(".tab_menus");
+            var next_target=$(selector[next_active]).data('target');
+            console.log(next_active+" : "+next_target);
+            $(selector[next_active]).removeClass('alertMsg');
+            $(selector[next_active]).addClass("tabs");
+            $(selector[next_active]).addClass(next_target);
         }
     })
 });
@@ -299,11 +324,12 @@ $(".detil_artikel").click(function(e){
     e.stopPropagation();
     e.stopImmediatePropagation();
     var target=$(this).data('target');
+    var v_init=$(this).data('v_init');
     $.ajax({
         beforeSend:function(){
             $(".detil_artikel").prop('disabled', true).html('Waiting ...');
         },
-        url:'detil-artikel/'+target,
+        url:'detil-artikel/'+target+'/'+v_init,
         type:'GET',
         success:function(data){
             $(".container").html(data);

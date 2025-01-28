@@ -19,7 +19,7 @@ use App\Reviewer_artikel;
 use App\Editorial_team;
 use App\Review_stage;
 use App\Checklist_review;
-use App\Checklist_Review_result;
+use App\Checklist_review_result;
 use App\Hasil_reviewer;
 use App\Publish_artikel;
 use App\Statistik_baca;
@@ -32,7 +32,7 @@ use Dompdf\Dompdf;
 
 class artikelController extends Controller
 {
-    public function formNewArtikel($id_artikel){
+    public function formNewArtikel($id_artikel, $v_init=null){
         $id_artikel_dec=Crypt::decrypt($id_artikel);
         $jumlah_review=0;
         $step=0;
@@ -42,8 +42,25 @@ class artikelController extends Controller
             $step=$get_data['step'];
             $review_stage=Review_stage::where('id_artikel', $id_artikel_dec)->get();
             $jumlah_review=$review_stage->count();
+
+            if($step === 1){
+                $tab_step=2;
+            }elseif($step === 2){
+                if($get_data['judul'] !== null){
+                   $tab_step=3;
+                }else{
+                    $tab_step=2;
+                }
+            }elseif($step === 3){
+                $tab_step=4;
+            }elseif($step >= 4){
+                $tab_step=7;
+            }
+
+        }else{
+            $tab_step=1;
         }
-        return view("arunika/artikel/tab_new_artikel", ['id_artikel'=>$id_artikel, 'jumlah_review'=>$jumlah_review, 'step'=>$step]);
+        return view("arunika/artikel/tab_new_artikel", ['id_artikel'=>$id_artikel, 'jumlah_review'=>$jumlah_review, 'step'=>$step, 'tab_step'=>$tab_step, 'v_init'=>$v_init]);
     }
     public function formDataPribadi(Request $request){
         try{
@@ -229,22 +246,39 @@ class artikelController extends Controller
         }
         return response()->json(['status'=>$status, 'msg'=>$msg, 'data'=>$data]);
     }
-    public function createThumbnail($filename, $path){
-        $source = imagecreatefromjpeg($path);
-        list($width, $height) = getimagesize($path);
-
-        // Define new dimensions (200x200 pixels)
-        $newWidth = 450;
-        $newHeight = 250;
-
+    public function createThumbnail($filename, $path, $type){
         // Create a new image
-        $thumb = imagecreatetruecolor($newWidth, $newHeight);
+        switch(mime_content_type($path)){
+            case 'image/png':
+                $source = imagecreatefrompng($path);
+                break;
+            case 'image/jpeg':
+                $source = imagecreatefromjpeg($path);
+                break;
+            case 'image/jpg':
+                $source = imagecreatefromjpeg($path);
+                break;
+            default:
+                $source=null;
 
-        // Resize
-        imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        }
+        if($source !== null){
+            // $source = imagecreatefromjpeg($path);
+            list($width, $height) = getimagesize($path);
 
-        // Save the resized image
-        imagejpeg($thumb, 'upload/image/thumbnail/thumbnail_'.$filename, 100);
+            // Define new dimensions (200x200 pixels)
+            $newWidth = 450;
+            $newHeight = 250;
+            $thumb = imagecreatetruecolor($newWidth, $newHeight);
+
+            // Resize
+            imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+            // Save the resized image
+            imagejpeg($thumb, 'upload/image/thumbnail/thumbnail_'.$filename, 100);
+            return true;
+        }
+        return false;
     }
     
     public function saveDataPribadi(Request $request){
@@ -277,7 +311,7 @@ class artikelController extends Controller
                                     $file_foto->move($destination, $filename);
                                     $path=$destination."/".$filename;
                                     if(File::exists($path)){
-                                        $generateThumbnail=$this->createThumbnail($filename, $path);
+                                        $generateThumbnail=$this->createThumbnail($filename, $path, $type);
                                         $penulis=new Penulis_artikel;
                                         $penulis->id_pegawai=$json_data['IdPegawai'];
                                         $penulis->nama=$json_data['NamaLengkap'];
@@ -727,7 +761,7 @@ class artikelController extends Controller
                         ->whereRaw('step <= 7')
                         ->get();
         $jumlah=$get_data->count();
-        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'list_menu', 'target'=>'artikel_baru', 'title'=>'Artikel Anda', 'keterangan_title'=> 'Dafar artikel anda']);
+        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'list_menu', 'target'=>'artikel_baru', 'title'=>'Artikel Anda', 'keterangan_title'=> 'Dafar artikel anda', 'v_init'=> 'list_artikel_proses']);
     }
     public function listDraft(){
         $nip=Auth::user()->nip;
@@ -742,26 +776,58 @@ class artikelController extends Controller
                                 ->orderBy('artikel.id', 'desc')
                                 ->get();
         $jumlah_draft=$get_data->count();
-        return view('arunika/artikel/list_draft', ['data'=>$get_data, 'jumlah'=>$jumlah_draft, 'class'=>'list_menu', 'target'=>'artikel_baru', 'title'=>'Artikel Anda', 'keterangan_title'=> 'Dafar Draft Artikel']);
+        return view('arunika/artikel/list_draft', ['data'=>$get_data, 'jumlah'=>$jumlah_draft, 'class'=>'list_menu', 'target'=>'artikel_baru', 'title'=>'Artikel Anda', 'keterangan_title'=> 'Dafar Draft Artikel', 'v_init'=>'draft']);
     }
     public function listArtikelProsesReviewer(){
         $nip=Auth::user()->nip;
-        $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
-                        ->join('reviewer_artikel', 'reviewer_artikel.id_artikel', '=', 'artikel.id')
-                        ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                        ->join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
-                        ->join('review_stage', function($q){
-                            $q->on('review_stage.id', '=', 'reviewer_artikel.id_review')
-                            ->where('review_stage.step', 4);
-                        })
-                        ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
-                        ->where('pegawai.nip', $nip)
-                        ->whereRaw('artikel.step >= 3')
-                        ->whereRaw('artikel.step <= 6')
-                        ->orderBy('review_stage.updated_at', 'desc')
-                        ->get();
+        // $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+        //                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+        //                 ->join('review_stage', function($q){
+        //                     $q->on('review_stage.id_artikel', '=', 'artikel.id')
+        //                         ->where('review_stage.step', 4)
+        //                         ->orWhere(function($b){
+        //                             $b->where('review_stage.step', 5)
+        //                             ->whereRaw('review_stage.send_author_at is null');
+        //                         });
+        //                 })
+        //                 ->join('reviewer_artikel', function($join){
+        //                     $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
+        //                         ->where('reviewer_artikel.status', true);
+        //                 })
+        //                 ->join('pegawai', function($join) use($nip){
+        //                     $join->on('pegawai.id', '=', 'reviewer_artikel.id_pegawai')
+        //                         ->where('pegawai.nip', $nip);
+        //                 })
+        //                 ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.id as id_stage', 'pegawai.nama as nama_rev', 'reviewer_artikel.id as id_reviewer')
+        //                 ->whereRaw('artikel.step >= 3')
+        //                 ->whereRaw('artikel.step <= 6')
+        //                 ->orderBy('review_stage.updated_at', 'desc')
+        //                 ->get();
+        $get_data=Review_stage::join('artikel', function($join){
+                                $join->on('artikel.id', '=', 'review_stage.id_artikel')
+                                ->whereRaw('artikel.step >= 3')
+                                ->whereRaw('artikel.step <= 4');
+                            })
+                            ->join('reviewer_artikel', function($join){
+                                $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
+                                ->where('reviewer_artikel.status', true);
+                            })
+                            ->join('pegawai', function($join) use($nip){
+                                    $join->on('pegawai.id', '=', 'reviewer_artikel.id_pegawai')
+                                        ->where('pegawai.nip', $nip);
+                                })
+                            ->join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
+                            ->where('review_stage.step', 4)
+                            ->orWhere(function($a){
+                                $a->where('review_stage.step', 5)
+                                ->whereRaw('review_stage.send_author_at is null');
+                            })
+                            ->orderBy('review_stage.updated_at', 'desc')
+                            ->get();
         $jumlah=$get_data->count();
-        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses', 'keterangan_title'=> 'Dafar artikel yang sedang anda review']);
+        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses', 'keterangan_title'=> 'Dafar artikel yang sedang anda review', 'v_init'=>'list_artikel_proses_reviewer']);
     }
     public function listArtikelProsesJM(){
         if(isJM()){
@@ -769,12 +835,12 @@ class artikelController extends Controller
             $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
                             ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
-                            ->where('step', 3)
-                            ->orWhere('step', 6)
+                            ->whereBetween('step', [3,6])
+                            // ->orWhere('step', 6)
                             //->orWhere('step', 7)
                             ->get();
             $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses Journal Manager', 'keterangan_title'=> 'Dafar artikel yang dalam Proses Review']);
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses Journal Manager', 'keterangan_title'=> 'Dafar artikel yang dalam Proses Review', 'v_init'=>'list_artikel_proses_jm']);
         }else{
             echo "Access denied";
         }
@@ -790,7 +856,7 @@ class artikelController extends Controller
                             ->where('penulis_artikel.nip', $nip)
                             ->get();
         $jumlah=$get_data->count();
-        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Proses Artikel Selesai', 'keterangan_title'=> 'Dafar artikel anda yang telah selesai direview']);
+        return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Proses Artikel Selesai', 'keterangan_title'=> 'Dafar artikel anda yang telah selesai direview', 'v_init'=>'list_artikel_publish']);
     }
     public function linkArtikelPublishJM(){
         if(isJM()){
@@ -802,7 +868,7 @@ class artikelController extends Controller
                             ->where('step', 8)
                             ->get();
             $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses', 'keterangan_title'=>'List Artikel yang telah Publish']);
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Published', 'keterangan_title'=>'List Artikel yang telah Publish', 'v_init'=>'list_artikel_publish_jm']);
         }else{
             echo "Akses ditolak";
         }
@@ -817,37 +883,59 @@ class artikelController extends Controller
                             ->where('step', 7)
                             ->get();
             $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Menunggu Publish (Early View)', 'keterangan_title'=>'List Artikel Menunggu Publish (Early View)']);
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Menunggu Publish (Early View)', 'keterangan_title'=>'List Artikel Menunggu Publish (Early View)', 'v_init'=>'list_artikel_waiting_publish_jm']);
         }else{
             echo "Akses ditolak";
         }
     }
     public function listArtikelSelesaiReview(){
         if(isReviewer()){
-            $get_data=Artikel::join('reviewer_artikel', 'reviewer_artikel.id_artikel', '=', 'artikel.id')
-                            ->join('review_stage', function($q){
-                                        $q->on('review_stage.id_artikel', '=', 'artikel.id')
-                                        ->on('review_stage.id', '=', 'reviewer_artikel.id_review');
-                                    })
-                            ->join('step_master', 'step_master.step_id', '=', 'review_stage.step')
-                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                            ->join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
-                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
-                            ->where('pegawai.nip', Auth::user()->nip)
-                            ->orderBy('review_stage.updated_at', 'desc')
-                            ->get();
+            $nip=Auth::user()->nip;
+            // $get_data=Artikel::join('reviewer_artikel', 'reviewer_artikel.id_artikel', '=', 'artikel.id')
+            //                 ->join('review_stage', function($q){
+            //                             $q->on('review_stage.id_artikel', '=', 'artikel.id')
+            //                             ->on('review_stage.id', '=', 'reviewer_artikel.id_review');
+            //                         })
+            //                 ->join('step_master', 'step_master.step_id', '=', 'review_stage.step')
+            //                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+            //                 ->join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
+            //                 ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
+            //                 ->where('pegawai.nip', Auth::user()->nip)
+            //                 ->orderBy('review_stage.updated_at', 'desc')
+            //                 ->get();
+            $get_data=Review_stage::join('artikel', function($join){
+                    $join->on('artikel.id', '=', 'review_stage.id_artikel')
+                    ->whereRaw('artikel.step >= 5');
+                })
+                ->join('reviewer_artikel', function($join){
+                    $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
+                    ->where('reviewer_artikel.status', true);
+                })
+                ->join('pegawai', function($join) use($nip){
+                        $join->on('pegawai.id', '=', 'reviewer_artikel.id_pegawai')
+                            ->where('pegawai.nip', $nip);
+                    })
+                ->join('step_master', 'step_master.step_id', '=', 'review_stage.step')
+                ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
+                ->whereIn('review_stage.step', [5,6,7,8,9])
+                ->whereRaw('review_stage.send_author_at is not null')
+                ->orderBy('review_stage.updated_at', 'desc')
+                ->get();
             $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'list-artikel-selesai-review', 'title'=> 'Artikel Proses', 'keterangan_title'=>'List Artikel yang selesai direview']);
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'list-artikel-selesai-review', 'title'=> 'Artikel Proses', 'keterangan_title'=>'List Artikel yang selesai direview', 'v_init'=>'list_artikel_selesai_review']);
         }else{
             echo "Akses ditolak";
         }
     }
-    public function detilArtikel($artikel_id){
+    public function detilArtikel($artikel_id, $v_init){
         try{
             $artikel_id_dec=Crypt::decrypt($artikel_id);
+            $v_init_dec=Crypt::decrypt($v_init);
             $get_artikel=Artikel::where('id', $artikel_id_dec)->first();
             $step=$get_artikel['step'];
-            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>'list_artikel_publish_jm']);
+            $judul=$get_artikel['judul'];
+            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul]);
         }catch(DecryptException $e){
             echo "invalid token";
         }
@@ -876,10 +964,14 @@ class artikelController extends Controller
     public function getDataReview($artikel_id){
         $data_review=[];
         $get_checklist_result=[];
-        $get_review_stage=Review_stage::leftJoin('step_master', 'step_master.step_id', '=', 'review_stage.step')
+        $get_review_stage=Review_stage::join('reviewer_artikel', function($join){
+                                    $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
+                                        ->where('reviewer_artikel.status', true);
+                                })
+                                ->leftJoin('step_master', 'step_master.step_id', '=', 'review_stage.step')
                                 ->select('review_stage.*', 'step_master.step_text')
-                                ->where('id_artikel', $artikel_id)
-                                ->orderBy('id', 'desc')
+                                ->where('reviewer_artikel.id_artikel', $artikel_id)
+                                ->orderBy('reviewer_artikel.id', 'desc')
                                 ->get();
         $jumlah_review=$get_review_stage->count();
         $data_review=[];
@@ -960,7 +1052,6 @@ class artikelController extends Controller
                         ->join('review_stage', 'review_stage.id', 'reviewer_artikel.id_review')
                         ->select('pegawai.*', 'reviewer_artikel.tgl_pilih', 'reviewer_artikel.tgl_mulai', 'reviewer_artikel.tgl_estimasi_selesai', 'reviewer_artikel.status', 'review_stage.review_ke')
                         ->where('reviewer_artikel.id_artikel', $artikel_id)
-                        ->where('reviewer_artikel.status', true)
                         ->orderBy('reviewer_artikel.id', 'desc')
                         ->get();
             $jumlah_reviewer=$get_data->count();
@@ -1013,33 +1104,44 @@ class artikelController extends Controller
                                     ->first();
                     if(!is_null($get_artikel)){
                         $step=$get_artikel['step'];
-                        $get_reviewer_before=Reviewer_artikel::join('review_stage', 'review_stage.id_artikel', '=', 'reviewer_artikel.id_artikel')
+                        $get_reviewer_before=Reviewer_artikel::join('review_stage', 'review_stage.id', '=', 'reviewer_artikel.id_review')
                                                 ->whereRaw('review_stage.step <> 5')
                                                 ->where('reviewer_artikel.id_artikel', $artikel_id)
                                                 ->where('reviewer_artikel.status', true)
+                                                ->select('reviewer_artikel.*')
+                                                ->orderBy('reviewer_artikel.id', 'desc')
                                                 ->first();
-                        $update_reviewer_before=true;
-                        $review_baru=true;
-                        if(!is_null($get_reviewer_before)){
-                            $update_reviewer_before=false;
-                            $get_reviewer_before->status=false;
-                            $update_reviewer_before=$get_reviewer_before->update();
-                            $review_baru=false;    
-                        }
-                        if($update_reviewer_before){
                             //insert artikel badge
-                            $save_review=true;
-                            if($review_baru){
-                                $save_review=false;
-                                $check_review_stage=Review_stage::where('id_artikel', $artikel_id)->get();
-                                $jumlah=$check_review_stage->count();
+                            //$save_review=false;
+                            
+                            // $reviewer_ke=$check_review_stage->count();
+                            
+                            try{
+                                DB::beginTransaction();
+                                
+                                //jika ada reviewer sebelumnya yang masih aktif dan sedang melakukan reviewer
+                                if(!is_null($get_reviewer_before)){
+                                    $check_review_stage=Review_stage::where('id', $get_reviewer_before['id_review'])->first();
+                                    $review_ke=$check_review_stage['review_ke'];
+                                    $get_reviewer_before->status=false;
+                                    $get_reviewer_before->update();
+                                }else{
+                                    $check_review_stage=Review_stage::where('id_artikel', $artikel_id)
+                                                        ->orderBy('id', 'desc')
+                                                        ->first();
+                                    $review_ke=1;
+                                    if(!is_null($check_review_stage)){
+                                        $review_ke=(int)$check_review_stage['review_ke']+=1;
+                                    }
+                                }
+
+                                //insert review stage
                                 $review_stage=new Review_stage;
                                 $review_stage->id_artikel=$artikel_id;
                                 $review_stage->step=4;
-                                $review_stage->review_ke=$jumlah+=1;
-                                $save_review=$review_stage->save();
-                            }
-                            if($save_review){
+                                $review_stage->review_ke=$review_ke;
+                                $review_stage->save();
+                                
                                 //insert reviewer
                                 $id_review=$review_stage->id;
                                 $reviewer_artikel=new Reviewer_artikel;
@@ -1050,31 +1152,26 @@ class artikelController extends Controller
                                 $reviewer_artikel->tgl_mulai=$request->tgl_mulai;
                                 $reviewer_artikel->tgl_estimasi_selesai=$request->tgl_selesai;
                                 $reviewer_artikel->status=true;
-                                $save_reviewer=$reviewer_artikel->save();
-                                if($save_reviewer){
-                                    $get_artikel->step=4;
-                                    $update_step=$get_artikel->update();
-                                    if($update_step){
-                                        
-                                        $get_pegawai=$this->getPegawaiById($id_pegawai);
-                                        $data_pegawai=$get_pegawai->getData();
-                                        $data_wa['judul']=$get_artikel['judul'];
-                                        $data_wa['no_handphone']=$data_pegawai->no_handphone;
-                                        $data_wa['nama_penerima']=$data_pegawai->nama;
-                                        $this->sendWaNotification('assign_reviewer', $data_wa);
-                                        $msg="Berhasil menyimpan reviewer";
-                                    }else{
-                                        $msg="Terjadi kesalahan sistem saat mengubah tahapan";
-                                    }
-                                }else{
-                                    $msg="Terjadi kesalahan sistem saat menyimpan reviewer";
-                                }
-                            }else{
-                                $msg="Terjadi kesalahan sistem saat menyimpan data review";
+                                $reviewer_artikel->save();
+                                
+                                //set artikel step menjadi sedang di review
+                                $get_artikel->step=4;
+                                $get_artikel->update();
+                                
+                                //kirim pemberitahuan ke reviewer
+                                $get_pegawai=$this->getPegawaiById($id_pegawai);
+                                $data_pegawai=$get_pegawai->getData();
+                                $data_wa['judul']=$get_artikel['judul'];
+                                $data_wa['no_handphone']=$data_pegawai->no_handphone;
+                                $data_wa['nama_penerima']=$data_pegawai->nama;
+                                //$this->sendWaNotification('assign_reviewer', $data_wa);
+                                $msg="Berhasil menyimpan reviewer";
+                                $update_step=true;
+                                DB::commit();   
+                            }catch(Exception $e){
+                                DB::rollback();
+                                $msg="Terjadi kesalahan sistem saat menyimpan reviewer";
                             }
-                        }else{
-                            $msg="Keslahan sistem. Reviewer aktif tidak dapat di ganti";
-                        }
                     }else{
                         $msg="Tidak dapat menambahkan reviewer";
                     }
@@ -1828,12 +1925,16 @@ public function removeHasilReview(Request $request){
                                     ->first();
                         $edoc_acc=$get_edoc['edoc_artikel'];
                     }else{
-                        $get_edoc=Review_stage::where('review_ke', $review_before)
-                            ->where('id_artikel', $artikel_id)
+                        $get_edoc=Review_stage::join('reviewer_artikel', function($join){
+                                                    $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
+                                                    ->where('reviewer_artikel.status', true);
+                                                })
+                            ->where('review_stage.review_ke', $review_before)
+                            ->where('review_stage.id_artikel', $artikel_id)
                             ->first();
                         $edoc_acc=$get_edoc['edoc_perbaikan_penulis'];
                     }
-                    if(is_null($get_edoc)){
+                    if(is_null($get_edoc) || is_null($edoc_acc)){
                         echo "Operation stop ";
                         die();
                     }
@@ -2091,6 +2192,12 @@ public function removeHasilReview(Request $request){
                             $get_issue->status=2;//set to publish
                             $get_issue->update();
 
+                            $get_review_stage=Review_stage::where('id_artikel', $artikel_id)
+                                                    ->where('step', 7)
+                                                    ->first();
+                            $get_review_stage->step=8;
+                            $get_review_stage->update();
+
                             $publish=true;
                             $msg="Berhasil Melakukan Publish terhadap artikel";
                             DB::commit();
@@ -2104,7 +2211,8 @@ public function removeHasilReview(Request $request){
                             $data_wa['nama_penerima']=$get_penulis['nama'];
                             $data_wa['no_handphone']=$get_penulis['no_handphone'];
                             $category="notification_publish";
-                            $this->sendWaNotification($category, $data_wa);
+                            $status_wa=$this->sendWaNotification($category, $data_wa);
+                            
                         }
                     }else{
                         $msg="Dokumen Artikel tidak dapat dipublish. Mohon hubungi tim pengembang";
@@ -2498,7 +2606,7 @@ public function removeHasilReview(Request $request){
         }
         return response()->json(['status'=>$delete, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
     }
-    public function updateFotoPenuls(Request $request){
+    public function updateFotoPenulis(Request $request){
         $update=false;
         try{
             $artikel_id=Crypt::decrypt($request->token_a);
@@ -2514,7 +2622,7 @@ public function removeHasilReview(Request $request){
                         $file->move($destination, $filename);
                         $path=$destination."/".$filename;
                         if(File::exists($path)){
-                            $generateThumbnail=$this->createThumbnail($filename, $path);
+                            $generateThumbnail=$this->createThumbnail($filename, $path, $type);
                             $get_artikel->foto_penulis=$path;
                             $update=$get_artikel->update();
                             if($update){

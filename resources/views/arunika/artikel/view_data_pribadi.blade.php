@@ -41,8 +41,10 @@
         <div class='row'>
             <div class="col-12">
                 <hr />
-                    <button class='btn btn-danger btn-md' onClick="loadDataPribadi('form')">Edit</button>
-                    <button class='btn btn-info btn-md tabs' style='float:right;' data-target="artikel">Selanjutnya ></button>
+                    @if($data['step'] < 3)
+                        <button class='btn btn-danger btn-sm' onClick="loadDataPribadi('form')">Edit</button>
+                    @endif
+                    <button class='btn btn-info btn-sm tabs' style='float:right;' data-target="artikel">Selanjutnya ></button>
 
             </div>
         </div>

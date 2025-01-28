@@ -38,8 +38,14 @@
                                     <br />
                                     {!! $list_data['name'] === null ? "" : "<span style='color:green;font-weight:bold;font-size:1rem'>Tema : ".$list_data['name']."</span>" !!}
                                 </td>
-                                <td class='mt-6'><b>{!! $list_data['step_text'] !!}</b></td>
-                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
+                                <td class='mt-6'>
+                                    <b>{!! $list_data['step_text'] !!}</b>
+                                    @if(isReviewer())
+                                        <br />
+                                    <span style='color:orange;font-size:1rem;font-weight:bold;'>(Review ke {!! $list_data['review_ke'] !!})</span>
+                                    @endif
+                                </td>
+                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
                             </tr>
                         @endforeach
                     @endif
@@ -47,5 +53,5 @@
             </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=123') !!}"></script>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
