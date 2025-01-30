@@ -32,7 +32,7 @@ Route::get('test/{a}', 'loginController@test')->name('test');
 
 Route::get('dashboard', 'dashboardController@index')->name('dashboard')->middleware('cas.auth');
 
-Route::get('form-new-artikel/{token}', 'artikelController@formNewArtikel')->name('form-new-artikel')->middleware('cas.auth');
+Route::get('form-new-artikel/{token}/{v_init?}', 'artikelController@formNewArtikel')->name('form-new-artikel')->middleware('cas.auth');
 Route::post('form-data-pribadi', 'artikelController@formDataPribadi')->name('form-data-pribadi')->middleware('cas.auth');
 Route::post('search-nip', 'artikelController@searchNIP')->name('search-nip')->middleware('cas.auth');
 Route::post('save-data-pribadi', 'artikelController@saveDataPribadi')->name('save-data-pribadi')->middleware('cas.auth');
@@ -65,7 +65,7 @@ Route::get('list-artikel-proses-reviewer', 'artikelController@listArtikelProsesR
 Route::get('list-artikel-proses-jm', 'artikelController@listArtikelProsesJM')->name('list-artikel-proses-jm')->middleware('cas.auth');
 Route::get('list-artikel-selesai-review', 'artikelController@listArtikelSelesaiReview')->name('list-artikel-selesai-review')->middleware('cas.auth');
 Route::get('link-artikel-publish-jm', 'artikelController@linkArtikelPublishJM')->name('link-artikel-publish-jm')->middleware('cas.auth');
-Route::get('detil-artikel/{id}', 'artikelController@detilArtikel')->name('detil-artikel')->middleware('cas.auth');
+Route::get('detil-artikel/{id}/{v_init}', 'artikelController@detilArtikel')->name('detil-artikel')->middleware('cas.auth');
 Route::post('data-umum-artikel', 'artikelController@dataUmumArtikel')->name('data-umum-artikel')->middleware('cas.auth');
 Route::post('data-review', 'artikelController@dataReview')->name('data-review')->middleware('cas.auth');
 Route::post('data-review-author', 'artikelController@dataReviewAuthor')->name('data-review')->middleware('cas.auth');
