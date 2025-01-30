@@ -2222,8 +2222,10 @@ public function removeHasilReview(Request $request){
                             $get_review_stage=Review_stage::where('id_artikel', $artikel_id)
                                                     ->where('step', 7)
                                                     ->first();
-                            $get_review_stage->step=8;
-                            $get_review_stage->update();
+                            if(!is_null($get_review_stage)){
+                                $get_review_stage->step=8;
+                                $get_review_stage->update();
+                            }
 
                             $publish=true;
                             $msg="Berhasil Melakukan Publish terhadap artikel";
