@@ -33,6 +33,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <!-- CSS Files -->
 <link id="pagestyle" href="{!! asset('web/assets/css/material-kit.css?v=3.0.4') !!}" rel="stylesheet" />
+<link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
 <link href="{!! asset('web/assets/css/style.css') !!}" rel="stylesheet"/>
 <!-- Nepcha Analytics (nepcha.com) -->
 <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
@@ -352,7 +353,7 @@
           @else
               @foreach($early_view as $list_early_view)
               <div class="col-lg-4 mt-3">
-                <a href="{!! url('baca-artikel/'.strtolower($list_early_view['edoc_pdf']).'/'.$list_early_view['token_a']) !!}">
+                <a href="#" onClick='earlyView()'>
                   <div class="row">
                     <div class="col-lg-4 skleton_loading img early_view_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('upload/image/', '', $list_early_view['foto_penulis']) !!}" style=""></div>
                     <div class="col-lg-8 text-judul">
@@ -651,6 +652,7 @@
   </div>
 </footer>
 <!--   Core JS Files   -->
+<script src="{!! asset('assets/plugins/global/plugins.bundle.js') !!}"></script>
 <script src="{!! asset('web/assets/js/core/popper.min.js') !!}" type="text/javascript"></script>
 <script src="{!! asset('web/assets/js/core/bootstrap.min.js') !!}" type="text/javascript"></script>
 <script src="{!! asset('web/assets/js/plugins/perfect-scrollbar.min.js') !!}"></script>
@@ -760,7 +762,14 @@ $(".text-hover").mouseleave(function(e){
   $("."+target+"_"+index).css({'transform':'scale(1)'});
   $("."+target+"_"+index).css({'transform':''});
 });
-
+function earlyView(){
+  swal.fire({
+    title: "<span>Perhatian !. Artikel ini sedang dalam proses persiapan publish.</span> ",
+    text: "Artikel ini belum dapat dibaca",
+    icon: "warning",
+    showConfirmButton: true,
+  })
+}
 </script>
 </body>
 

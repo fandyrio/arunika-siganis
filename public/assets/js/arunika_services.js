@@ -75,12 +75,29 @@ $(document).on("click",".list_menu", function(e){
             $(".container").html(data);
         }
     })
+});
+$(".input_manual").change(function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if($(".input_manual").is(':checked')){
+        $(".input_manual").val(true);
+    }else{
+        $(".input_manual").val(false);
+    }
 })
 $(".search-nip").click(function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    var nip=$(".nip_baru").val();
+    var isManual=false;
+    var token_n=$(".nip_baru").val();
+    if($(".input_manual").is(':checked')){
+        var nip=$(".nip").val();
+        isManual=true;
+    }else{
+        var nip=$(".nip_baru").val();
+    }
     if(nip === "" || nip === null){
         callSwal('error', 'NIP Harus diisi', false);
         return false;
@@ -92,7 +109,7 @@ $(".search-nip").click(function(e){
         },
         url:'search-nip',
         type:'POST',
-        data:{nip:nip},
+        data:{nip:nip, isManual:isManual, token_n:token_n},
         dataType:'JSON',
         success:function(data){
             closeLoading();

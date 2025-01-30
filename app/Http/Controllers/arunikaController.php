@@ -287,7 +287,7 @@ class arunikaController extends Controller
                         ->select('artikel.*', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
                         ->whereRaw("keyword_artikel.keyword like '%".$real_tag."%' ")
                         ->get();
-        return view('web/list_artikel_by_tema', ['artikel'=>$get_data, 'issue'=>"#".$real_tag, 'logo'=>$this->data, 'title'=>'Daftar Artikel '.$real_tag]);
+        return view('web/list_artikel_by_tema', ['artikel'=>$get_data, 'issue'=>"#".$real_tag, 'logo'=>$this->data, 'title'=>'Daftar Artikel '.$real_tag, 'jumlah'=>$get_data->count()]);
     }
     public function getListArtikelByIssue($code_issue){
         $get_data=Publish_artikel::join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')

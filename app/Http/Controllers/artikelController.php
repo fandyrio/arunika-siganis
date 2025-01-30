@@ -69,10 +69,10 @@ class artikelController extends Controller
                 $nip=Auth::user()->nip;
                 $enc_nip=Crypt::encrypt($nip);
                 $id_pegawai=Crypt::encrypt('null');
-                return view('arunika/artikel/form_data_pribadi', ['nip'=>$nip, 'enc_nip'=>$enc_nip, 'id_pegawai'=>$id_pegawai, 'link_save'=>'save-data-pribadi']);
+                return view('arunika/artikel/form_data_pribadi', ['nip'=>$nip, 'enc_nip'=>$enc_nip, 'id_pegawai'=>$id_pegawai, 'link_save'=>'save-data-pribadi', 'is_manual'=>false]);
             }else{
                 $get_data=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                        ->select('penulis_artikel.*', 'artikel.foto_penulis', 'artikel.step')
+                        ->select('penulis_artikel.*', 'artikel.foto_penulis', 'artikel.step', 'artikel.is_manual')
                         ->where('artikel.id', $id_artikel)
                         ->first();
                 if(!is_null($get_data)){
@@ -81,7 +81,12 @@ class artikelController extends Controller
                     }else if($request->view === 'form'){
                         $validate_edit=$this->checkValidateEdit(Crypt::encrypt($get_data['step']));
                         if($validate_edit->edit){
-                            return view('arunika/artikel/form_data_pribadi', ['nip'=>Auth::user()->nip, 'enc_nip'=>Crypt::encrypt(Auth::user()->nip), 'id_pegawai'=>Crypt::encrypt($get_data['id']), 'foto_penulis'=>$get_data['foto_penulis'], 'link_save'=>'update-data-pribadi']);
+                            if($get_data['is_manual'] === 1){
+                                $nip=$get_data['nip'];
+                            }else{
+                                $nip=Auth::user()->nip;
+                            }
+                            return view('arunika/artikel/form_data_pribadi', ['nip'=>$nip, 'enc_nip'=>Crypt::encrypt($nip), 'id_pegawai'=>Crypt::encrypt($get_data['id']), 'foto_penulis'=>$get_data['foto_penulis'], 'link_save'=>'update-data-pribadi', 'is_manual'=>$get_data['is_manual']]);
                         }else{
                             echo "<center><span class='fas fa-exclamation-circle' style='font-size:5vw;color:red;'></span><br /><br /></center><b><h5><center>".$validate_edit->msg."</center></h5></b><center><button class='btn btn-info btn-sm tabs' data-target='data_pribadi'>< Kembali</button></center>";
                         }
@@ -219,10 +224,21 @@ class artikelController extends Controller
         $msg="";
         try{
             $nip=$request->nip;
-            $dec_nip=Crypt::decrypt($nip);
-            $login_nip=Auth::user()->nip;
-
-            if($dec_nip === $login_nip){
+            $access_validation=true;
+            if($request->isManual === "true"){
+                $jm=Crypt::decrypt($request->token_n);
+                $access_validation=false;
+                if(isJM()){
+                    $access_validation=true;
+                    $dec_nip=$nip;
+                    $login_nip=$nip;
+                }
+            }else{
+                $dec_nip=Crypt::decrypt($nip);
+                $login_nip=Auth::user()->nip;
+            }
+            
+            if($dec_nip === $login_nip && $access_validation === true){
                 $data_sikep=DB::select('CALL SPGetHakimByNip('.$dec_nip.')');
                 $jumlah_data=count($data_sikep);
                 if($jumlah_data === 1){
@@ -293,14 +309,20 @@ class artikelController extends Controller
                 'foto_hakim' => ['required', 'image'],
             ]);
             try{
-                $dec_nip=Crypt::decrypt($request->nip_baru);
+                if($request->input_manual === "true"){
+                    $is_manual=true;
+                    $dec_nip=$request->nip;
+                }else{
+                    $is_manual=false;
+                    $dec_nip=Crypt::decrypt($request->nip_baru);
+                }
                 $id_pegawai=Crypt::decrypt($request->token);
-                if($dec_nip === Auth::user()->nip){
+                if($dec_nip === Auth::user()->nip || isJM()){
                     $data_sikep=DB::select('CALL SPGetHakimByNip('.$dec_nip.')');
                     $jumlah_data=count($data_sikep);
                     if($jumlah_data === 1){
                         $json_data=(array)$data_sikep[0];
-                        if($dec_nip === Auth::user()->nip){
+                        if($dec_nip === Auth::user()->nip || isJM()){
                             $file_foto=$request->foto_hakim;
                             $size=$file_foto->getSize();
                             $type=$file_foto->getMimeType();
@@ -315,7 +337,7 @@ class artikelController extends Controller
                                         $penulis=new Penulis_artikel;
                                         $penulis->id_pegawai=$json_data['IdPegawai'];
                                         $penulis->nama=$json_data['NamaLengkap'];
-                                        $penulis->nip=$request->nip;
+                                        $penulis->nip=$dec_nip;
                                         $penulis->no_handphone=$json_data['NomorHandphone'];
                                         $penulis->satker=$json_data['NamaStruktur'];
                                         $penulis->jabatan=$json_data['NamaJabatan'];
@@ -327,6 +349,7 @@ class artikelController extends Controller
                                             $artikel->id_penulis=$penulis_id;
                                             $artikel->foto_penulis=$path;
                                             $artikel->step=1;
+                                            $artikel->is_manual=$is_manual;
                                             if($artikel->save()){
                                                 $status=true;
                                                 $token_id=Crypt::encrypt($artikel->id);
@@ -383,8 +406,12 @@ class artikelController extends Controller
         try{
             $id_pegawai=Crypt::decrypt($request->token);
             $artikel_id=Crypt::decrypt($request->token_a);
-            $nip=Crypt::decrypt($request->nip_baru);
-            if(isYourArtikel($artikel_id)){
+            if($request->input_manual === "true"){
+                $nip=$request->nip;
+            }else{
+                $nip=Crypt::decrypt($request->nip_baru);
+            }
+            if(isYourArtikel($artikel_id) || isJM()){
                 if($artikel_id !== "null"){
                     $get_data=Penulis_artikel::where('id', $id_pegawai)
                                 ->first();
@@ -486,7 +513,7 @@ class artikelController extends Controller
         $save_keyword=false;
         try{
             $artikel_id=Crypt::decrypt($request->token_a);
-            if(isYourArtikel($artikel_id)){
+            if(isYourArtikel($artikel_id) || isJM()){
                 $step_id=[1,2,5];
                 $check_data=Artikel::where('id', $artikel_id)
                         ->whereIn('step', $step_id)
@@ -675,7 +702,7 @@ class artikelController extends Controller
             $explode=explode("::", $id_art_key);
             $id_artikel=$explode[0];
             $id_keyword=$explode[1];
-            if(isYourArtikel($id_artikel)){
+            if(isYourArtikel($id_artikel) || isJM()){
                 $step_id=[2, 5];
                 $get_keyword=Keyword::where('keyword_artikel.id_artikel', $id_artikel)
                 ->where('keyword_artikel.id', $id_keyword)
@@ -721,7 +748,7 @@ class artikelController extends Controller
         $update=false;
         try{
             $artikel_id=Crypt::decrypt($request->token);
-            if(isYourArtikel($artikel_id)){
+            if(isYourArtikel($artikel_id) || isJM()){
                 $validate_page=$this->checkValidateTabsRequest($request->token, 3);
                 if($validate_page->status){
                     $get_data=Artikel::where('id', $artikel_id)->first();
@@ -2391,7 +2418,7 @@ public function removeHasilReview(Request $request){
             $judul=$data_wa['judul'];
             $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  dengan hasil : _".$data_wa['hasil_reviewer'].'_'.PHP_EOL;
             if($data_wa['hasil_reviewer']){
-                $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika";
+                $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika".PHP_EOL;
             }else{
                 $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.".PHP_EOL;
             }

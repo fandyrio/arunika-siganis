@@ -23,6 +23,16 @@
     </div>
    </div>
    <div class='row mb-6'>
+            @if(isJM())
+            <div class='col-lg-10 mb-6'>
+                <div class="form-check">
+                    <input class="form-check-input input_manual" name='input_manual' type="checkbox" value="{!! $is_manual === 1 ? 'true' : 'false' !!}" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault" style='color:orange;'>
+                        Input NIP Manual
+                    </label>
+                </div>
+            </div>
+            @endif
             <div class='col-lg-10'>
                 <label>NIP</label>
                 <input type='number' class='form-control nip required_field' name='nip' value="">
@@ -79,7 +89,12 @@
  <!--end::Form-->
 </div>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=123') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=1234') !!}"></script>
+@if($is_manual === 1)
+    <script>
+        $(".input_manual").attr('checked', true);
+    </script>
+@endif
 @if(!isset($hakim))
     <script>
         $(".nip").val("{!! $nip !!}")

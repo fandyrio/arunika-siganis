@@ -157,7 +157,7 @@
             <!-- <div class="mt-n8 mt-md-n9 text-center">
               <img class="avatar avatar-xxl shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy">
             </div> -->
-            <div class="row py-5">
+            <div class="row py-5" style='color:black;'>
               <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb" style=''>
@@ -167,25 +167,26 @@
                         </ol>
                     </nav>
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h3 class="mb-0">{!! $artikel['judul'] !!}</h3>
+                  <h3 class="mb-0" style='color:#684DF4'>{!! $artikel['judul'] !!}</h3>
                   <div class="d-block">
                     <!-- <button type="button" class="btn btn-sm btn-outline-info text-nowrap mb-0">Follow</button> -->
                   </div>
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                    <span class="h6">{!! date('d F Y', strtotime($artikel['publish_at'])) !!}</span> | 
-                    <span><a class="text-info icon-move-right">{!! $artikel['nama'] !!}</a></span>
+                    <span class="h6" style='font-size:0.8rem;'>{!! date('d F Y', strtotime($artikel['publish_at'])) !!}</span> | 
+                    <span><a class="text-warning icon-move-right" style='font-size:0.8rem;font-weight:bold'>{!! $artikel['nama'] !!}</a></span>
                   </div>
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                  <img class="shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy" width="100%">
+                    <img class="shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy" width="100%">
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
-                  <center><i class="material-icons opacity-6 me-2" style='font-size:5rem;'>format_quote</i></center>
-                  {!! $artikel['tentang_artikel'] !!}
+                  <center>
+                    <i class="material-icons opacity-6 me-2" style='font-size:5rem;'>format_quote</i></center>
+                  <center>{!! $artikel['tentang_artikel'] !!}</center>
                   <hr />
                     <p class="text-lg">
                         {!! str_replace('Times New Roman', 'Arial', $artikel['text_tulisan']) !!}
@@ -195,7 +196,7 @@
                 <div class="col-lg-8 col-md-7">
                     <span class="badge rounded-pill bg-secondary">Tags : </span><br /><br />
                     @foreach($keyword as $list_keyword)
-                        <a href="{!! url('tags/'.str_replace(' ','-', strtolower($list_keyword['keyword']))) !!}"><span class="badge rounded-pill bg-info">#{!! $list_keyword['keyword'] !!}</span></a>
+                        <a href="{!! url('tags/'.str_replace(' ','-', strtolower($list_keyword['keyword']))) !!}"><span class="badge rounded-pill bg-info mt-2">#{!! $list_keyword['keyword'] !!}</span></a>
                     @endforeach
                 </div>
               </div>
