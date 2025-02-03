@@ -135,6 +135,12 @@
   background-color:#F44335;
 }
 
+.arunika_top_mob{
+  position:static;
+  width:15% !important;
+  scale:1.7;
+}
+
 @media only screen and (max-width: 430px) {
   .siganis_logo{
     width: 30% !important;
@@ -160,16 +166,12 @@
   .logo-top{
     width:73%;
   }
-  .arunika_top{
-    position:static;
-    width:50% !important;
-    scale:1.4
-  }
+  
   .inline-view{
     width:auto !important;
   }
   .artikel-title{
-    font-size:1rem;
+    font-size:0.8rem;
   }
 }
 
@@ -202,7 +204,7 @@
     background-position: top;
   }
   .artikel-title{
-    font-size:1rem;
+    font-size:0.8rem;
   }
 }
 
@@ -215,7 +217,7 @@
     padding-left:2% !important;
   }
   .artikel-title{
-    font-size:1rem;
+    font-size:0.8rem;
   }
 }
 
@@ -235,8 +237,11 @@
 }
 .arunika_top{
   position:static;
-  width:25%;
+  width:15%;
   scale:1.2
+}
+.btn-mob-100{
+  width: 100%;
 }
 .logo-top{
   width: 70%;
@@ -250,4 +255,29 @@
 .btn-outline-info{
   border:1px solid #1A73E8;
   color:#1A73E8;
+}
+
+.f_lat_ar_img_mob{
+  width: 100% !important;
+  height:200px;
+}
+.f_lat_ar_txt_mob{
+  width: 100% !important;
+}
+/* .padding_lat_ar_mob{
+  padding:3% 0 0 0 !important;
+} */
+
+.lat_ar_txt_mob, .lat_ar_img_mob{
+  width:100% !important;
+}
+.lat_ar_img_mob{
+  height: 110px;
+}
+.h_lat_ar_mob{
+  width: 50%;
+  padding-left: 5%;
+}
+.artikel_title_mob{
+  font-size:14px;
 }

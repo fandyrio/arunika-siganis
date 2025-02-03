@@ -60,80 +60,121 @@
             </span>
           </button>
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
-            <ul class="navbar-nav navbar-nav-hover ms-auto">
-              <li class="nav-item dropdown dropdown-hover mx-2">
-                <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="material-icons opacity-6 me-2 text-md">dashboard</i>
-                  Artikel
-                  <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
-                </a>
-                <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
-                  <div class="d-none d-lg-block">
-                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-                      Status Artikel
-                    </h6>
-                    <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
-                      <span>Sedang Publish</span>
-                    </a>
-                    <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
-                      <span>Arsip</span>
-                    </a>
-                    <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
-                      <span>Early View</span>
-                    </a>
-                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-                      Pencarian
-                    </h6>
-                    <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
-                      <span>Cari Berdasarkan Kategori
+      <ul class="navbar-nav navbar-nav-hover ms-auto">
+        <li class="nav-item dropdown dropdown-hover mx-2">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="material-icons opacity-6 me-2 text-md">dashboard</i>
+            Artikel
+            <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+          </a>
+          <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
+            <div class="d-none d-lg-block">
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
+              </a>
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
 
-                      </span>
-                    </a>
+                </span>
+              </a>
+            </div>
+            <div class="d-lg-none">
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
+              </a>
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
+
+                </span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item ms-lg-auto">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
+            <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
+          </a>
+        </li>
+        <li class="nav-item dropdown dropdown-hover mx-2">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="material-icons opacity-6 me-2 text-md">view_day</i>
+                  Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
+            <div class="d-none d-lg-block">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
+                      <span class="text-sm">Penulisan Artikel</span>
+                    </div>
+                    <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
                   </div>
+                </a>
+                <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
                 </div>
               </li>
-              <li class="nav-item ms-lg-auto">
-                <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
-                  <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
-                </a>
-              </li>
-              <li class="nav-item dropdown dropdown-hover mx-2">
-                <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="material-icons opacity-6 me-2 text-md">view_day</i>
-                        Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
-                  <div class="d-none d-lg-block">
-                    <li class="nav-item dropdown dropdown-hover dropdown-subitem">
-                      <a class="dropdown-item py-2 ps-3 border-radius-md" href="./presentation.html">
-                        <div class="w-100 d-flex align-items-center justify-content-between">
-                          <div>
-                            <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
-                            <span class="text-sm">Penulisan Artikel</span>
-                          </div>
-                          <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
-                        </div>
-                      </a>
-                      <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
-                        <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
-                          Syarat Penulisan
-                        </a>
-                        <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
-                          Checklist Penilaian Penulisan
-                        </a>
-                      </div>
-                    </li>
+            </div>
+            <div class="d-lg-none">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0"> <i class="ni ni-single-copy-04 text-gradient text-primary"></i>&nbspPedoman</h6>
+                      <!-- <span class="text-sm">Penulisan Artikel</span> -->
+                    </div>  
                   </div>
-                </ul>
-            </li>
-            <li class="nav-item my-auto ms-3 ms-lg-0">
-              <!-- <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> -->
-              <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
-                <!-- {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} -->
-                {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
-              </a>
-            </li>
-          </div>
+                </a>
+                <li>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
+                </li>
+              </li>
+            </div>
+          </ul>
+        </li>
+        <li class="nav-item my-auto ms-3 ms-lg-0">
+          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+            {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
+          </a>
+        </li>
+      </ul>
+    </div>
         </div>
       </nav>
     </div>
@@ -155,9 +196,10 @@
       <div class="col-md-3 mb-4 ms-auto">
         <div>
           <a href="{!! url('/home') !!}">
-            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:2'>
+            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important'>
+            <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
           </a>
-          <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
+          
         </div>
         <div>
           <ul class="d-flex flex-row ms-n3 nav">

@@ -84,7 +84,7 @@ class arunikaController extends Controller
                         ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.code_issue')
                         ->whereRaw('publish_artikel.code_issue is not null')
                         ->orderBy('artikel.id', 'desc')
-                        ->skip(0)->take(5)
+                        ->skip(0)->take(15)
                         ->get();
         $data_new_artikel=[];
         $x=0;
@@ -251,7 +251,7 @@ class arunikaController extends Controller
                         $keyword_string.=$keyword['keyword'];
                         $x++;
                     }
-                    return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other, 'keyword_string'=>$keyword_string]);
+                    return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other, 'keyword_string'=>$keyword_string, 'logo'=>$this->data]);
                 }else{
                     return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);    
                 }  
@@ -605,5 +605,35 @@ class arunikaController extends Controller
     public function getChecklistPenilaian(){
         $get_data=Checklist_review::where('active', true)->get();
         return view('web/content_static', ['syarat'=>$get_data, 'logo'=>$this->data, 'title'=>'Checklist Penilaian Arunika', 'source'=>'checklist']);
+    }
+    public function getAllArtikel($page=null){
+        $limit=20;
+        if($page === null || $page === 1){
+            $page=1;
+        }
+
+        $get_all=Artikel::join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                            ->whereRaw('publish_artikel.code_issue is not null')
+                            ->get();
+        $total=$get_all->count();
+        $jumlah_halaman=ceil($total/$limit);
+
+        if($page > $jumlah_halaman){
+            $page=1;
+        }
+
+        $skip=$page * $limit - $limit;
+
+        $get_all_data=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->join('publish_artikel', function($join){
+                                $join->on('publish_artikel.id_artikel', '=', 'artikel.id')
+                                ->whereRaw('publish_artikel.code_issue is not null');
+                            })
+                            ->join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue')
+                            ->where('artikel.step', 8)
+                            ->skip($skip)->take($limit)
+                            ->get();
+        return view('web/list_all_artikel', ['title'=>'Daftar Artikel Terbaru', 'artikel'=>$get_all_data, 'logo'=>$this->data, 'jumlah'=>$total, 'jumlah_halaman'=>$jumlah_halaman, 'page'=>$page]);
     }
 }

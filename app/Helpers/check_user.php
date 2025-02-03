@@ -80,12 +80,12 @@
     if(!function_exists('resizeImage')){
         function resizeImage($path, $width, $height, $type, $prefix){
             // *** 1) Initialise / load image
-            $real_path="img/no-profile,jpg";
+            $real_path="img/no-profile.jpg";
             if($type === "artikel-img"){
                 $real_path="upload/image/".$path;
             }
             $resizeObj = new Resize($real_path);
-            
+            $width+=150;
             // *** 2) Resize image (options: exact, portrait, landscape, auto, crop)
             $resizeObj -> resizeImage($width, $height, 'landscape');
     

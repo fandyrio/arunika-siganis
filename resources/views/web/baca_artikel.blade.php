@@ -47,6 +47,7 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  <style>p {line-height:2 !important}</style>
 </head>
 
 <body class="blog-author bg-gray-200">
@@ -56,6 +57,10 @@
       <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom">
         Arunika (Artikel Hukum Hakim Nusantara)
       </a>
+      <a class="navbar-brand-mob" href="{!! url('/home') !!}" style='width:70%;'>
+        <img src="{!! asset($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
+          <span class='text-white' style='margin-left:10%;'>Arunika - Siganis</span>
+      </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon mt-2">
           <span class="navbar-toggler-bar bar1"></span>
@@ -63,81 +68,122 @@
           <span class="navbar-toggler-bar bar3"></span>
         </span>
       </button>
-      <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 ms-lg-12 ps-lg-5" id="navigation">
-        <ul class="navbar-nav navbar-nav-hover ms-auto">
+      <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+      <ul class="navbar-nav navbar-nav-hover ms-auto">
         <li class="nav-item dropdown dropdown-hover mx-2">
-          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="material-icons opacity-6 me-2 text-md">dashboard</i>
             Artikel
-            <img src="{!! asset('web/assets/img/down-arrow-white.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+            <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
           </a>
-            <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
-                <div class="d-none d-lg-block">
-                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-                        Status Artikel
-                    </h6>
-                    <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
-                        <span>Sedang Publish</span>
-                    </a>
-                    <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
-                        <span>Arsip</span>
-                    </a>
-                    <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
-                        <span>Early View</span>
-                    </a>
-                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-                        Pencarian
-                    </h6>
-                    <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
-                        <span>Cari Berdasarkan Kategori
+          <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
+            <div class="d-none d-lg-block">
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
+              </a>
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
 
-                        </span>
-                    </a>
-                </div>
+                </span>
+              </a>
             </div>
+            <div class="d-lg-none">
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
+              </a>
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
+
+                </span>
+              </a>
+            </div>
+          </div>
         </li>
-  <li class="nav-item ms-lg-auto">
-    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" href="{!! url('/search') !!}">
-      <i class="material-icons opacity-6 me-2 text-md">search</i> Search
-    </a>
-  </li>
-  <li class="nav-item dropdown dropdown-hover mx-2">
-    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="material-icons opacity-6 me-2 text-md">view_day</i>
-            Penulisan <img src="{!! asset('web/assets/img/down-arrow-white.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
-    </a>
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
-        <div class="d-none d-lg-block">
-          <li class="nav-item dropdown dropdown-hover dropdown-subitem">
-            <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
-              <div class="w-100 d-flex align-items-center justify-content-between">
-                <div>
-                  <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
-                  <span class="text-sm">Penulisan Artikel</span>
+        <li class="nav-item ms-lg-auto">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
+            <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
+          </a>
+        </li>
+        <li class="nav-item dropdown dropdown-hover mx-2">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="material-icons opacity-6 me-2 text-md">view_day</i>
+                  Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
+            <div class="d-none d-lg-block">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
+                      <span class="text-sm">Penulisan Artikel</span>
+                    </div>
+                    <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
+                  </div>
+                </a>
+                <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
                 </div>
-                <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
-              </div>
-            </a>
-            <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
-                Syarat Penulisan
-              </a>
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
-                Checklist Penilaian Penulisan
-              </a>
+              </li>
             </div>
-          </li>
+            <div class="d-lg-none">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0"> <i class="ni ni-single-copy-04 text-gradient text-primary"></i>&nbspPedoman</h6>
+                      <!-- <span class="text-sm">Penulisan Artikel</span> -->
+                    </div>  
+                  </div>
+                </a>
+                <li>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
+                </li>
+              </li>
+            </div>
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          
-          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="{{ isset(Session::get('cas')['nama']) ? '_self' : '_blank' }}">
-           
-            {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
+          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+            {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>
       </ul>
-      </div>
+    </div>
     </div>
   </nav>
   <!-- End Navbar -->
@@ -150,20 +196,20 @@
   <!-- -------- END HEADER 4 w/ search book a ticket form -------background-color:#f8f8f800 -->
   <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4" style=''>
     <!-- START Testimonials w/ user image & text & info -->
-    <section class="py-sm-7 py-5 position-relative">
-      <div class="container">
+    <section class="py-sm-7 py-5 position-relative" style='padding:0px !important'>
+      <div class="container all_div" style='margin-left:0 !important;margin-right:0 !important;max-width:100% !important'>
         <div class="row">
           <div class="col-12 mx-auto">
             <!-- <div class="mt-n8 mt-md-n9 text-center">
               <img class="avatar avatar-xxl shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy">
             </div> -->
             <div class="row py-5" style='color:black;'>
-              <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
+              <div class="col-lg-8 col-md-8 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb" style=''>
-                            <li class="breadcrumb-item text-dark"><a href="{!! url('/home') !!}" >Home</a></li>
-                            <li class="breadcrumb-item text-dark"><a href="{!! url('issue/'.$artikel['code_issue']) !!}" >Library</a></li>
-                            <li class="breadcrumb-item text-dark active" aria-current="page">Data</li>
+                            <li class="breadcrumb-item"><a href="{!! url('/home') !!}" style='color:grey;'>Home</a></li>
+                            <li class="breadcrumb-item"><a href="{!! url('issue/'.$artikel['code_issue']) !!}" style='color:grey;'>Artikel</a></li>
+                            <li class="breadcrumb-item text-dark active title_text" aria-current="page"></li>
                         </ol>
                     </nav>
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -180,7 +226,7 @@
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                    <img class="shadow-xl position-relative z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy" width="100%">
+                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
@@ -188,7 +234,7 @@
                     <i class="material-icons opacity-6 me-2" style='font-size:5rem;'>format_quote</i></center>
                   <center>{!! $artikel['tentang_artikel'] !!}</center>
                   <hr />
-                    <p class="text-lg">
+                    <p class="text-lg" style='line-height:2;'>
                         {!! str_replace('Times New Roman', 'Arial', $artikel['text_tulisan']) !!}
                     </p>
                 </p>
@@ -202,17 +248,18 @@
               </div>
             </div>
             <div class="col-lg-4 col-md-4 mt-6">
-              <div class="row ">
-                <div class="col-md-12" style='background-color:white;padding:10px;border-radius:2%;filter: drop-shadow(8px 8px 10px gray);'>
-                  <span class='text-info text-bold'>File PDF</span><br />
-                    <a href="{!! url('download-artikel/'.Crypt::encrypt($artikel['edoc_pdf']).'/edoc-pdf') !!}">
-                      <i class="material-icons opacity-6 me-2" style='font-size:1rem;'>file_download</i>Download
+              <!-- <div class="row ">
+                <div class="col-md-12" style='background-color:#684DF4;padding:10px;border-radius:30px;filter: drop-shadow(8px 8px 10px gray);text-align:center'>
+                  <span class='text-info text-bold'>
+                    <a href="{!! url('download-artikel/'.Crypt::encrypt($artikel['edoc_pdf']).'/edoc-pdf') !!}" style='color:white;'>
+                      <i class="material-icons opacity-6 me-2" style='font-size:1rem;'>file_download</i>
+                      <span style='font-size:0.8rem;'>Download eDoc Disini</span>
                     </a>
                   </span>
                 </div>
-              </div>
+              </div> -->
               <div class="row mt-4">
-                <div class="col-md-12" style='background-color:white;padding:10px;border-radius:2%;filter: drop-shadow(8px 8px 10px gray);'>
+                <div class="col-md-12" style='background-color:white;padding:10px;border-radius:2%;'>
                   <span class='text-info text-bold'>Artikel Terkait</span><br />
                 
                 @if($jumlah_similar === 0)
@@ -224,9 +271,9 @@
                       $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_similar['edoc_pdf']);
                       $edoc=str_replace(".pdf", "", $replace_1);
                     @endphp
-                    <div class="row" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
-                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('../../{!! $list_similar['foto_penulis'] !!}');height:100px;"></div>
-                        <div class="col-lg-9">
+                    <div class="row mt-2" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
+                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('../../{!! $list_similar['foto_penulis'] !!}');height:80px;"></div>
+                        <div class="col-lg-9" style='width:70%'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_similar['id'].'arn'.$list_similar['code_issue']) !!}">
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_similar['judul'])) !!}</span></a>
                         </div>
@@ -238,7 +285,7 @@
                 </div>
               </div>
               <div class="row mt-4">
-                <div class="col-md-12" style='background-color:white;padding:10px;border-radius:2%;filter: drop-shadow(8px 8px 10px gray);'>
+                <div class="col-md-12" style='background-color:white;padding:10px;border-radius:2%;'>
                   <span class='text-info text-bold'>Artikel Lainnya</span><br />
 
                 @if($jlh_other === 0)
@@ -251,11 +298,11 @@
                       $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_other['edoc_pdf']);
                       $edoc=str_replace(".pdf", "", $replace_1);
                     @endphp
-                    <div class="row" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
-                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! str_replace('upload/image/', '', $list_other['foto_penulis']) !!}" data-prefix="artikel-img" style="height:100px;width:30%"></div>
-                        <div class="col-lg-9" style='width:70%;'>
+                    <div class="row" style='padding-left:2%;padding-right:2%;margin-top:15px;'>
+                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! str_replace('upload/image/', '', $list_other['foto_penulis']) !!}" data-prefix="artikel-img" style="width:30%"></div>
+                        <div class="col-lg-9" style='width:70%;padding-right:5px !important;'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_other['id'].'arn'.$list_other['code_issue']) !!}">
-                            <span class='text-red text-bold'>{!! $list_other['kategori'] !!}</span><br />
+                            <span class='text-red text-bold' style='font-size:0.7rem'>{!! $list_other['kategori'] !!}</span><br />
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_other['judul'])) !!}</span></a>
                         </div>
 
@@ -531,7 +578,7 @@
     setTimeout(function(e){
       $.post('{!! url("validate-reader") !!}', {token:"{!! Crypt::encrypt($artikel['id']) !!}"}, function(data)
       {
-          console.log('validate');
+          //console.log('validate');
       });
     }, 90000);
 
@@ -540,13 +587,14 @@
     runImg(jumlah_skleton, skleton);
     async function runImg(jumlah_skleton, skleton){
       for(var x=0;x<jumlah_skleton;x++){
-        console.log(x);
+        //console.log(x);
         var target=$(skleton[x]).data('target');
         var width=$(skleton[x]).width();
-        var height=$(skleton[x]).height();
+        var height=width-20;
+        $(skleton[x]).css({'height':height});
         var prefix=$(skleton[x]).data('prefix');
         var type="artikel-img";
-        // alert(width+"x"+height);
+        //console.log(width+"x"+height);
         let printFoto=await setPhoto(width, height, target, type, x, prefix);
       }
     }
@@ -557,7 +605,7 @@
           dataType:'JSON',
           type:'POST',
           success:function(data){
-            console.log(x);
+            // console.log(x);
             $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
             $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
             // console.log("background-image:url('img/20241210031407-ari.jpg')");
@@ -565,7 +613,18 @@
           }
         })
     }
-
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      //alert('mobile');
+      $(".navbar-brand").hide();
+      $(".navbar-brand-mob").show();
+      $(".foto_besar").attr({width:'100%'});
+    }else{
+      $(".navbar-brand-mob").hide();
+      $(".navbar-brand").show();
+      $(".foto_besar").attr({width:'100%'});
+    }
+    // console.log($(".all_div").width());
   </script>
 </body>
 

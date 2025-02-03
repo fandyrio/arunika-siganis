@@ -31,9 +31,9 @@
 <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 <!-- Material Icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
 <!-- CSS Files -->
 <link id="pagestyle" href="{!! asset('web/assets/css/material-kit.css?v=3.0.4') !!}" rel="stylesheet" />
-<link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
 <link href="{!! asset('web/assets/css/style.css') !!}" rel="stylesheet"/>
 <!-- Nepcha Analytics (nepcha.com) -->
 <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
@@ -80,68 +80,108 @@
           </a>
           <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
             <div class="d-none d-lg-block">
-  <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-    Status Artikel
-  </h6>
-  <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
-    <span>Sedang Publish</span>
-  </a>
-  <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
-    <span>Arsip</span>
-  </a>
-  <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
-    <span>Early View</span>
-  </a>
-  <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-    Pencarian
-  </h6>
-  <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
-    <span>Cari Berdasarkan Kategori
-
-    </span>
-  </a>
-</div>
-
-          </div>
-        </li>
-  <li class="nav-item ms-lg-auto">
-    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
-      <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
-    </a>
-  </li>
-  <li class="nav-item dropdown dropdown-hover mx-2">
-    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="material-icons opacity-6 me-2 text-md">view_day</i>
-            Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
-    </a>
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
-        <div class="d-none d-lg-block">
-          <li class="nav-item dropdown dropdown-hover dropdown-subitem">
-            <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
-              <div class="w-100 d-flex align-items-center justify-content-between">
-                <div>
-                  <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
-                  <span class="text-sm">Penulisan Artikel</span>
-                </div>
-                <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
-              </div>
-            </a>
-            <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
-                Syarat Penulisan
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
               </a>
-              <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
-                Checklist Penilaian Penulisan
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
+
+                </span>
               </a>
             </div>
-          </li>
+            <div class="d-lg-none">
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                Status Artikel
+              </h6>
+              <a href="{!! url('/sedang-publish') !!}" class="dropdown-item border-radius-md">
+                <span>Sedang Publish</span>
+              </a>
+              <a href="{!! url('/arsip') !!}" class="dropdown-item border-radius-md">
+                <span>Arsip</span>
+              </a>
+              <a href="{!! url('/early-view') !!}" class="dropdown-item border-radius-md">
+                <span>Early View</span>
+              </a>
+              <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+                Pencarian
+              </h6>
+              <a href="{!! url('/all-category') !!}" class="dropdown-item border-radius-md">
+                <span>Cari Berdasarkan Kategori
+
+                </span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item ms-lg-auto">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
+            <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
+          </a>
+        </li>
+        <li class="nav-item dropdown dropdown-hover mx-2">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="material-icons opacity-6 me-2 text-md">view_day</i>
+                  Penulisan <img src="{!! asset('web/assets/img/down-arrow-dark.svg') !!}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
+            <div class="d-none d-lg-block">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pedoman</h6>
+                      <span class="text-sm">Penulisan Artikel</span>
+                    </div>
+                    <img src="{!! asset('web/assets/img/down-arrow.svg') !!}" alt="down-arrow" class="arrow">
+                  </div>
+                </a>
+                <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
+                </div>
+              </li>
+            </div>
+            <div class="d-lg-none">
+              <li class="nav-item dropdown dropdown-hover dropdown-subitem">
+                <a class="dropdown-item py-2 ps-3 border-radius-md" href="#">
+                  <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0"> <i class="ni ni-single-copy-04 text-gradient text-primary"></i>&nbspPedoman</h6>
+                      <!-- <span class="text-sm">Penulisan Artikel</span> -->
+                    </div>  
+                  </div>
+                </a>
+                <li>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/syarat-penulisan') !!}">
+                    Syarat Penulisan
+                  </a>
+                  <a class="dropdown-item ps-3 border-radius-md mb-1" href="{!! url('/checklist-penilaian') !!}">
+                    Checklist Penilaian Penulisan
+                  </a>
+                </li>
+              </li>
+            </div>
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          {{-- <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank"> --}}
-          <a href="{{ isset(Session::get('cas')['nama']) ? route('dashboard') : route('sso') }}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
-            {{-- {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!} --}}
-            {{ isset(Session::get('cas')['nama']) ? Session::get('cas')['nama'] : 'Login' }}
+          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+            {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>
       </ul>
@@ -153,7 +193,6 @@
 <header class="header-2" style="background-image: url('{!! asset($logo['page_header']) !!}');background-size:cover;background-repeat:no-repeat;background-position:center;height:500px">
   
   <div class="page-header relative" style="height:500px;">
-  <img src="upload/config/logo_arunika_complate.png" class='arunika_logo'>
   <img src="{!! $logo['logo_siganis'] !!}" class='siganis_logo'>
     <div class="containers" style="bottom:0px;position:absolute;background-image:linear-gradient(to top, #684DF4 0%,  rgba(255,255,255,0) 100%);">
       <div class="row" style="padding-bottom:30px;padding-left:8%;background-image:linear-gradient(to top, #000 0%,  rgba(255,255,255,0) 100%)">
@@ -162,7 +201,7 @@
           <p class="lead text-white mt-3" style=''>{!! $issue[$jumlah_issue-1]['description'] !!} </p>
         </div>
         <div class="col-lg-2" style="padding-top:5%;">
-        <a href="{!! url('/dashboard') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+        <a href="{!! url('/login') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
         </div>
       </div>
     </div>
@@ -223,7 +262,7 @@
                 <div class="card-body py-7 text-center" style="height:100%;padding:0 !important;">
                   <i class="material-icons text-white text-4xl my-3">touch_app</i>
                   <h3 class="text-white">Submit <br /> Artikelmu</h3>
-                  <p class="text-white opacity-8">Arunika memberikan kesempatan bagi Hakim dibawah Badan Peradilan Umum untuk menulis artikel dan opini.</p>
+                  <p class="text-white opacity-8">Arunika merupakan wadah bagi Hakim dibawah Badan Peradilan Umum untuk menulis artikel dan opini.</p>
                 </div>
               </div>
               <div class="back back-backgrounds" style="background-image: url('{!! $issue[$jumlah_issue-1]['flyer'] !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
@@ -248,7 +287,7 @@
                 @endif
               @endfor
               <br />
-              <a href="{!! url('/all-category') !!}"><button class='btn btn-light btn-sm' style='color:#F44335;font-size:0.6rem;'>Selengkapnya <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+              <a href="{!! url('/all-category') !!}"><button class='btn btn-light btn-sm btn-wb' style='color:#F44335;font-size:0.6rem;'>Selengkapnya <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
             </div>
           </div>
         </div>
@@ -302,20 +341,34 @@
   </section>
   <section class="my-2 py-2">
     <div class="container">
-      <div class="row">
+     
         <div class="row" style='font-family:Montserrat-FF,Arial,Tahoma,sans-serif'>
           <div class="col-lg-6" style="margin-bottom:16px;">
             <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Arunika<span class='gradient_text'>Terbaru</span> </span>
+          </div>
+          <div class="col-lg-6 sisi2_" style="">
+            <a href="{!! url('artikel') !!}"><span class='text_nav'>Lihat Selengkapnya ></span></a>
           </div>
         </div>
         <div class="row">
           @php $x=1 @endphp
           @foreach($new_artikel as $list_artikel)
-          <div class="col-lg-3">
+              @php
+                $class_img='lat_ar_img';
+                $class_txt='lat_ar_txt';
+                $class_home='h_lat_ar';
+                if($x === 1){
+                  $class_img='f_lat_ar_img';
+                  $class_txt='f_lat_ar_txt';
+                  $class_home='f_h_lat_ar';
+                }
+
+              @endphp
+          <div class="col-lg-3 {!! $class_home !!}">
             <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/a-'.Crypt::decrypt($list_artikel['token_a']).'arn'.$list_artikel['code_issue']) !!}">
-              <div class="row" style='padding:3%;'>
-                <div class="col-lg-12 skleton_loading foto_penulis_grid img artikel_terbaru_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style=""></div>
-                <div class="col-lg-12 text-judul text-hover" data-target='artikel_terbaru' data-idx="{!! $x !!}" style='padding:0'>
+              <div class="row padding_lat_ar" style='padding:3%;'>
+                <div class="col-lg-12 {!! $class_img !!} skleton_loading foto_penulis_grid img artikel_terbaru_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style=""></div>
+                <div class="col-lg-12 {!! $class_txt !!} text-judul text-hover" data-target='artikel_terbaru' data-idx="{!! $x !!}" style='padding:0'>
                   <span class='text-sm text-red text-bold line-height-3'>{!! $list_artikel['kategori_artikel'] !!}</span><br />
                   <span class='artikel-title'>{!! ucwords(strtolower($list_artikel['judul'])) !!}</span><br />
                   <span class="text-purple text-bold fn-sz-1 line-height-3">{!! $list_artikel['nama'] !!}</span>
@@ -326,7 +379,7 @@
             @php $x++ @endphp
           @endforeach
         </div>
-      </div>
+      
     </div>
   </section>
   <section>
@@ -409,6 +462,10 @@
             </div>
             @php $x++ @endphp
           @endforeach
+            <div class="col-md-12 sisi2_mob mt-4">
+              <a href="{!! url('arsip') !!}"><button class='btn btn-light btn-sm btn-wb' style='color:#F44335;font-size:0.6rem;'>Selengkapnya <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+              <hr />
+            </div>
         </div>
       </div>
     </div>
@@ -421,7 +478,7 @@
               <div class="col-lg-12">
                 <div class="row">
                   <div class="col-lg-4 mt-3" style="margin-bottom:16px;">
-                    <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Arunika<span class='gradient_text'> Pengumuman</span></span><br />
+                    <span style='font-size:16px;color:#684DF4;font-weight:bold;'><span class='gradient_text'> Pengumuman</span></span><br />
                     <div class="row">
                       <div class="col-lg-12" style='font-size:0.9rem;color:black;'>
                         @if($jumlah_pengumuman === 0)
@@ -445,7 +502,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-4 mt-3" style="margin-bottom:16px;">
+                  <!-- <div class="col-lg-4 mt-3" style="margin-bottom:16px;">
                     <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Penulis Terbanyak</span>
                       @foreach($data_penulis as $list_penulis)
                       <div class="row mt-3">
@@ -461,7 +518,7 @@
                           </div>
                         </div>
                       @endforeach
-                  </div>
+                  </div> -->
                   <div class="col-lg-4 mt-3" style="margin-bottom:16px;">
                     <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Arunika<span class='gradient_text'> EditorialTeam</span></span>
                     <div class="row">
@@ -514,7 +571,7 @@
       <div class="col-md-3 mb-4 ms-auto">
         <div>
           <a href="{!! url('/home') !!}">
-            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:2'>
+            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important;'>
           </a>
           <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
         </div>
@@ -737,8 +794,10 @@ $.ajaxSetup({
           console.log(x);
           $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
           $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-          console.log("background-image:url('"+data.background+"')");
+          //console.log("background-image:url('"+data.background+"')");
           $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
+        },error:function(data){
+          console.log("err");
         }
       })
   }
@@ -762,6 +821,7 @@ $(".text-hover").mouseleave(function(e){
   $("."+target+"_"+index).css({'transform':'scale(1)'});
   $("."+target+"_"+index).css({'transform':''});
 });
+
 function earlyView(){
   swal.fire({
     title: "<span>Perhatian !. Artikel ini sedang dalam proses persiapan publish.</span> ",
@@ -770,6 +830,26 @@ function earlyView(){
     showConfirmButton: true,
   })
 }
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    //alert('mobile');
+    $(".arunika_top").addClass('arunika_top_mob');
+    $(".arunika_top_mob").removeClass('arunika_top');
+    $(".btn-wb").addClass('btn-mob-100');
+    $(".f_lat_ar_img").addClass('f_lat_ar_img_mob');
+    $(".f_lat_ar_txt").addClass('f_lat_ar_txt_mob');
+    $(".lat_ar_img").addClass('lat_ar_img_mob');
+    $(".lat_ar_txt").addClass('lat_ar_txt_mob');
+    $(".h_lat_ar").addClass('h_lat_ar_mob');
+    $(".padding_lat_ar").addClass('padding_lat_ar_mob');
+    $(".artikel_title").addClass('artikel_title_mob');
+    $(".sisi2_").hide();
+    $(".sisi2_mob").show();
+  }else{
+    $(".foto_besar").attr({width:'100%'});
+    $(".sisi2_mob").hide();
+    $(".sisi2_").show();
+  }
 </script>
 </body>
 

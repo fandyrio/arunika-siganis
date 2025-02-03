@@ -114,7 +114,7 @@ $(".search-nip").click(function(e){
         success:function(data){
             closeLoading();
             $(".search-nip").prop('disabled', false).html("Cari NIP");
-            console.log(data);
+            //console.log(data);
             if(data.status){
                 $(".nama_hakim").val(data.data.nama);
                 $(".pangkat_hakim").val(data.data.pangkat);
@@ -170,7 +170,7 @@ $("form").submit(function(e){
     var target=$(this).data('target');
     if(target === "artikel"){
         var jlh_keyword=$(".list_keyword").length;
-        console.log(jlh_keyword);
+        //console.log(jlh_keyword);
         var keyword=$(".list_keyword");
         var exists=$(".exists_keyword");
         var jlh_exists=$(".exists_keyword").length;
@@ -238,7 +238,7 @@ $("form").submit(function(e){
             var next_active=index+=1;
             var selector=$(".tab_menus");
             var next_target=$(selector[next_active]).data('target');
-            console.log(next_active+" : "+next_target);
+            //console.log(next_active+" : "+next_target);
             $(selector[next_active]).removeClass('alertMsg');
             $(selector[next_active]).addClass("tabs");
             $(selector[next_active]).addClass(next_target);
@@ -329,7 +329,7 @@ $(".btn-send").click(function(e){
             var next_active=index+=1;
             var selector=$(".tab_menus");
             var next_target=$(selector[next_active]).data('target');
-            console.log(next_active+" : "+next_target);
+            //console.log(next_active+" : "+next_target);
             $(selector[next_active]).removeClass('alertMsg');
             $(selector[next_active]).addClass("tabs");
             $(selector[next_active]).addClass(next_target);

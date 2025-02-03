@@ -134,5 +134,6 @@ Route::get('all-category', 'arunikaController@getAllCategory')->name('all-catego
 Route::post('resize-img-view', 'arunikaController@resizeImageView')->name('resize-img-view');
 Route::get('syarat-penulisan', 'arunikaController@getSyaratPenulisan')->name('syarat-penulisan');
 Route::get('checklist-penilaian', 'arunikaController@getChecklistPenilaian')->name('checklist-penulisan');
+Route::get('artikel/{page?}', 'arunikaController@getAllArtikel')->name('all-artikel');
 //Route::get('test-pdf', 'artikelController@testpdf')->name('test-pdf');
 //Route::get('generateAdmin', 'registerController@createUserAdmin')->name('generate-admin');
