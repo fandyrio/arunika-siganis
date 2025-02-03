@@ -54,10 +54,11 @@
   <!-- Navbar Transparent -->
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
-      <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom">
+      <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom" style='width:50%;'>
+      <img src="{!! asset($logo['logo_arunika']) !!}" class='arunika_top' style='scale:1 !important'> 
         Arunika (Artikel Hukum Hakim Nusantara)
       </a>
-      <a class="navbar-brand-mob" href="{!! url('/home') !!}" style='width:70%;'>
+      <a class="navbar-brand-mob" href="{!! url('/home') !!}" style='width:70%;display:none;'>
         <img src="{!! asset($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
           <span class='text-white' style='margin-left:10%;'>Arunika - Siganis</span>
       </a>
