@@ -268,6 +268,8 @@ $(document).on("click",".tabs", function(e){
         loadDataReviewAuthor();
     }else if(target === "publsih"){
         loadDataPublish();
+    }else if(target === "prepare_publish"){
+        loadDataPreparePublish();
     }
 });
 $(".remove_keyword").click(function(e){

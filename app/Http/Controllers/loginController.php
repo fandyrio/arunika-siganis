@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\Editorial_team;
+use App\Pegawai;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class loginController extends Controller
@@ -36,6 +38,7 @@ class loginController extends Controller
             if ($check_data !== false) {
                 $check_pwd = Hash::check($request->password, $check_data['password']);
                 if ($check_pwd) {
+                    //$this->userLocal($request->nip);
                     Auth::login($check_data);
                     $status = true;
                     $msg = "Selamat datang di Arunika.";
@@ -91,15 +94,35 @@ class loginController extends Controller
 
     public function userLocal($nip){
         $get_data=User::where('nip', $nip)->first();
+        $check_pegawai=Pegawai::where('nip', $nip)->first();
         if(is_null($get_data)){
-            $user=new User;
-            $user->name=Session::get('cas')['nama'];
-            $user->nip=Session::get('cas')['nip'];
-            $user->password=Hash::make('redirfromssomahkamahagung');
-            $user->role=1;
-            $save = $user->save();
-            if($save){
-                $this->userLocal($nip);
+            try{
+                DB::beginTransaction();
+                $user=new User;
+                $user->name=Session::get('cas')['name'];
+                $user->nip=Session::get('cas')['nip'];
+                $user->password=Hash::make('redirfromssomahkamahagung');
+                $user->role=1;
+                $save=$user->save();
+                if(is_null($check_pegawai)){
+                    $data=DB::select('CALL SPGetHakimByNip('.$nip.')');
+                    $json_data=(array)$data[0];
+                    $pegawai=new Pegawai;
+                    $pegawai->id_pegawai=$json_data['IdPegawai'];
+                    $pegawai->nama=$json_data['NamaLengkap'];
+                    $pegawai->nip=$json_data['NipBaru'];
+                    $pegawai->no_handphone=$json_data['NomorHandphone'];
+                    $pegawai->foto_profile=null;
+                    $save_pegawai=$pegawai->save();
+                    // var_dump($save_pegawai);
+                }
+                if($save){
+                    $this->userLocal($nip);
+                }
+                DB::commit();
+            }catch(\Exception $e){
+                DB::rollback();
+                $msg="Terjadi kesalahan sistem saat melakukan penyimpanan data : ".$e->getMessage();
             }
         }else{
             Auth::login($get_data);

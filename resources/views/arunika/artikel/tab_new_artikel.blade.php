@@ -22,7 +22,7 @@
                         <button class="nav-link tab_menus {!! $tab_step >= 2 ? 'tabs artikel' : 'alertMsg' !!}" id="profile-tab" data-target="artikel" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">{!! $no !!}. Artikel</button>
                         @php $no++ @endphp
                     </li>
-                    @if($jumlah_review > 0)
+                    @if($jumlah_review > 0 || $step >= 3)
                         @php $no=3; @endphp
                         <li class="nav-item" role="presentation">
                             <button class="nav-link tabs review" id="profile-tab" data-target="review-author" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">{!! $no !!}. Review Artikel</button>
@@ -38,7 +38,7 @@
                     @endif
                     @if($step === 6 || $step === 7)
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link tabs finish" data-target="finish" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">{!! $no++ !!}. Publish Data</button>
+                            <button class="nav-link tabs prepare_publish" data-target="prepare_publish" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">{!! $no++ !!}. Persiapan Publish Data</button>
                         </li>
                     @endif
                 </ul>
@@ -75,8 +75,8 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="{!! asset('../resources/views/assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('../resources/views/assets/js/arunika_services.js?q=123') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=123') !!}"></script>
 <script>
     // setTimeout(function(){
     //     loadDataPribadi();

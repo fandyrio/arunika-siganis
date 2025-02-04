@@ -18,7 +18,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('web/assets/img/apple-icon.png') !!}">
-<link rel="icon" type="image/png" href="{!! asset('web/assets/img/favicon.png') !!}">
+<link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
 
 <title>Arunika By SIGANIS</title>
 <!--     Fonts and icons     -->
@@ -180,7 +180,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>
@@ -201,7 +201,7 @@
           <p class="lead text-white mt-3" style=''>{!! $issue[$jumlah_issue-1]['description'] !!} </p>
         </div>
         <div class="col-lg-2" style="padding-top:5%;">
-        <a href="{!! url('/login') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+        <a href="{!! url('/sso') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
         </div>
       </div>
     </div>
@@ -267,7 +267,7 @@
               </div>
               <div class="back back-backgrounds" style="background-image: url('{!! $issue[$jumlah_issue-1]['flyer'] !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
                 <div class="card-body pt-7 text-center" >
-                  <a href="{!! url('/login') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
+                  <a href="{!! url('/sso') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
                 </div>
               </div>
             </div>
@@ -378,8 +378,12 @@
           </div>
             @php $x++ @endphp
           @endforeach
+          <div class="col-md-12 sisi2_mob mt-4">
+              <a href="{!! url('artikel') !!}"><button class='btn btn-light btn-sm btn-wb' style='color:#F44335;font-size:0.6rem;'>Selengkapnya <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+              <hr />
+            </div>
         </div>
-      
+                
     </div>
   </section>
   <section>

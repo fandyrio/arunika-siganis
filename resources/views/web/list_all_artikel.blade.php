@@ -2,7 +2,14 @@
 @section('content')
 <div class="row" style='margin-top:70px !important;'>
     <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-    <div class="card d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mb-5" style='margin-top:8rem;'>
+    <nav aria-label="breadcrumb" style='margin-top:4rem;'>
+        <ol class="breadcrumb" style=''>
+            <li class="breadcrumb-item"><a href="{!! url('/home') !!}" style='color:grey;'>Home</a></li>
+            <li class="breadcrumb-item"><a href="{!! url('artikel') !!}" style='color:grey;'>Artikel</a></li>
+            <li class="breadcrumb-item text-dark active title_text" aria-current="page"></li>
+        </ol>
+    </nav>
+    <div class="card d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mb-5" style='margin-top:4rem;'>
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
         <div class="bg-header-page shadow-info border-radius-lg p-3">
             <span class="text-white text-primary mb-0 fn-sz-md text-bold">Artikel Terbaru {!! date('Y') !!}</span>
@@ -39,6 +46,8 @@
                                     echo $text;
                                 @endphp
                             </a>
+                            <br />
+                            <span style='font-size:0.8rem;color:orange;'>{!! date('d F Y', strtotime($list_artikel['publish_at'])) !!}</span>
                         </h6>
                         <p class='fn-sz-sm'>
                         {!! substr(strip_tags($list_artikel['tentang_artikel']), 0,500) !!} ...

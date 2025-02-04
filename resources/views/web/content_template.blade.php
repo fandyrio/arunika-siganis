@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
   <link rel="apple-touch-icon" sizes="76x76" href="{!! url('web/assets/img/apple-icon.png') !!}">
-  <link rel="icon" type="image/png" href="{!! url('web/assets/img/favicon.png') !!}">
+  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $title !!}
   </title>
@@ -169,7 +169,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>

@@ -297,6 +297,28 @@ function loadDataFinish(){
     })
 }
 
+function loadDataPreparePublish (){
+    $.ajax({
+        beforeSend:function(){
+            loadText("tab-content-artikel");
+        },
+        url:'prepare-publish',
+        type:'POST',
+        data:{token:$("input[name='token_a']").val()},
+        success:function(data){
+            if(typeof data.status !== "undefined"){
+                console.log('sini');
+                callSwal('error', data.msg, true);
+                loadDataPribadi('view');
+            }else{
+                $(".tab-content-artikel").html(data);
+                $(".tabs").removeClass('active');
+                $(".prepare_publish").addClass('active');
+            }
+        }
+    })
+}
+
 function loadDataDetilArtikel(){
     $.ajax({
         beforeSend:function(){

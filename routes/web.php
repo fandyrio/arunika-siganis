@@ -25,7 +25,7 @@ Route::post('validate-input', 'registerController@validateNIP')->name('validate-
     cas()->authenticate();
 }); */
 Route::get('sso', 'loginController@sso')->name('sso')->middleware('isNotLogin');
-Route::get('login', 'loginController@index')->name('check-login')->middleware('isNotLogin');
+//Route::get('login', 'loginController@index')->name('check-login')->middleware('isNotLogin');
 // Route::get('logout', 'loginController@logout')->name('logout')->middleware('auth');
 Route::get('logout', 'loginController@logoutSso')->name('logout');
 Route::get('test/{a}', 'loginController@test')->name('test');
@@ -59,6 +59,7 @@ Route::post('update-pengumuman', 'artikelController@updatePengumuman')->name('up
 Route::post('add-new-config', 'configController@formAddConfig')->name('add-new-config')->middleware('cas.auth');
 Route::post('save-config', 'configController@saveWebContent')->name('save-config')->middleware('cas.auth');
 Route::post('finish-page-artikel', 'artikelController@finishPage')->name('finish-page-artikel')->middleware('cas.auth');
+Route::post('prepare-publish', 'artikelController@preparePublish')->name('prepare-publish')->middleware('cas.auth');
 Route::post('send-artikel', 'artikelController@sendArtikel')->name('send-artikel')->middleware('cas.auth');
 Route::get('list-artikel-proses', 'artikelController@listArtikelProses')->name('list-artikel-proses')->middleware('cas.auth');
 Route::get('list-artikel-proses-reviewer', 'artikelController@listArtikelProsesReviewer')->name('list-artikel-proses-reviewer')->middleware('cas.auth');
@@ -135,5 +136,6 @@ Route::post('resize-img-view', 'arunikaController@resizeImageView')->name('resiz
 Route::get('syarat-penulisan', 'arunikaController@getSyaratPenulisan')->name('syarat-penulisan');
 Route::get('checklist-penilaian', 'arunikaController@getChecklistPenilaian')->name('checklist-penulisan');
 Route::get('artikel/{page?}', 'arunikaController@getAllArtikel')->name('all-artikel');
+Route::get('penulis-artikel/{nama}/{id_pegawai}', 'arunikaController@getArtikelByPenulis')->name('penulis-artikel');
 //Route::get('test-pdf', 'artikelController@testpdf')->name('test-pdf');
 //Route::get('generateAdmin', 'registerController@createUserAdmin')->name('generate-admin');

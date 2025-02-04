@@ -1,5 +1,6 @@
 <?php
     use Carbon\Carbon;
+    use App\Config;
 
     if(! function_exists('sendWaHelp')){
         function sendWaHelp($data){
@@ -23,7 +24,17 @@
             'names: siganis',
             'Content-Type: application/json'
         );
-        $telepon=$data['no_wa'];
+        $get_config=Config::where('config_name', 'environment')->first();
+        if(!is_null($get_config)){
+            $env=strip_tags($get_config['config_value']);
+            if($env === "production"){
+                $telepon=$data['no_wa'];
+            }else{
+                $telepon="081273861528";
+            }
+        }else{
+            $telepon="081273861528";
+        }
         $postfield  = json_encode(array(
             "variable"  => "_Ini adalah pesan otomatis Aplikasi Sistem Pembinaan Tenaga Teknis (SIGANIS)_",
             "variable2" =>  preg_replace("/\n/m", '\n', "$body"),

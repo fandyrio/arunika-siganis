@@ -47,7 +47,7 @@ class editorialTeamController extends Controller
         return response()->json(['status'=>$status, 'msg'=>$msg, 'data'=>$data]);
     }
     public function saveEditor(Request $request){
-        $id_pegawai=null;
+        $input_editorial_team=false;
         $status=false;
         try{
             $id_pegawai_sikep=Crypt::decrypt($request->token);
@@ -57,36 +57,68 @@ class editorialTeamController extends Controller
                         ->first();
             
             if(is_null($check)){
+                //belum pernah login dan belum diinput ke table pegawai
                 $call_data=DB::select("CALL SPGetHakimByNip('".$request->nip."')");
                 $jumlah_data=count($call_data);
                 if($jumlah_data === 1){
-                        $arr_data=(array)$call_data[0];
-                        $no_hp=$arr_data['NomorHandphone'];
-                        $nama=$arr_data['NamaLengkap'];
-                    
-                        $pegawai=new Pegawai;
-                        $pegawai->id_pegawai=$arr_data['IdPegawai'];
-                        $pegawai->nama=$arr_data['NamaLengkap'];
-                        $pegawai->nip=$request->nip;
-                        $pegawai->no_handphone=$arr_data['NomorHandphone'];
-                        $save_pegawai=$pegawai->save();
-                        if($save_pegawai){
-                            $id_pegawai=$pegawai->id;
-                        }else{
-                            $msg="Terjadi kesalahan sistem saat menyimpan data Hakim";
-                        }
+                    $arr_data=(array)$call_data[0];
+                    $no_hp=$arr_data['NomorHandphone'];
+                    $nama=$arr_data['NamaLengkap'];
+                
+                    $pegawai=new Pegawai;
+                    $pegawai->id_pegawai=$arr_data['IdPegawai'];
+                    $pegawai->nama=$arr_data['NamaLengkap'];
+                    $pegawai->nip=$request->nip;
+                    $pegawai->no_handphone=$arr_data['NomorHandphone'];
+                    $save_pegawai=$pegawai->save();
+                    if($save_pegawai){
+                        $id_pegawai=$pegawai->id;
+                        $input_editorial_team=true;
+                    }else{
+                        $msg="Terjadi kesalahan sistem saat menyimpan data Hakim";
+                    }
                 }else{
                     $msg="Data anda tidak valid";
                 }
-            }elseif($check['sebagai'] !== null){
-                $msg="Data sudah ada";
-            }else{
-                $id_pegawai=$check['id'];
-                $no_hp=$check['no_handphone'];
-                $nama=$check['nama'];
+            }elseif(!is_null($check)){
+                $msg="Data Pegawai sudah ada";
+                if($check['sebagai'] !== null){
+                    //sudah pernah ada namun pernah dinonaktifkan
+                    $editorial_team=Editorial_team::where('id_pegawai', $check['id'])
+                                    ->where('active', false)
+                                    ->first();
+                    if(!is_null($editorial_team)){
+                        $editorial_team->active=true;
+                        $editorial_team->sebagai=$request->sebagai;
+                        $status=$editorial_team->update();
+                        if($status){
+                            $msg="Berhasil mengaktifkan kembali data";
+                            if($request->sebagai === 'editor'){
+                                $sebagai="Reviewer";
+                            }else{
+                                $sebagai=$request->sebagai;
+                            }
+                            //$data_wa['no_wa']="081273861528";
+                            $data_wa['no_wa']=$check['no_handphone'];
+                            $data_wa['nama']=$check['nama'];
+                            $data_wa['pesan']="Anda telah ditentukan kembali menjadi ".$sebagai." Artikel Pada Arunika (Artikel Hukum Hakim Indonesia).".PHP_EOL."Terimakasih";
+                            $send_wa_notif=sendWaHelp($data_wa);
+                        }else{
+                            $msg="Terjadi kesalahan sistem saat mengaktifkan data editorial team";
+                        }
+                    }else{
+                        $msg="Data editor tidak ditemukan";
+                    }
+                }else{
+                    //belum pernah diinput ke editorial_team
+                    $input_editorial_team=true;
+                    $id_pegawai=$check['id'];
+                    $nama=$check['nama'];
+                    $no_hp=$check['no_handphone'];
+                }
             }
 
-            if($id_pegawai !== null){
+            if($input_editorial_team === true){
                 $editorial_team=new Editorial_team;
                 $editorial_team->id_pegawai=$id_pegawai;
                 $editorial_team->sebagai=$request->sebagai;

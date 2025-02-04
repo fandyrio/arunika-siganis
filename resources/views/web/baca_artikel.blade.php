@@ -44,6 +44,7 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="{!! asset('web/assets/css/material-kit.css?v=3.0.4') !!}" rel="stylesheet" />
   <link href="{!! asset('web/assets/css/style.css') !!}" rel="stylesheet"/>
+  <link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -206,6 +207,7 @@
             </div> -->
             <div class="row py-5" style='color:black;'>
               <div class="col-lg-8 col-md-8 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
+                  <input type='text' class='form-control' value="http://{!! $_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'] !!}" id="webURL" style='opacity:0;'>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb" style=''>
                             <li class="breadcrumb-item"><a href="{!! url('/home') !!}" style='color:grey;'>Home</a></li>
@@ -222,7 +224,8 @@
                 <div class="row mb-4">
                   <div class="col-lg-12">
                     <span class="h6" style='font-size:0.8rem;'>{!! date('d F Y', strtotime($artikel['publish_at'])) !!}</span> | 
-                    <span><a class="text-warning icon-move-right" style='font-size:0.8rem;font-weight:bold'>{!! $artikel['nama'] !!}</a></span>
+                    <a class="text-warning icon-move-right" href="{!! url('penulis-artikel/'.preg_replace('/[^A-Za-z0-9\-]/', '-', strtolower($artikel['nama']))).'/'.Crypt::encrypt($artikel['id_pegawai']) !!}" style='font-size:0.8rem;font-weight:bold'><u>{!! $artikel['nama'] !!}</u></a>
+                    <span style='float:right;'><button class='btn btn-default btn-sm' onClick='copyClipboard()'><i class='fa fa-copy' style='font-size:1rem;'></i> <span class='text_desktop'>Copy Link</span></button></span>
                   </div>
                 </div>
                 <div class="row mb-4">
@@ -561,6 +564,7 @@
   </footer>
   <!-- -------- END FOOTER 5 w/ DARK BACKGROUND ------- -->
   <!--   Core JS Files   -->
+  <script src="{!! asset('assets/plugins/global/plugins.bundle.js') !!}"></script>
   <script src="{!! asset('web/assets/js/core/popper.min.js') !!}" type="text/javascript"></script>
   <script src="{!! asset('web/assets/js/core/bootstrap.min.js') !!}" type="text/javascript"></script>
   <script src="{!! asset('web/assets/js/plugins/perfect-scrollbar.min.js') !!}"></script>
@@ -617,15 +621,38 @@
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) {
       //alert('mobile');
+      $(".text_mob").show();
+      $(".text_desktop").hide();
       $(".navbar-brand").hide();
       $(".navbar-brand-mob").show();
       $(".foto_besar").attr({width:'100%'});
     }else{
+      $(".text_mob").hide();
+      $(".text_desktop").show();
       $(".navbar-brand-mob").hide();
       $(".navbar-brand").show();
       $(".foto_besar").attr({width:'100%'});
     }
     // console.log($(".all_div").width());
+    function copyClipboard() {
+      // Get the text field
+      var copyText = document.getElementById("webURL");
+
+      // Select the text field
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+
+      // Alert the copied text
+      swal.fire({
+        position: "bottom-end",
+        text: "Link Copied",
+        showConfirmButton: false,
+        timer:1500,
+      })
+    }
   </script>
 </body>
 

@@ -744,6 +744,22 @@ class artikelController extends Controller
         }
         return response()->json(['status'=>false, 'msg'=>$msg]);
     }
+    public function preparePublish(Request $request){
+        try{
+            $artikel_id=Crypt::decrypt($request->token);
+            $get_data=Artikel::where('id', $artikel_id)
+                        ->whereIn('step', [6,7])
+                        ->first();
+            if(!is_null($get_data)){
+                return view('arunika/artikel/prepare_publish');
+            }else{
+                $msg="Data tidak ditemukan";
+            }
+        }catch(DecryptExcecption $e){
+            $msg="Invalid token";
+        }
+        return response()->json(['status'=>false, 'msg'=>$msg]);
+    }
     public function sendArtikel(Request $request){
         $update=false;
         try{
@@ -1191,7 +1207,7 @@ class artikelController extends Controller
                                 $data_wa['judul']=$get_artikel['judul'];
                                 $data_wa['no_handphone']=$data_pegawai->no_handphone;
                                 $data_wa['nama_penerima']=$data_pegawai->nama;
-                                //$this->sendWaNotification('assign_reviewer', $data_wa);
+                                $this->sendWaNotification('assign_reviewer', $data_wa);
                                 $msg="Berhasil menyimpan reviewer";
                                 $update_step=true;
                                 DB::commit();   
@@ -1602,8 +1618,8 @@ public function removeHasilReview(Request $request){
                                         $category="reviewer_result";
                                         //judul, no_hp, nama_penerima
                                         $data_wa['judul']=$artikel['judul'];
-                                        $data_wa['no_wa']="081273861528";
-                                        //$data_wa['no_hp']=$get_pegawai['no_handphone'];
+                                        //$data_wa['no_wa']="081273861528";
+                                        $data_wa['no_hp']=$get_pegawai['no_handphone'];
                                         $data_wa['nama_penerima']=$get_pegawai['nama'];
                                         $data_wa['hasil_reviewer']=$get_review_stage['step_text'];
                                         $this->sendWaNotification($category, $data_wa);
@@ -2400,6 +2416,11 @@ public function removeHasilReview(Request $request){
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callForm'=>'loadDataPublish()', 'token_id'=>Crypt::encrypt($get_publish_data['id_artikel']), 'closeModal'=>true]);
     }
     public function sendWaNotification($category, $data_wa){
+        $domain="domain belum disetting";
+        $get_config=Config::where('config_name', 'domain')->first();
+        if(!is_null($get_config)){
+            $domain=$get_config['config_value'];
+        }
         if($category === "send_artikel_to_jm"){
             $get_jm=$this->getJM();
             $judul=$data_wa['judul'];
@@ -2407,22 +2428,22 @@ public function removeHasilReview(Request $request){
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
 
-            $msg="Artikel dengan judul : _".$judul.'_'.PHP_EOL." baru saja di kirimkan.";
-            $msg.=PHP_EOL."Silahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.".PHP_EOL;
+            $msg="Artikel dengan judul : *_".$judul."_* baru saja di kirimkan.";
+            $msg.="\r\rSilahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.";
             
         }else if($category === "assign_reviewer"){
-            $msg="Anda telah ditunjuk untuk melakukan review artikel dengan judul _: ".$data_wa['judul']."_".PHP_EOL;
-            $msg.="Silahkan login untuk melihat lebih lanjut.".PHP_EOL;
+            $msg="Anda telah ditunjuk untuk melakukan review artikel dengan judul _: ".$data_wa['judul']."_\r\r";
+            $msg.="Silahkan login untuk melihat lebih lanjut.\r";
             $judul=$data_wa['judul'];
             $no_wa=$data_wa['no_handphone'];
             $nama_penerima=$data_wa['nama_penerima'];
         }else if($category === "reviewer_result"){    //hasil review reviewer kepada author
             $judul=$data_wa['judul'];
-            $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  dengan hasil : _".$data_wa['hasil_reviewer'].'_'.PHP_EOL;
+            $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  \rdengan hasil : _".$data_wa['hasil_reviewer']."_\r\r";
             if($data_wa['hasil_reviewer']){
-                $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika".PHP_EOL;
+                $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika\r";
             }else{
-                $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.".PHP_EOL;
+                $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.\r";
             }
             $nama_penerima=$data_wa['nama_penerima'];
             $no_wa=$data_wa['no_wa'];
@@ -2434,8 +2455,8 @@ public function removeHasilReview(Request $request){
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
 
-            $msg="Perbaikan Artikel dengan judul : _".$judul.'_'.PHP_EOL." baru saja di kirimkan.";
-            $msg.=PHP_EOL."Silahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.".PHP_EOL;
+            $msg="Perbaikan Artikel dengan judul : _".$judul."_ baru saja di kirimkan.";
+            $msg.="\r\rSilahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.\r";
         }else if($category === "artikel_accepted"){
             $get_jm=$this->getJM();
             $judul=$data_wa['judul'];
@@ -2443,18 +2464,18 @@ public function removeHasilReview(Request $request){
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
 
-            $msg="Artikel dengan judul : _".$judul.'_'.PHP_EOL." telah di Setujui oleh reviewer.";
-            $msg.=PHP_EOL."Silahkan login untuk melakukan persiapan publish.".PHP_EOL;
+            $msg="Artikel dengan judul : _".$judul."_\rtelah di Setujui oleh reviewer.";
+            $msg.="\r\rSilahkan login untuk melakukan persiapan publish.".PHP_EOL;
         }else if($category === "notification_publish"){
             $nama_penerima=$data_wa['nama_penerima'];
             $judul=$data_wa['judul'];
-            //$no_wa=$data_wa['no_handphone'];
-            $no_wa="081273861528";
-            $msg="Artikel anda dengan judul ".$judul." telah publish.".PHP_EOL;
-            $msg.="Silahkan kunjungi halaman arunika".PHP_EOL;
+            $no_wa=$data_wa['no_handphone'];
+            $msg="Artikel anda dengan judul ".$judul." telah publish.\r\r";
+            $msg.="Silahkan kunjungi halaman arunika\r";
         }
         
-        $msg.="Terimakasih";
+        $msg.="\rTerimakasih";
+        $msg.="\r\rHalaman arunika dapat diakses melalui : ".strip_tags($domain);
         $data_wa['no_wa']=$no_wa;
         //$data_wa['no_wa']="081273861528";
         $data_wa['nama']=$nama_penerima;
