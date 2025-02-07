@@ -103,6 +103,8 @@ Route::post('check-data-personal', 'artikelController@checkDataPersonal')->name(
 Route::post('check-data-artikel', 'artikelController@checkDataArtikel')->name('check-data-artikel')->middleware('cas.auth');
 Route::post('check-data-review', 'artikelController@checkDataReview')->name('check-data-review')->middleware('cas.auth');
 Route::post('check-data-publish', 'artikelController@checkDataPublish')->name('check-data-publish')->middleware('cas.auth');
+Route::post('hide-artikel', 'artikelController@hideShowArtikel')->name('hide-artikel')->middleware('cas.auth');
+Route::post('delete-config', 'configController@deleteConfig')->name('delete-config')->middleware('cas.auth');
 Route::get('list-artikel-waiting-publish', 'artikelController@listArtikelWaitingPublish')->name('list-artikel-waiting-publish')->middleware('cas.auth');
 Route::get('list-artikel-publish', 'artikelController@listArtikelPublish')->name('list-artikel-publish')->middleware('cas.auth');
 Route::get('list-issue-artikel', 'issueArtikelController@index')->name('list-issue-artikel')->middleware('cas.auth');

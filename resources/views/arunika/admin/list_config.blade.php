@@ -27,6 +27,7 @@
                     </td>
                     <td>
                         <button class='btn btn-info btn-sm edit' data-pattern="config" data-token_i="{!! Crypt::encrypt($list_config['id']) !!}">Edit</button>
+                        <button class='btn btn-danger btn-sm delete' data-pattern="config" data-token_i="{!! Crypt::encrypt($list_config['id']) !!}">Delete</button>
                     </td>
                 </tr>
                 @php $no++; @endphp
@@ -36,4 +37,4 @@
     </div>
 </div>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js?q=test1') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js?q=test2') !!}"></script>

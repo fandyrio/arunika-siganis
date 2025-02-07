@@ -421,7 +421,7 @@ function checkingDataPersonal(token_a){
                 text: "Please wait ...",
                 type: "warning",
                 allowOutsideClick: false,
-                onOpen: function() {
+                didOpen: function() {
                     swal.showLoading()
                 }
             });
@@ -519,4 +519,16 @@ function checkStop(step, msg_stop){
         'error'
     )
     return false;
+}
+function sweatLoading(){
+    swal.fire({
+        title: "Process your Request",
+        text: "Please wait ...",
+        type: "warning",
+        allowOutsideClick: false,
+        showConfirmButton:false,
+        didOpen: function() {
+            swal.showLoading()
+        }
+    });
 }

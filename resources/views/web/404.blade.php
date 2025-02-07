@@ -14,12 +14,20 @@ License: You must have a valid license purchased only from themeforest(the above
 @section('content')
     <div class='row mt-8' style='background-color:white;'>
         <div class="col-md-12">
-            <center><img src="{!! url('upload/config/404.webp') !!}" width="30%"></center>
+            <center><img src="{!! url('upload/config/404.webp') !!}" width="30%"></center><br />
             <center>
                 <h4>Halaman tidak ditemukan</h4>
                 Maaf, halaman yang anda tuju tidak tersedia. Mohon cek kembali tautan pada browser anda.
             </center>
+            <br /><br />
+            @if(isset($reason))
             <br />
+            <center>
+                <span class='text-red text-bold text-center' style='font-size:2rem;'>Perhatian!</span><br />
+                    <span style='color:black;'>{!! $reason !!}</span>
+            </center>
+            <br />
+            @endif
             <br />
             <center><a href="{!! url('home') !!}"><button class='btn btn-outline-info'>Halaman Utama</button></a></center>
         </div>

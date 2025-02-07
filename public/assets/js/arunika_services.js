@@ -514,6 +514,7 @@ $(".sendReviewToAuthor").click(function(e){
         reverseButtons: true
     }).then(function(result) {
         if (result.value) {
+            sweatLoading();
             $.post(attr, {token:token, target:target}, function(data){
                 if(data.status){
                     eval(data.callLink);
@@ -814,6 +815,48 @@ $(".changePhotoPenulis").change(function(e){
                 icon = "success";
             }
             callSwal(icon, data.msg, true);
+        }
+    })
+});
+$(document).on("click", ".toogleShowHide", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    var dest=$(this).data('dest');
+    if(dest === 1){
+        var text="disembunyikan dari";
+    }else{
+        var text="ditampilkan di";
+    }
+    swal.fire({
+        title: "<span style='color:red'>Artikel ini akan "+text+" Publish.</span> ",
+        text: "Apakah anda yakin ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+    }).then(function(result) {
+        if (result.value) {
+            sweatLoading();
+            $.post('hide-artikel', {dest:dest, target:target}, function(data){
+                if(data.status){
+                    callLink(data.callLink);
+                    var icon="success";
+                }else{
+                    var icon="error";
+                }
+                callSwal(icon, data.msg, true);
+            })
+            // result.dismiss can be "cancel", "overlay",
+            // "close", and "timer"
+        } else if (result.dismiss === "cancel") {
+            swal.fire(
+                "Cancelled",
+                "Permintaan dibatalkan",
+                "error"
+            )
         }
     })
 })

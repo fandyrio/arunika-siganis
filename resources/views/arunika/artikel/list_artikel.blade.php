@@ -40,6 +40,7 @@
                                 </td>
                                 <td class='mt-6'>
                                     <b>{!! $list_data['step_text'] !!}</b>
+                                    {!! (!$list_data["visible"]) ? "<br /><span style='color:red;font-weight:bold;'>(Hide)</span>" : ""  !!}
                                     @if(isReviewer())
                                         <br />
                                     <span style='color:orange;font-size:1rem;font-weight:bold;'>(Review ke {!! $list_data['review_ke'] !!})</span>

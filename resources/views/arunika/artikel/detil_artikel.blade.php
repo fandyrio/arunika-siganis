@@ -1,10 +1,20 @@
 <div class='card card-custom'>
     <div class="card-body">
         <div class="row mb-3">
-            <div class='col-md-12'>
+            <div class='col-md-10'>
                 <button class='btn btn-light list_menu' data-target='{!! $target !!}' style='background-color:white;border-color:white;font-size:1.8rem;font-weight:bold;'><span class='fas fa-angle-left' style='cursor:pointer;'></span> Detil Artikel </button><br />
-                Judul : <span style='color:#1BC5BD;font-size:1rem;font-weight:bold'>{!! $judul !!}</span>
-                <hr />
+                <span style='font-size:1.3rem;'>Judul</span> : <span style='color:#1BC5BD;font-size:1rem;font-weight:bold;font-size:1.3rem;'>{!! $judul !!}</span>
+                {!! (!$visible) ? '<br /><span style="color:red;font-weight:bold;">(This article hide from public)</span>' : '' !!}
+            </div>
+            <div class="col-md-2">
+            <span style='float:right;'>
+                @if($step === 8)
+                    <button class='btn btn-{!! ($visible) ? "danger" : "success" !!} btn-sm toogleShowHide' data-target="{!! $id_artikel !!}" data-dest="{!! $visible !!}">{!! ($visible) ? 'Hide From Public' : 'Show to Public' !!}</button>
+                @endif
+                </span>
+            </div>
+            <div class="col-md-12">
+            <hr />
             </div>
         </div>
         <div class="row mb-6">
@@ -49,8 +59,8 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js?q=1234511111') !!}"></script>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=123451111112') !!}"></script>
 <script>
     loadDataDetilArtikel();
 </script>

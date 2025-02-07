@@ -29,7 +29,7 @@
             $env=strip_tags($get_config['config_value']);
             if($env === "production"){
                 $telepon=$data['no_wa'];
-            }else{
+            }else if($env === "testing" || $env === "development"){
                 $telepon="081273861528";
             }
         }else{

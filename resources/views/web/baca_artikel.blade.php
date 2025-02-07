@@ -72,6 +72,11 @@
       </button>
       <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
       <ul class="navbar-nav navbar-nav-hover ms-auto">
+        <li class="nav-item ms-lg-auto mx-2">
+          <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/home') !!}">
+            <i class="material-icons opacity-6 me-2 text-bd">home</i> Home
+          </a>
+        </li>
         <li class="nav-item dropdown dropdown-hover mx-2">
           <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="material-icons opacity-6 me-2 text-md">dashboard</i>
@@ -125,7 +130,7 @@
             </div>
           </div>
         </li>
-        <li class="nav-item ms-lg-auto">
+        <li class="nav-item ms-lg-auto mx-2">
           <a class="nav-link ps-2 d-flex cursor-pointer align-items-center text-bold" href="{!! url('/search') !!}">
             <i class="material-icons opacity-6 me-2 text-bd">search</i> Search
           </a>
@@ -180,7 +185,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url($logo['env'] === 'production' ? '/sso' : '/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>

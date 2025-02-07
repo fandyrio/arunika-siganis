@@ -221,6 +221,8 @@ $(".delete").click(function(e){
         var url="delete-issue-artikel";
     }else if(pattern === "pengumuman_arunika"){
         var url="delete-pengumuman";
+    }else if(pattern === "config"){
+        var url="delete-config";
     }
     swal.fire({
         title: "Apakah anda yakin menghapus data ini?",
@@ -232,6 +234,7 @@ $(".delete").click(function(e){
         reverseButtons: true
     }).then(function(result) {
         if (result.value) {
+            sweatLoading();
             $.post(url, {token_i:token_i}, function(data){
                 if(data.status){
                     if(typeof data.btnBack !== "undefined"){

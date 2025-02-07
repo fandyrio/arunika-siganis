@@ -184,7 +184,7 @@ class artikelController extends Controller
         if(!is_null($get_data)){
             if(($step_name === "saveChecklistReview" || $step_name === "saveHasilReview" || $step_name === "removeHasilReview" || $step_name === "sendHasilToAuthor" || $step_name === "saveCatatanReview") && $step === 4){
                 return true;
-            }else if($step === 5 and $step_name === "cancelHasilToAuthor"){
+            }else if(($step === 5 || $step === 6) &&  $step_name === "cancelHasilToAuthor"){
                 return true;
             }
         }
@@ -864,7 +864,7 @@ class artikelController extends Controller
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'review_stage.review_ke')
                             ->where('review_stage.step', 4)
                             ->orWhere(function($a){
-                                $a->where('review_stage.step', 5)
+                                $a->whereIn('review_stage.step', [5,6,9])
                                 ->whereRaw('review_stage.send_author_at is null');
                             })
                             ->orderBy('review_stage.updated_at', 'desc')
@@ -978,10 +978,41 @@ class artikelController extends Controller
             $get_artikel=Artikel::where('id', $artikel_id_dec)->first();
             $step=$get_artikel['step'];
             $judul=$get_artikel['judul'];
-            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul]);
+            $visible=$get_artikel['visible'];
+            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul, 'visible'=>$visible]);
         }catch(DecryptException $e){
             echo "invalid token";
         }
+    }
+    public function hideShowArtikel(Request $request){
+        $update=false;
+        try{
+            $artikel_id=Crypt::decrypt($request->target);
+            $current_position=$request->dest;
+            $get_artikel=Artikel::join('publish_artikel', function($join){
+                                    $join->on('publish_artikel.id_artikel', '=', 'artikel.id')
+                                        ->whereRaw('publish_artikel.publish_at is not null');
+                                })
+                        ->select('artikel.*')
+                        ->where('artikel.id', $artikel_id)
+                        ->where('artikel.step', 8)
+                        ->first();
+            if(!is_null($get_artikel)){
+                $get_artikel->visible=$get_artikel['visible'] === 1 ? false : true;
+                if($get_artikel->update()){
+                    $update=true;
+                    $msg="Success to ";
+                    $msg.=$get_artikel['visible'] === 1 ? 'hide' : 'view'.' '."artikel in Public";
+                }else{
+                    $msg="There is problem while hide artikel";
+                }
+            }else{
+                $msg="Data artikel tidak ditemukan";
+            }
+        }catch(DecryptException $e){
+            $msg="Token tidak valid";
+        }
+        return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>'detil-artikel/'.$request->target.'/'.Crypt::encrypt('list_artikel_publish_jm')]);
     }
     public function dataUmumArtikel(Request $request){
         try{
@@ -1619,7 +1650,7 @@ public function removeHasilReview(Request $request){
                                         //judul, no_hp, nama_penerima
                                         $data_wa['judul']=$artikel['judul'];
                                         //$data_wa['no_wa']="081273861528";
-                                        $data_wa['no_hp']=$get_pegawai['no_handphone'];
+                                        $data_wa['no_wa']=$get_pegawai['no_handphone'];
                                         $data_wa['nama_penerima']=$get_pegawai['nama'];
                                         $data_wa['hasil_reviewer']=$get_review_stage['step_text'];
                                         $this->sendWaNotification($category, $data_wa);
@@ -1670,7 +1701,7 @@ public function removeHasilReview(Request $request){
                                         ->get()->count();
                         $get_review_stage=Review_stage::where('id_artikel', $artikel_id)
                                             ->where('id', $review_id)
-                                            ->whereIn('step', [5,6])
+                                            ->whereIn('step', [5,6,9])
                                             ->whereRaw('catatan_reviewer is not null')
                                             ->first();
                         if(!is_null($get_review_stage)){
@@ -1678,7 +1709,7 @@ public function removeHasilReview(Request $request){
                                 if($get_hasil_review > 0){
                                     if($get_review_stage['edoc_perbaikan_penulis'] === null){
                                         $artikel=Artikel::where('id', $artikel_id)
-                                                ->where('step', 5)
+                                                ->whereIn('step', [5,6,9])
                                                 ->first();
                                         $artikel->step=4;
                                         $update_step=$artikel->update();

@@ -28,7 +28,7 @@ class configController extends Controller
             $validate=$request->validate([
                 'config_name' => 'required'
             ]);
-            if(($request->value_text !== null || $request->value_text !== "")  && $request->value_file !== null){
+            if(($request->value_text !== null && $request->value_text !== "")  || $request->value_file !== null){
                 if($request->value_text !== null && $request->value_text !== ""){
                     $text_value=$request->value_text;
                 }
@@ -106,7 +106,7 @@ class configController extends Controller
             if(!is_null($get_config)){
                 $text_value=$request->value_text;
                 $file_value=$request->value_file;
-                if(($text_value !== "" || $text_value !== null) && $file_value !== null){
+                if(($text_value !== "" && $text_value !== null) || $file_value !== null){
                     if($text_value !== "" && $text_value !== null){
                         $text_value=$request->value_text;
                     }
@@ -156,6 +156,26 @@ class configController extends Controller
             $msg="Invalid token";
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'btnBack'=>'backToList']);
+    }
+    public function deleteConfig(Request $request){
+        $delete=false;
+        try{
+            $config_id=Crypt::decrypt($request->token_i);
+            $get_config=Config::where('id', $config_id)->first();
+            if(!is_null($get_config)){
+                if($get_config->delete()){
+                    $delete=true;
+                    $msg="Berhasil menghapus data";
+                }else{
+                    $msg="Terjadi kesalahan saat menghapus data";
+                }
+            }else{
+                $msg="Data tidak ditemukan";
+            }
+        }catch(DecryptException $e){
+            $msg="Invalid token";
+        }
+        return response()->json(['status'=>$delete, 'msg'=>$msg, 'callLink'=>'list-config-web']);
     }
     public function listPertanyaan($page){
         try{
