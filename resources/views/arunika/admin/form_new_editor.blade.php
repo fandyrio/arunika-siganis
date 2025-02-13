@@ -19,7 +19,7 @@
                 <div class='col-lg-5'>
                 <label>Sebagai</label>
                 <select class='form-control required_field' name='sebagai'>
-                    <option value='editor'>Editor</option>
+                    <option value='editor'>Reviewer</option>
                     <option value='jurnal_manager'>Jurnal Manager</option>
                 </select>
                 </div>
@@ -60,5 +60,5 @@
         </form>
     </div>
 </div>
-<script src="{!! asset('../resources/views/assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('../resources/views/assets/js/arunika_services_config.js') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js') !!}"></script>

@@ -90,14 +90,14 @@ class dashboardController extends Controller
                 if($list_artikel['step'] === 7){
                     $jumlah_siap_publish+=1;
                 }
-                $data['jumlah_masuk']=$jumlah_masuk;
-                $data['jumlah_proses_review']=$jumlah_proses_review;
-                $data['jumlah_perbaikan']=$jumlah_perbaikan;
-                $data['jumlah_diterima']=$jumlah_diterima;
-                $data['jumlah_siap_publish']=$jumlah_siap_publish;
-                $data['total_artikel_jm']=$jumlah_masuk+$jumlah_proses_review+$jumlah_perbaikan+$jumlah_diterima+$jumlah_siap_publish;
-                $data['total_artikel_proses_jm']=$jumlah_masuk+$jumlah_proses_review+$jumlah_perbaikan+$jumlah_diterima;
             }
+            $data['jumlah_masuk']=$jumlah_masuk;
+            $data['jumlah_proses_review']=$jumlah_proses_review;
+            $data['jumlah_perbaikan']=$jumlah_perbaikan;
+            $data['jumlah_diterima']=$jumlah_diterima;
+            $data['jumlah_siap_publish']=$jumlah_siap_publish;
+            $data['total_artikel_jm']=$jumlah_masuk+$jumlah_proses_review+$jumlah_perbaikan+$jumlah_diterima+$jumlah_siap_publish;
+            $data['total_artikel_proses_jm']=$jumlah_masuk+$jumlah_proses_review+$jumlah_perbaikan+$jumlah_diterima;
         }
         $get_artikel_personal=Artikel::join("penulis_artikel", function($join) use($nip){
                                             $join->on('penulis_artikel.id', '=', 'artikel.id_penulis')

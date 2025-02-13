@@ -28,7 +28,7 @@
 <meta name="csrf-token-web" content="{{ csrf_token() }}">
 <link href="{!! asset('web/assets/css/nucleo-svg.css') !!}" rel="stylesheet" />
 <!-- Font Awesome Icons -->
-<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+<!-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> -->
 <!-- Material Icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
@@ -180,7 +180,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url('/sso') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>
@@ -201,7 +201,7 @@
           <p class="lead text-white mt-3" style=''>{!! $issue[$jumlah_issue-1]['description'] !!} </p>
         </div>
         <div class="col-lg-2" style="padding-top:5%;">
-        <a href="{!! url('/sso') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
+        <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" target="_blank"><button class='btn btn-danger' style="white-space:nowrap;">Submit Now <i class="material-icons" style="font-size:1.5rem;">chevron_right</i> </button></a>
         </div>
       </div>
     </div>
@@ -267,7 +267,7 @@
               </div>
               <div class="back back-backgrounds" style="background-image: url('{!! $issue[$jumlah_issue-1]['flyer'] !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
                 <div class="card-body pt-7 text-center" >
-                  <a href="{!! url('/sso') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
+                  <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
                 </div>
               </div>
             </div>
@@ -347,7 +347,7 @@
             <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Arunika<span class='gradient_text'>Terbaru</span> </span>
           </div>
           <div class="col-lg-6 sisi2_" style="">
-            <a href="{!! url('artikel') !!}"><span class='text_nav'>Lihat Selengkapnya ></span></a>
+            <a href="{!! url('artikel') !!}"><span class='text_nav' style='color:#684DF4;font-weight:bold;'>Lihat Selengkapnya ></span></a>
           </div>
         </div>
         <div class="row">
@@ -445,7 +445,7 @@
             <span style='font-size:16px;color:#684DF4;font-weight:bold;'>Arunika<span class='gradient_text'>Paper</span></span>
           </div>
           <div class="col-lg-6 sisi2_" style="">
-            <a href="{!! url('arsip') !!}"><span class='text_nav'>Lihat Selengkapnya ></span></a>
+            <a href="{!! url('arsip') !!}"><span class='text_nav' style='color:#684DF4;font-weight:bold;'>Lihat Selengkapnya ></span></a>
           </div>
         </div>
         <div class="row">
@@ -746,7 +746,7 @@ $.ajaxSetup({
     if (!countUp.error) {
       countUp.start();
     } else {
-      console.error(countUp.error);
+      //console.error(countUp.error);
     }
   }
   if (document.getElementById('state2')) {
@@ -754,7 +754,7 @@ $.ajaxSetup({
     if (!countUp1.error) {
       countUp1.start();
     } else {
-      console.error(countUp1.error);
+      //console.error(countUp1.error);
     }
   }
   if (document.getElementById('state3')) {
@@ -762,7 +762,7 @@ $.ajaxSetup({
     if (!countUp2.error) {
       countUp2.start();
     } else {
-      console.error(countUp2.error);
+      //console.error(countUp2.error);
     };
   }
   var loadingScreen = document.querySelector(".loadingScreen");
@@ -778,7 +778,7 @@ $.ajaxSetup({
   runImg(jumlah_skleton, skleton);
   async function runImg(jumlah_skleton, skleton){
     for(var x=0;x<jumlah_skleton;x++){
-      console.log(x);
+      //console.log(x);
       var target=$(skleton[x]).data('target');
       var width=$(skleton[x]).width();
       var height=$(skleton[x]).height();
@@ -795,13 +795,13 @@ $.ajaxSetup({
         dataType:'JSON',
         type:'POST',
         success:function(data){
-          console.log(x);
+          //console.log(x);
           $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
           $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
           //console.log("background-image:url('"+data.background+"')");
           $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
         },error:function(data){
-          console.log("err");
+          //console.log("err");
         }
       })
   }
