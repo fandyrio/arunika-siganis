@@ -18,6 +18,7 @@
                             <td colspan="3">Tidak ada data</td>
                         </tr>
                     @else
+                        @php $index=1; @endphp
                         @foreach($data as $list_data)
                             @php
                                 if($target === 'artikel_baru'){
@@ -27,7 +28,7 @@
                                     $target=Crypt::encrypt($list_data['id']);
                                 }
                             @endphp
-                            <tr>
+                            <tr class='index_{!! $index !!}'>
                                 <td>
                                     <b>{!! $list_data['nama'] !!}</b><br />
                                     <span style='color:green;font-size:1rem'>{!! $list_data['jabatan'] !!}</span><br />
@@ -39,13 +40,17 @@
                                     {!! $list_data['name'] === null ? "" : "<span style='color:green;font-weight:bold;font-size:1rem'>Tema : ".$list_data['name']."</span>" !!}
                                 </td>
                                 <td class='mt-6'><b>{!! $list_data['step_text'] !!}</b></td>
-                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
+                                <td>
+                                    <button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button>
+                                    <button class='btn btn-danger btn-sm deleteArtikel' data-target='{!! Crypt::encrypt($list_data["id"]) !!}' data-index="{!! Crypt::encrypt($index) !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type="button" style="border-radius:10%"><span class='fas fa-trash'></span> Delete</button>
+                                </td>
                             </tr>
+                            @php $index++ @endphp
                         @endforeach
                     @endif
                 </table>
             </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js?q=12') !!}"></script>

@@ -2687,6 +2687,34 @@ public function removeHasilReview(Request $request){
         }
         return response()->json(['status'=>$delete, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
     }
+    public function deleteArtikelDraft(Request $request){
+        $delete=false;
+        $index=0;
+        try{
+            $id_artikel=Crypt::decrypt($request->target);
+            if(isYourArtikel($id_artikel)){
+                $get_artikel=Artikel::where('id', $id_artikel)
+                            ->whereIn('step', [1,2])
+                            ->first();
+                if(!is_null($get_artikel)){
+                    $delete=$get_artikel->delete();
+                    if($delete){
+                        $msg="Berhasil menghapus data";
+                        $index=Crypt::decrypt($request->index);
+                    }else{
+                        $msg="Terjadi kesalahan sistem saat menghapus data";
+                    }
+                }else{
+                    $msg="Data tidak ditemukan ".$id_artikel;
+                }
+            }else{
+                $msg="Akses tidak diperbolehkan";
+            }
+        }catch(DecryptException $e){
+            $msg="Invalid token";
+        }
+        return response()->json(['status'=>$delete, 'msg'=>$msg, 'index'=>$index]);
+    }
     public function updateFotoPenulis(Request $request){
         $update=false;
         try{
