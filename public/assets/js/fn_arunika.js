@@ -393,16 +393,17 @@ function checkuncheck(checkbox){
 function confirmPublsih(){
     var data=$(".confirmPublish").data('target');
     swal.fire({
-        title: "<span style='color:red;'>Data yang dipublish tidak dapat diunpublish kemudian</span>",
+        title: "<span style='color:red;'>Artikel ini akan dipublish dan terbuka untuk publik</span>",
         text: "Apakah anda yakin untuk Publish Artikel ini ?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes",
         cancelButtonText: "Tidak",
-        reverseButtons: true,
+        reverseButtons: true,   
         allowOutsideClick: false
     }).then(function(result) {
         if (result.value) {
+            Swal.close();
             checkingDataPersonal(data);   
         }else if (result.dismiss === "cancel") {
             swal.fire(
@@ -416,13 +417,14 @@ function confirmPublsih(){
 function checkingDataPersonal(token_a){
     $.ajax({
         beforeSend:function(){
-            swal.fire({
+            Swal.fire({
                 title: "<span class='fl'><span class='msg_check' style='color:black;text-align:left;font-size:1rem;'><li>Checking Data Pribadi ...<span class='data_pribadi'></span></li><li>Checking Data Artikel ...<span class='data_artikel'></span></li><li>Checking Data Review ...<span class='data_review'></span></li><li>Checking Data Publish ...<span class='data_publish'></span></li></span></span>",
                 text: "Please wait ...",
                 type: "warning",
                 allowOutsideClick: false,
+                showConfirmButton:false,
                 didOpen: function() {
-                    swal.showLoading()
+                    Swal.showLoading()
                 }
             });
         },

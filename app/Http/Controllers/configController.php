@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use App\Config;
+use App\Pegawai;
 use App\Checklist_review;
 use File;
 
@@ -240,5 +241,42 @@ class configController extends Controller
             $msg="Invalid token";
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>"callLink('list-pertanyaan-review/".Crypt::encrypt('1')."')"]);
+    }
+    public function listPengguna($page=null){
+        if($page === null){
+            $page=1;
+        }
+        $limit=30;
+        $total=Pegawai::all()->count();
+        $jumlah_halaman=ceil($total/$limit);
+        $skip=$page * $limit - $limit;
+
+        $get_pegawai=Pegawai::leftJoin('users', 'users.nip', '=', 'pegawai.nip')
+                        ->select('pegawai.nama', 'pegawai.no_handphone', 'pegawai.id_pegawai', 'pegawai.id as id_pegawai_lokal', 'users.nip as nip_users')
+                        ->orderBy('pegawai.nama')
+                        ->get();
+        $jumlah=$get_pegawai->count();
+        return view('arunika/admin/list_pengguna', ['jumlah_halaman'=>$jumlah_halaman, 'data'=>$get_pegawai, 'total'=>$total, 'jumlah'=>$jumlah, 'jumlah_halaman'=>$jumlah_halaman]);
+
+    }
+    public function removePengguna(Request $request){
+        $delete=false;
+        try{
+            $id_pegawai_lokal=Crypt::decrypt($request->target);
+            $get_pegawai=Pegawai::where('id', $id_pegawai_lokal)->first();
+            if(!is_null($get_pegawai)){
+                if($get_pegawai->delete()){
+                    $msg="Data berhasil dihapus";
+                    $delete=true;
+                }else{
+                    $msg="Terjadi kesalahan saat menghapus data pegawai";
+                }
+            }else{
+                $msg="Data tidak ditemukan";
+            }
+        }catch(DecryptException $e){
+            $msg="Invalid token";
+        }
+        return response()->json(['status'=>$delete, 'msg'=>$msg]);
     }
 }

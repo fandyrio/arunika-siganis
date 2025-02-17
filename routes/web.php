@@ -105,6 +105,7 @@ Route::post('check-data-review', 'artikelController@checkDataReview')->name('che
 Route::post('check-data-publish', 'artikelController@checkDataPublish')->name('check-data-publish')->middleware('cas.auth');
 Route::post('hide-artikel', 'artikelController@hideShowArtikel')->name('hide-artikel')->middleware('cas.auth');
 Route::post('delete-artikel-draft', 'artikelController@deleteArtikelDraft')->name('delete-artikel-draft')->middleware('cas.auth');
+Route::post('remove-artikel', 'artikelController@removeArtikel')->name('remove-artikel')->middleware('cas.auth');
 Route::post('delete-config', 'configController@deleteConfig')->name('delete-config')->middleware('cas.auth');
 Route::get('list-artikel-waiting-publish', 'artikelController@listArtikelWaitingPublish')->name('list-artikel-waiting-publish')->middleware('cas.auth');
 Route::get('list-artikel-publish', 'artikelController@listArtikelPublish')->name('list-artikel-publish')->middleware('cas.auth');
@@ -114,6 +115,8 @@ Route::post('save-issue-artikel', 'issueArtikelController@saveIssueArtikel')->na
 Route::post('update-issue-artikel', 'issueArtikelController@updateIssueArtikel')->name('update-issue-artikel')->middleware('cas.auth');
 Route::post('edit-config', 'configController@editConfig')->name('edit-config')->middleware('cas.auth');
 Route::post('update-config', 'configController@updateConfig')->name('update-config')->middleware('cas.auth');
+Route::get('list-pengguna/{page?}', 'configController@listPengguna')->name('list-pengguna')->middleware('cas.auth');
+Route::post('remove-pengguna', 'configController@removePengguna')->name('remove-pengguna')->middleware('cas.auth');
 Route::get('list-draft', 'artikelController@listDraft')->name('list-draft')->middleware('cas.auth');
 
 Route::get('home', 'arunikaController@index')->name('home');

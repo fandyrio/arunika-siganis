@@ -233,6 +233,7 @@ class arunikaController extends Controller
                                     ->whereIn("keyword_artikel.keyword", $keyword)
                                     ->whereRaw('publish_artikel.publish_at is not null')
                                     ->where('artikel.id', '<>', $artikel_id)
+                                    ->where('visible', true)
                                     ->take(0)->limit(5)
                                     ->orderBy('artikel.id', 'desc')
                                     ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf', 'publish_artikel.code_issue', 'penulis_artikel.id_pegawai')
@@ -246,6 +247,7 @@ class arunikaController extends Controller
                                     ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama', 'publish_artikel.code_issue', 'penulis_artikel.id_pegawai')
                                     ->whereRaw('publish_artikel.publish_at is not null')
                                     ->where('artikel.id', '<>', $artikel_id)
+                                    ->where('visible', true)
                                     ->take(0)->limit(5)
                                     ->orderBy('artikel.id', 'desc')
                                     ->groupBy('artikel.id', 'artikel.foto_penulis', 'artikel.judul', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama', 'publish_artikel.code_issue', 'penulis_artikel.id_pegawai')
@@ -511,7 +513,10 @@ class arunikaController extends Controller
         return $ip_address;
     }
     public function getAllCategory(){
-        $get_all_category=Kategori_artikel::leftJoin('artikel', 'artikel.kategori_artikel_kode', '=', 'kategori_artikel.kode')
+        $get_all_category=Kategori_artikel::leftJoin('artikel', function($join){
+                                            $join->on('artikel.kategori_artikel_kode', '=', 'kategori_artikel.kode')
+                                            ->where('visible', true);
+                                        })
                                             ->leftJoin('publish_artikel', function($join){
                                                 $join->on('publish_artikel.id_artikel', '=', 'artikel.id')
                                                     ->whereRaw('publish_artikel.code_issue is not null');
@@ -556,6 +561,7 @@ class arunikaController extends Controller
                                     ->whereRaw('code_issue is not null');
                             })
                             ->where('artikel.kategori_artikel_kode', $kode_kategori)
+                            ->where('artikel.visible', true)
                             ->get()->count();
             $jumlah_halaman=ceil($total/$limit);
             if($page > $jumlah_halaman){
@@ -573,6 +579,7 @@ class arunikaController extends Controller
                             ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
                             ->select('artikel.id','artikel.judul', 'artikel.foto_penulis', 'publish_artikel.publish_at', 'publish_artikel.edoc_pdf', 'artikel.tentang_artikel', 'penulis_artikel.nama', 'kategori_artikel.kategori', 'publish_artikel.code_issue')
                             ->whereRaw('publish_artikel.code_issue is not null')
+                            ->where('artikel.visible', true)
                             ->join("statistik_baca", 'statistik_baca.id_artikel', '=', 'artikel.id')
                             ->skip($skip)->take($limit)
                             ->orderBy('statistik_baca.jumlah', 'desc')

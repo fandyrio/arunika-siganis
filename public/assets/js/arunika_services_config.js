@@ -265,4 +265,44 @@ $(".delete").click(function(e){
             )
         }
     });
+});
+$(".removePegawai").click(function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    swal.fire({
+        title: "<span style='color:red'>Perhatian !. Data yang telah dihapus tidak dapat dikembalikan lagi</span> ",
+        text: "Apakah anda yakin ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+    }).then(function(result) {
+        if (result.value) {
+            sweatLoading();
+            $.post('remove-pengguna', {target:target}, function(data){
+                if(data.status){
+                    // eval(data.callLink);
+                    var icon="success";
+                    $(".list_menu[data-target='pengguna']").trigger('click');
+                    // eval(data.callForm);
+                    //$(".btn_place").html("Success sent data");
+                }else{
+                    var icon="error";
+                }
+                callSwal(icon, data.msg, true);
+                $(".index_"+data.index).remove();
+            })
+            // result.dismiss can be "cancel", "overlay",
+            // "close", and "timer"
+        } else if (result.dismiss === "cancel") {
+            swal.fire(
+                "Cancelled",
+                "Permintaan dibatalkan",
+                "error"
+            )
+        }
+    })
 })

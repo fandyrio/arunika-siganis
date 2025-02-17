@@ -93,6 +93,7 @@ class loginController extends Controller
     }
 
     public function userLocal($nip){
+        $msg="";
         $get_data=User::where('nip', $nip)->first();
         $check_pegawai=Pegawai::where('nip', $nip)->first();
         if(is_null($get_data)){
@@ -127,6 +128,7 @@ class loginController extends Controller
         }else{
             Auth::login($get_data);
         }
+        return response()->json(['data'=>$get_data, 'msg'=>$msg]);
     }
 
     public function logoutSso()

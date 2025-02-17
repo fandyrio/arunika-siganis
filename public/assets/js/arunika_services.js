@@ -62,7 +62,10 @@ $(document).on("click",".list_menu", function(e){
         setHeader("Pengumuman", "Daftar Pengumuman Arunika");
     }else if(target === "draft"){
         var url="list-draft";
-        setHeader('Draft', "Daftar Draft Artikel")
+        setHeader('Draft', "Daftar Draft Artikel");
+    }else if(target === "pengguna"){
+        var url="list-pengguna";
+        setHeader('Pengguna', "Pengguna System");
     }
     $.ajax({
         beforeSend:function(){
@@ -899,4 +902,44 @@ $(".deleteArtikel").click(function(e){
             )
         }
     })
-})
+});
+$(".removeArtikel").click(function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    swal.fire({
+        title: "<span style='color:red'>Perhatian !. Data yang telah dihapus tidak dapat dikembalikan lagi</span> ",
+        text: "Apakah anda yakin ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+    }).then(function(result) {
+        if (result.value) {
+            sweatLoading();
+            $.post('remove-artikel', {target:target}, function(data){
+                if(data.status){
+                    // eval(data.callLink);
+                    var icon="success";
+                    $(".list_menu[data-target='list_artikel_publish_jm']").trigger('click');
+                    // eval(data.callForm);
+                    //$(".btn_place").html("Success sent data");
+                }else{
+                    var icon="error";
+                }
+                callSwal(icon, data.msg, true);
+                $(".index_"+data.index).remove();
+            })
+            // result.dismiss can be "cancel", "overlay",
+            // "close", and "timer"
+        } else if (result.dismiss === "cancel") {
+            swal.fire(
+                "Cancelled",
+                "Permintaan dibatalkan",
+                "error"
+            )
+        }
+    })
+});
