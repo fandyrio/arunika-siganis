@@ -117,18 +117,20 @@ class loginController extends Controller
                     $save_pegawai=$pegawai->save();
                     // var_dump($save_pegawai);
                 }
+                DB::commit();
                 if($save){
                     $this->userLocal($nip);
                 }
-                DB::commit();
             }catch(\Exception $e){
                 DB::rollback();
                 $msg="Terjadi kesalahan sistem saat melakukan penyimpanan data : ".$e->getMessage();
+                dd($msg);
+                exit();
             }
         }else{
             Auth::login($get_data);
         }
-        return response()->json(['data'=>$get_data, 'msg'=>$msg]);
+        //return response()->json(['data'=>$get_data, 'msg'=>$msg]);
     }
 
     public function logoutSso()

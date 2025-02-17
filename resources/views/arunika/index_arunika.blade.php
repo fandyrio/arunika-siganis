@@ -412,6 +412,35 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
+								<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											
+										<i class="fa fa-cog text-primary"></i>
+											<!--end::Svg Icon-->
+										</span>
+										<span class="menu-text">Management</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Management</span>
+												</span>
+											</li>
+											<li class="menu-item list_menu" aria-haspopup="true" data-target='pengguna'>
+												<a href="#" class="menu-link">
+													<i class="menu-bullet menu-bullet-dot">
+														<span></span>
+													</i>
+													<span class="menu-text">Pengguna</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+</li>
 								@endif
 							</ul>
 							<!--end::Menu Nav-->
