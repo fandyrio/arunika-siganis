@@ -100,7 +100,7 @@ class loginController extends Controller
             try{
                 DB::beginTransaction();
                 $user=new User;
-                $user->name=Session::get('cas')['name'];
+                $user->name=Session::get('cas')['nama'];
                 $user->nip=Session::get('cas')['nip'];
                 $user->password=Hash::make('redirfromssomahkamahagung');
                 $user->role=1;
@@ -124,7 +124,6 @@ class loginController extends Controller
             }catch(\Exception $e){
                 DB::rollback();
                 $msg="Terjadi kesalahan sistem saat melakukan penyimpanan data : ".$e->getMessage();
-                dd($msg);
                 exit();
             }
         }else{
