@@ -27,8 +27,8 @@
   <meta property="og:image" content="{!! url($artikel['foto_penulis']) !!}" />
   <meta name="author" content="{!! $artikel['nama'] !!}">
   <meta name="keyword" content="{!! $keyword_string !!}">
-  <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
-  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <!-- <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}"> -->
   <title>
     {!! $artikel['judul'] !!}
   </title>
@@ -185,7 +185,7 @@
           </ul>
         </li>
         <li class="nav-item my-auto ms-3 ms-lg-0">
-          <a href="{!! url($logo['env'] === 'production' ? '/sso' : '/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
+          <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" class="btn btn-sm  bg-gradient-info  mb-0 me-1 mt-2 mt-md-0" target="_blank">
             {!! isset(Auth::user()->name) === true ? Auth::user()->name : 'Login' !!}
           </a>
         </li>

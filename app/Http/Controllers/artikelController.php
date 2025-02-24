@@ -305,7 +305,7 @@ class artikelController extends Controller
         try{
             $validated=$request->validate([
                 'token' => ['required'],
-                'nip' => ['required','digits:18'],
+                'nip' => ['required'],
                 'foto_hakim' => ['required', 'image'],
             ]);
             try{
@@ -2758,30 +2758,34 @@ public function removeHasilReview(Request $request){
     }
     public function removeArtikel(Request $request){
         $delete=false;
-        try{
-            $id_artikel=Crypt::decrypt($request->target);
-            $get_data=Artikel::where('id', $id_artikel)->where('step', 8)->first();
-            if(!is_null($get_data)){
-                try{
-                    DB::beginTransaction();
-                        $get_reviewer=Reviewer_artikel::where('id_artikel', $id_artikel)->delete();
-                        $review_stage=Review_stage::where('id_artikel', $id_artikel)->delete();
-                        $checklist_review=Checklist_review_result::where('id_artikel', $id_artikel)->delete();
-                        $keyword=Keyword::where('id_artikel', $id_artikel)->delete();
-                        $publish=Publish_artikel::where('id_artikel', $id_artikel)->delete();
-                        $get_data->delete();
-                    DB::commit();
-                    $delete=true;
-                    $msg="Berhasil Menghpaus data";
-                }catch(\Exception $e){
-                    DB::rollback();
-                    $msg="Kesalahan program";
+        if(isJM()){
+            try{
+                $id_artikel=Crypt::decrypt($request->target);
+                $get_data=Artikel::where('id', $id_artikel)->first();
+                if(!is_null($get_data)){
+                    try{
+                        DB::beginTransaction();
+                            $get_reviewer=Reviewer_artikel::where('id_artikel', $id_artikel)->delete();
+                            $review_stage=Review_stage::where('id_artikel', $id_artikel)->delete();
+                            $checklist_review=Checklist_review_result::where('id_artikel', $id_artikel)->delete();
+                            $keyword=Keyword::where('id_artikel', $id_artikel)->delete();
+                            $publish=Publish_artikel::where('id_artikel', $id_artikel)->delete();
+                            $get_data->delete();
+                        DB::commit();
+                        $delete=true;
+                        $msg="Berhasil Menghpaus data";
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        $msg="Kesalahan program";
+                    }
+                }else{
+                    $msg="Data tidak ditemukan";
                 }
-            }else{
-                $msg="Data tidak ditemukan";
+            }catch(DecryptException $e){
+                $msg="Invalid token";
             }
-        }catch(DecryptException $e){
-            $msg="Invalid token";
+        }else{
+            $msg="Akses ditolak";
         }
         return response()->json(['status'=>$delete, 'msg'=>$msg]);
     }  
