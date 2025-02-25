@@ -27,8 +27,11 @@
   <meta property="og:image" content="{!! url($artikel['foto_penulis']) !!}" />
   <meta name="author" content="{!! $artikel['nama'] !!}">
   <meta name="keyword" content="{!! $keyword_string !!}">
-  <!-- <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
-  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}"> -->
+  <meta name="thumbnailUrl" content="{!! url($artikel['foto_penulis']) !!}">
+  <meta property="og:image:width" content="300">
+  <meta property="og:image:height" content="300">
+  <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $artikel['judul'] !!}
   </title>

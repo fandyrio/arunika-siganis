@@ -7,13 +7,15 @@
                 {!! (!$visible) ? '<br /><span style="color:red;font-weight:bold;">(This article hide from public)</span>' : '' !!}
             </div>
             <div class="col-md-4">
-            <span style='float:right;'>
-                @if($step === 8)
-                    <button class='btn btn-{!! ($visible) ? "warning" : "success" !!} btn-sm toogleShowHide' data-target="{!! $id_artikel !!}" data-dest="{!! $visible !!}">{!! ($visible) ? 'Hide From Public' : 'Show to Public' !!}</button>
-                    <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button>
-                @endif
+            @if(isJM())
+                <span style='float:right;'>
+                    @if($step === 8)
+                        <button class='btn btn-{!! ($visible) ? "warning" : "success" !!} btn-sm toogleShowHide' data-target="{!! $id_artikel !!}" data-dest="{!! $visible !!}">{!! ($visible) ? 'Hide From Public' : 'Show to Public' !!}</button>
+                        <!-- <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button> -->
+                    @endif
                 <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button>
                 </span>
+            @endif
             </div>
             <div class="col-md-12">
             <hr />
