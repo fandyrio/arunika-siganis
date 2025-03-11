@@ -1113,8 +1113,14 @@ class artikelController extends Controller
             $data_review=$this->getDataReview($artikel_id);
             //var_dump(count($data_review->data_review));die();
             //$get_hasil_review=Catatan_hasil_review::where('id_review', )
+            $get_config=Config::where('config_name', 'blind_review')->first();
+            if(!is_null($get_config)){
+                $blind_review=strip_tags($get_config['config_value']);
+            }else{
+                $blind_review="T";
+            }
             $blind_reviewer=true;
-            return view('arunika/artikel/view_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review, 'blind_review'=>true]);
+            return view('arunika/artikel/view_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review, 'blind_review'=>$blind_review]);
         }catch(DecryptException $e){
             echo "Token tidak valid";
         }
@@ -1130,10 +1136,16 @@ class artikelController extends Controller
                         ->get();
             $jumlah_reviewer=$get_data->count();
             $data_review=$this->getDataReview($artikel_id);
+            $get_config=Config::where('config_name', 'blind_review')->first();
+            if(!is_null($get_config)){
+                $blind_review=strip_tags($get_config['config_value']);
+            }else{
+                $blind_review="T";
+            }
             //var_dump(count($data_review->data_review));die();
             //$get_hasil_review=Catatan_hasil_review::where('id_review', )
 
-            return view('arunika/artikel/data_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review, 'artikel_id'=>$artikel_id]);
+            return view('arunika/artikel/data_review_artikel', ['reviewer'=>$get_data, 'jumlah_reviewer' => $jumlah_reviewer, 'data_review'=>$data_review, 'jumlah_review'=>$data_review->jumlah_review, 'artikel_id'=>$artikel_id, 'blind_review'=>$blind_review]);
         }catch(DecryptException $e){
             echo "Token tidak valid";
         }

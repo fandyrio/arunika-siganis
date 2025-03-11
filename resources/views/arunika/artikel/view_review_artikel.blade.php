@@ -12,7 +12,7 @@
                 </tr>
                 @foreach($reviewer as $list_reviewer)
                     <tr>
-                        <td>{!! $blind_review === true ? '<i>Blind Review Method</i>' : $list_reviewer['nama'] !!}<br /><span style='color:orange;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span></td>
+                        <td>{!! $blind_review === 'Y' ? '<i>Blind Review Method</i>' : $list_reviewer['nama'] !!}<br /><span style='color:orange;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span></td>
                         <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_pilih'])) !!}</td>
                         <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_mulai'])) !!}</td>
                         <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_estimasi_selesai'])) !!}</td>
@@ -74,7 +74,7 @@
             {!! $data_review->data_review[$x]->catatan_jm  !== null ? "<span style='color:red;font-weight:bold;'>Catatan dari Journal Manager : ".$data_review->data_review[$x]->catatan_jm."</span>" : '' !!}
             <div class="separator separator-dashed separator-border-2 mb-6" ></div>
             @if($data_review->data_review[$x]->step_id === 6 || $data_review->data_review[$x]->step_id === 7)
-                <b>Accepted eDoc : </b><a href="download/{!! Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span> Download</a>
+                <b>Accepted eDoc : </b><a href="download/{!! (int)$data_review->data_review[$x]->review_ke > 1 ? Crypt::encrypt($data_review->data_review[$x]->edoc_perbaikan) : Crypt::encrypt($data_review->artikel->edoc_artikel) !!}/edoc_artikel_doc"><span class='fas fa-file-download'></span> Download</a>
             @endif
             @php
                 $display="";
@@ -170,7 +170,7 @@
                     <div class="alert alert-primary" role="alert" style='font-weight:bold;'>
                         3. Informasi Pengiriman Hasil Review
                     </div>
-                    <b>Dikirim oleh :</b> {!! $data_review->data_review[$x]->sent_by; !!} <br />
+                    <b>Dikirim oleh :</b> {!! $blind_review === 'Y' ? 'Blind Review Method' : $data_review->data_review[$x]->sent_by; !!} <br />
                     <b>Dikirim Pada : </b> {!! $data_review->data_review[$x]->sent_at === null ? '' : date('d-M-Y', strtotime($data_review->data_review[$x]->sent_at)) !!} Pukul : {!! $data_review->data_review[$x]->sent_at === null ? '-' : date('H:i', strtotime($data_review->data_review[$x]->sent_at)) !!} wib<br /><br />
                     @if(isYourArtikel($data_review->data_review[$x]->id_artikel))
                         @if($data_review->data_review[$x]->step_id === 5 && $data_review->data_review[$x]->sent_at !== null)
