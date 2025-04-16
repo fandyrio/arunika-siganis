@@ -17,8 +17,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="apple-touch-icon" sizes="76x76" href="{!! asset('web/assets/img/apple-icon.png') !!}">
-<link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+<link rel="apple-touch-icon" sizes="76x76" href="{!! Storage::url('web/assets/img/apple-icon.png') !!}">
+<link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
 
 <title>Arunika By SIGANIS</title>
 <!--     Fonts and icons     -->
@@ -52,7 +52,7 @@
   <!-- Navbar -->
   <div class="loadingScreen" style='z-index:999;'>
 <!--My content is the word "soundscape" but the o is replaced with a disc-->
-    <center><img src="{!! asset($logo['loading_animation']) !!}"><br /><br />
+    <center><img src="{!! Storage::url($logo['loading_animation']) !!}"><br /><br />
     <h4>L o a d i n g ... </h4><br /></center>
   </div>
 <div class="container position-sticky z-index-sticky top-0">
@@ -61,7 +61,7 @@
 <nav class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4 bg-white-transparent">
   <div class="container-fluid px-0">
     <a class="navbar-brand font-weight-bolder ms-sm-3 logo-top" href="{!! url('/home') !!}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
-    <img src="{!! $logo['logo_arunika'] !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Nusantara</span></span>
+    <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Nusantara</span></span>
     </a>
     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon mt-2">
@@ -190,10 +190,10 @@
 </nav>
 <!-- End Navbar -->
 </div></div></div>
-<header class="header-2" style="background-image: url('{!! asset($logo['page_header']) !!}');background-size:cover;background-repeat:no-repeat;background-position:center;height:500px">
+<header class="header-2" style="background-image: url('{!! Storage::url($logo['page_header']) !!}');background-size:cover;background-repeat:no-repeat;background-position:center;height:500px">
   
   <div class="page-header relative" style="height:500px;">
-  <img src="{!! $logo['logo_siganis'] !!}" class='siganis_logo'>
+  <img src="{!! Storage::url($logo['logo_siganis']) !!}" class='siganis_logo'>
     <div class="containers" style="bottom:0px;position:absolute;background-image:linear-gradient(to top, #684DF4 0%,  rgba(255,255,255,0) 100%);">
       <div class="row" style="padding-bottom:30px;padding-left:8%;background-image:linear-gradient(to top, #000 0%,  rgba(255,255,255,0) 100%)">
         <div class="col-lg-8 position-relative" style="left:2%;">
@@ -265,7 +265,7 @@
                   <p class="text-white opacity-8">Arunika merupakan wadah bagi Hakim dibawah Badan Peradilan Umum untuk menulis artikel dan opini.</p>
                 </div>
               </div>
-              <div class="back back-backgrounds" style="background-image: url('{!! $issue[$jumlah_issue-1]['flyer'] !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
+              <div class="back back-backgrounds" style="background-image: url('{!! Storage::url($issue[$jumlah_issue-1]['flyer']) !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
                 <div class="card-body pt-7 text-center" >
                   <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
                 </div>
@@ -453,7 +453,7 @@
           @foreach($issue as $list_issue)
             <div class="col-lg-3 list_tema mt-3">
               <div class="row">
-                <div class="col-lg-12 flyer_theme img list_issue_{!! $x !!}" style="background-image:url('{!! $list_issue['flyer'] !!}');background-image:">
+                <div class="col-lg-12 flyer_theme img list_issue_{!! $x !!}" style="background-image:url('{!! Storage::url($list_issue['flyer']) !!}');background-image:">
                   <span class='badge bg-theme badge-text' style=''>Arunika {!! $x !!}</span>
                 </div>
                 <div class="col-lg-12" style='font-family:Montserrat-FF,Arial,Tahoma,sans-serif;border-radius: 0 0 5% 5%;background-color:linen;min-height:104px;'>
@@ -575,7 +575,7 @@
       <div class="col-md-3 mb-4 ms-auto">
         <div>
           <a href="{!! url('/home') !!}">
-            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important;'>
+            <img src="{!! Storage::url($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important;'>
           </a>
           <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
         </div>

@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
   <link rel="apple-touch-icon" sizes="76x76" href="{!! url('web/assets/img/apple-icon.png') !!}">
-  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $title !!}
   </title>
@@ -41,7 +41,7 @@
 
 <body class="contact-us">
   <div class="loadingScreen" style='z-index:999;'>
-    <center><img src="{!! asset($logo['loading_animation']) !!}"><br /><br />
+    <center><img src="{!! Storage::url($logo['loading_animation']) !!}"><br /><br />
     <h4>L o a d i n g ... Please Wait ...</h4><br /></center>
   </div>
 <div class="container position-sticky z-index-sticky top-0">

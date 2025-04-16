@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use App\Services\uploadImageService;
 use File;
+use Illuminate\Support\Facades\Storage;
 
 class issueArtikelController extends Controller
 {
+    public function __construct(uploadImageService $uploadService){
+        $this->uploadService=$uploadService;
+    }
     public function index(){
         if(isJM()){
             $get_issue=Issue_artikel::orderBy('id', 'desc')->get();
@@ -39,7 +44,7 @@ class issueArtikelController extends Controller
                 'name'=>'required',
                 'description'=>'required',
                 'year'=>['required', 'digits:4'],
-                'flyer'=>['required', 'file'],
+                'flyer'=>['required', 'image', 'mimes:jpg,jpeg,png'],
             ]);
 
             $check=Issue_artikel::where('status',1)->first();
@@ -47,37 +52,31 @@ class issueArtikelController extends Controller
                 $msg="Tidak dapat menyimpan tema ini, karena masih ada tema yang belum dipublish";
             }else{
                 $file=$request->flyer;
-                $size=$file->getSize();
+                $validate=$this->uploadService->uploadImage($file);
+                if($validate['status']){
+                    $size=$file->getSize();
                 $type=$file->getMimeType();
                 if($size <= 3145728){
-                    if($type === "image/jpg" || $type === "image/png" || $type === "image/jpeg" || $type === "image/webp"){
-                        $filename='flyer_'.date('YmdHis').'_'.$file->getClientOriginalName();
-                        $destination="upload/image";
-                        $file->move($destination, $filename);
-                        $path=$destination."/".$filename;
-                        if(File::exists($path)){
-                            $code=$this->generateCode();;
-                            $issue=new Issue_artikel;
-                            $issue->code_issue=$code;
-                            $issue->name=$request->name;
-                            $issue->description=$request->description;
-                            $issue->year=$request->year;
-                            $issue->flyer=$path;
-                            $issue->status=1;
-                            $save=$issue->save();
-                            if($save){
-                                $msg="Berhasil menyimpan data issue";
-                            }else{
-                                $msg="Terjadi kesalahan sistem saat menyimpan data issue";
-                            }
-                        }else{
-                            $msg="Terjadi kesalahan sistem saat upload Dokumen. Silahkan hubungi tim IT";
-                        }
+                   
+                    $code=$this->generateCode();
+                    $issue=new Issue_artikel;
+                    $issue->code_issue=$code;
+                    $issue->name=$request->name;
+                    $issue->description=$request->description;
+                    $issue->year=$request->year;
+                    $issue->flyer=$validate['path'];
+                    $issue->status=1;
+                    $save=$issue->save();
+                    if($save){
+                        $msg="Berhasil menyimpan data issue";
                     }else{
-                        $msg="Tipe file harus JPG / PNG. ".$type;
+                        $msg="Terjadi kesalahan sistem saat menyimpan data issue";
                     }
                 }else{
                     $msg="Ukuran file harus dibahwah atas sama dengan 3mb";
+                }
+                }else{
+                    $msg=$validate['msg'];
                 }
             }
         }catch(ValidationException $e){
@@ -104,41 +103,34 @@ class issueArtikelController extends Controller
     }
     public function updateIssueArtikel(Request $request){
         $update=false;
+        $upload=true;
         try{
             $issue_id=Crypt::decrypt($request->token_i);
             try{
-                $validate=$request->validate([
+                $rules=[
                     'name'=>'required',
                     'description'=>'required',
                     'year'=>['required', 'digits:4'],
                     "status"=>["required"],
-                ]);
-                $upload=true;
+                ];
+                
                 $path=null;
                 $check_data=Issue_artikel::where('id', $issue_id)->first();
                 if(!is_null($check_data)){
-                    if(isset($request->flyer) && $request->flyer !== "" && $request->flyer !=="NULL"){
+                    if($request->hasFile('flyer')){
+                        $rules['flyer']=['required', 'image', 'mimes:jpg,jpeg,png'];
+                        $validate=$request->validate($rules);
                         $upload=false;
                         $file=$request->flyer;
-                        $size=$file->getSize();
-                        $type=$file->getMimeType();
-                        if($size <= 3145728){
-                            if($type === "image/jpg" || $type === "image/png" || $type === "image/jpeg" || $type === "image/webp"){
-                                    $destination="upload/image";
-                                    $filename=$file->getClientOriginalName();
-                                    $file->move($destination, $filename);
-                                    $path=$destination."/".$filename;
-                                    if(File::exists($path)){
-                                        $upload=true;
-                                    }else{
-                                        $msg="Dokumen tidak dapat diupload";
-                                    }
-                            }else{
-                                $msg="Tipe file harus Image JPG / PNG ".$type;
-                            }
+                        $processImg=$this->uploadService->uploadImage($file);
+                        if($processImg['status']){
+                             $upload=true;
+                             $path=$processImg['path'];
                         }else{
-                            $msg="Ukuran file harus dibawah 3mb";
+                            $msg=$processImg['msg'];
                         }
+                    }else{
+                        $validate=$request->validate($rules);
                     }
                 }else{
                     $upload=false;
@@ -149,7 +141,7 @@ class issueArtikelController extends Controller
                     $check_data->description=$request->description;
                     $check_data->year=$request->year;
                     $check_data->status=$request->status;
-                    if($path !== null){
+                    if($request->hasFile('flyer')){
                         $check_data->flyer=$path;
                     }
                     $update=$check_data->update();

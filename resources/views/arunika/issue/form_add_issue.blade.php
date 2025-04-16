@@ -91,7 +91,7 @@
                         </div>
                         <div class="col-md-6">
                             @if($input_file === "none")
-                                <span class='img_flyer'><img src="{!! $flyer !!}" width="100%"></span>
+                                <span class='img_flyer'><img src="{!! Storage::url($flyer) !!}" width="100%"></span>
                             @endif
                         </div>
                     <div>

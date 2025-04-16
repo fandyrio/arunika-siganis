@@ -24,14 +24,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="{!! $artikel['judul'] !!}" />
   <meta property="og:description" content="{!! $artikel['tentang_artikel'] !!}" />
-  <meta property="og:image" content="{!! url($artikel['foto_penulis']) !!}" />
+  <meta property="og:image" content="{!! Storage::url($artikel['foto_penulis']) !!}" />
   <meta name="author" content="{!! $artikel['nama'] !!}">
   <meta name="keyword" content="{!! $keyword_string !!}">
-  <meta name="thumbnailUrl" content="{!! url($artikel['foto_penulis']) !!}">
+  <meta name="thumbnailUrl" content="{!! Storage::url($artikel['foto_penulis']) !!}">
   <meta property="og:image:width" content="300">
   <meta property="og:image:height" content="300">
-  <link rel="apple-touch-icon" sizes="76x76" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
-  <link rel="icon" type="image/png" href="{!! asset('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $artikel['judul'] !!}
   </title>
@@ -59,11 +59,11 @@
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
       <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom" style='width:50%;'>
-      <img src="{!! asset($logo['logo_arunika']) !!}" class='arunika_top' style='scale:1 !important'> 
+      <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style='scale:1 !important'> 
         Arunika (Artikel Hukum Hakim Nusantara)
       </a>
       <a class="navbar-brand-mob" href="{!! url('/home') !!}" style='width:70%;display:none;'>
-        <img src="{!! asset($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
+        <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
           <span class='text-white' style='margin-left:10%;'>Arunika - Siganis</span>
       </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -199,7 +199,7 @@
   <!-- End Navbar -->
   <!-- -------- START HEADER 4 w/ search book a ticket form ------- -->
   <header>
-    <div class="page-header min-height-200" style="background-image: url('{!! asset('web/assets/img/city-profile.jpg') !!}')" loading="lazy">
+    <div class="page-header min-height-200" style="background-image: url('{!! Storage::url('assets-img/city-profile.jpg') !!}')" loading="lazy">
       <span class="mask bg-gradient-dark opacity-8"></span>
     </div>
   </header>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! asset($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
+                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! Storage::url($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
@@ -284,7 +284,7 @@
                       $edoc=str_replace(".pdf", "", $replace_1);
                     @endphp
                     <div class="row mt-2" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
-                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('../../{!! $list_similar['foto_penulis'] !!}');height:80px;"></div>
+                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('{!! Storage::url($list_similar['foto_penulis']) !!}');height:80px;"></div>
                         <div class="col-lg-9" style='width:70%'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_similar['id'].'arn'.$list_similar['code_issue']) !!}">
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_similar['judul'])) !!}</span></a>
@@ -311,7 +311,7 @@
                       $edoc=str_replace(".pdf", "", $replace_1);
                     @endphp
                     <div class="row" style='padding-left:2%;padding-right:2%;margin-top:15px;'>
-                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! str_replace('upload/image/', '', $list_other['foto_penulis']) !!}" data-prefix="artikel-img" style="width:30%"></div>
+                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! $list_other['foto_penulis'] !!}" data-prefix="artikel-img" style="width:30%"></div>
                         <div class="col-lg-9" style='width:70%;padding-right:5px !important;'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_other['id'].'arn'.$list_other['code_issue']) !!}">
                             <span class='text-red text-bold' style='font-size:0.7rem'>{!! $list_other['kategori'] !!}</span><br />
@@ -613,16 +613,16 @@
     }
     async function setPhoto(width, height, target, type, x, prefix){
       $.ajax({
-          url:"{!! url('resize-img-view') !!}",
-          data:{width:width, height:height, target:target, type:type, prefix:prefix},
+          url:"{!! url('img/"+target+"?w="+width+"&h="+height+"&q=90') !!}",
           dataType:'JSON',
-          type:'POST',
+          type:'GET',
           success:function(data){
             // console.log(x);
             $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
             $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
             // console.log("background-image:url('img/20241210031407-ari.jpg')");
-            $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
+            $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
+
           }
         })
     }

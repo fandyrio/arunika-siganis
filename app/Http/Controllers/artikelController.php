@@ -29,9 +29,14 @@ use ZipArchive;
 use App\Issue_artikel;
 use PhpOffice\PhpWord\IOFactory;
 use Dompdf\Dompdf;
+use App\Services\uploadImageService;
+use Illuminate\Support\Facades\Storage;
 
 class artikelController extends Controller
 {
+    public function __construct(uploadImageService $uploadService){
+        $this->uploadService=$uploadService;
+    }
     public function formNewArtikel($id_artikel, $v_init=null){
         $id_artikel_dec=Crypt::decrypt($id_artikel);
         $jumlah_review=0;
@@ -302,11 +307,12 @@ class artikelController extends Controller
         $token_id=Crypt::encrypt('null');
         $callFn="";
         $status=false;
+        $real_extention='-';
         try{
             $validated=$request->validate([
                 'token' => ['required'],
                 'nip' => ['required'],
-                'foto_hakim' => ['required', 'image'],
+                'foto_hakim' => ['required', 'image', 'mimes:jpeg,png,jpg'],
             ]);
             try{
                 if($request->input_manual === "true"){
@@ -321,54 +327,42 @@ class artikelController extends Controller
                     $data_sikep=DB::select('CALL SPGetHakimByNip('.$dec_nip.')');
                     $jumlah_data=count($data_sikep);
                     if($jumlah_data === 1){
+
                         $json_data=(array)$data_sikep[0];
                         if($dec_nip === Auth::user()->nip || isJM()){
                             $file_foto=$request->foto_hakim;
-                            $size=$file_foto->getSize();
-                            $type=$file_foto->getMimeType();
-                            if($size <= 3145728){
-                                if($type === "image/png" || $type === "image/jpeg" || $type === "image/png"){
-                                    $destination="upload/image";
-                                    $filename=date('YmdHis')."-".$file_foto->getClientOriginalName();
-                                    $file_foto->move($destination, $filename);
-                                    $path=$destination."/".$filename;
-                                    if(File::exists($path)){
-                                        $generateThumbnail=$this->createThumbnail($filename, $path, $type);
-                                        $penulis=new Penulis_artikel;
-                                        $penulis->id_pegawai=$json_data['IdPegawai'];
-                                        $penulis->nama=$json_data['NamaLengkap'];
-                                        $penulis->nip=$dec_nip;
-                                        $penulis->no_handphone=$json_data['NomorHandphone'];
-                                        $penulis->satker=$json_data['NamaStruktur'];
-                                        $penulis->jabatan=$json_data['NamaJabatan'];
-                                        $penulis->pangkat=$json_data['KodeGolonganRuang'];
-                                        $save_penulis=$penulis->save();
-                                        if($save_penulis){
-                                            $penulis_id=$penulis->id;
-                                            $artikel=new Artikel;
-                                            $artikel->id_penulis=$penulis_id;
-                                            $artikel->foto_penulis=$path;
-                                            $artikel->step=1;
-                                            $artikel->is_manual=$is_manual;
-                                            if($artikel->save()){
-                                                $status=true;
-                                                $token_id=Crypt::encrypt($artikel->id);
-                                                $callFn="loadDataPribadi('view')";
-                                                $msg="Berhasil menyimpan data penulis";
-                                            }else{
-                                                $msg="Terjadi kesalahan saat menyimpan artikel";
-                                            }
-                                        }else{
-                                            $msg="Terjadi kesalahan saat menyimpan data penulis";
-                                        }
+                            $processImg=$this->uploadService->uploadImage($file_foto);
+
+                            if($processImg['status']){
+                                $penulis=new Penulis_artikel;
+                                $penulis->id_pegawai=$json_data['IdPegawai'];
+                                $penulis->nama=$json_data['NamaLengkap'];
+                                $penulis->nip=$dec_nip;
+                                $penulis->no_handphone=$json_data['NomorHandphone'];
+                                $penulis->satker=$json_data['NamaStruktur'];
+                                $penulis->jabatan=$json_data['NamaJabatan'];
+                                $penulis->pangkat=$json_data['KodeGolonganRuang'];
+                                $save_penulis=$penulis->save();
+                                if($save_penulis){
+                                    $penulis_id=$penulis->id;
+                                    $artikel=new Artikel;
+                                    $artikel->id_penulis=$penulis_id;
+                                    $artikel->foto_penulis=$processImg['path'];
+                                    $artikel->step=1;
+                                    $artikel->is_manual=$is_manual;
+                                    if($artikel->save()){
+                                        $status=true;
+                                        $token_id=Crypt::encrypt($artikel->id);
+                                        $callFn="loadDataPribadi('view')";
+                                        $msg="Berhasil menyimpan data penulis";
                                     }else{
-                                        $msg="Terjadi kesalahan saat upload image";
+                                        $msg="Terjadi kesalahan saat menyimpan artikel";
                                     }
                                 }else{
-                                    $msg="Tipe data harus Gambar (JPG / PNG)";
+                                    $msg="Terjadi kesalahan saat menyimpan data penulis";
                                 }
                             }else{
-                                $msg="Ukuran File harus lebih kecil dari 3mb";
+                                $msg=$processImg['msg'];
                             }
                         }else{
                             $msg="Data NIP tidak valid";
@@ -398,11 +392,13 @@ class artikelController extends Controller
                 }   
             }
         }
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>$token_id, 'callForm'=>$callFn]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>$token_id, 'callForm'=>$callFn, 'ext'=>$real_extention]);
     }
     public function updateDataPribadi(Request $request){
         $status=false;
         $artikel_id=null;
+        $real_extention="-";
+        $type='-';
         try{
             $id_pegawai=Crypt::decrypt($request->token);
             $artikel_id=Crypt::decrypt($request->token_a);
@@ -418,37 +414,30 @@ class artikelController extends Controller
                     $get_artikel=Artikel::where('id', $artikel_id)->first();
                     if(!is_null($get_data) && !is_null($get_artikel)){
                         try{
-                            $validated=$request->validate([
+                            $rules=[
                                 'token' => ['required'],
                                 'nip' => ['required','digits:18'],
-                            ]);
+                            ];
                             $file_foto=$request->foto_hakim;
                             $upload=true;
                             $path=null;
-                            if($file_foto !== "" && $file_foto !== NULL){
+                            if($request->hasFile('foto_hakim')){
+                                $rules['foto_hakim']=['required', 'image', 'mimes:jpeg,jpg,png'];
+                                $validated=$request->validate($rules);
                                 $upload=false;
-                                $size=$file_foto->getSize();
-                                $type=$file_foto->getMimeType();
-                                if($size <= 3145728){
-                                    if($type === "image/png" || $type === "image/jpeg" || $type === "image/png"){
-                                        $filename=date('YmdHis')."-".$file_foto->getClientOriginalName();
-                                        $destination="upload/image";
-                                        $file_foto->move($destination, $filename);
-                                        $path=$destination."/".$filename;
-                                        if(File::exists($path)){
-                                            $upload=true;
-                                        }else{
-                                            $msg="Terjadi kesalahan saat upload foto";
-                                        }
-                                    }else{
-                                        $msg="Tipe data harus Image (JPG / PNG)";
-                                    }
+                                $processImg=$this->uploadService->uploadImage($file_foto);
+                                if($processImg['status']){
+                                    $path=$processImg['path'];
+                                    $upload=true;
                                 }else{
-                                    $msg="Ukuran file harus lebih kecil dari 3mb";
+                                    $msg=$processImg['msg'];
                                 }
                             }
     
                             if($upload === true){
+                                if(!$request->hasFile('foto_hakim')){
+                                    $validated=$request->validate($rules);
+                                }
                                 $get_data_sikep=DB::select("CALL SPGetHakimByNip('".$nip."')");
                                 $jumlah_data=count($get_data_sikep);
                                 if($jumlah_data === 1){
@@ -482,15 +471,7 @@ class artikelController extends Controller
                                 }
                             }
                         }catch(ValidationException $e){
-                            $msg="";
-                            $obj_msg=json_decode($e->validator->errors());
-                            $jumlah_data=count(array($obj_msg));
-                            for($x=0;$x<$jumlah_data;$x++){
-                                if(isset($obj_msg->nip[$x])){
-                                    $msg=$obj_msg->nip[$x];
-                                    break;
-                                }
-                            }
+                            $msg=$e->validator->errors()->first();
                         }
                     }else{
                         $msg="Data tidak ditemukan ";
@@ -505,7 +486,7 @@ class artikelController extends Controller
             $msg="Data Hakim tidak sesuai";
         }
         
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'callForm'=>"loadDataPribadi('view')", 'token_id'=>Crypt::encrypt($artikel_id)]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'callForm'=>"loadDataPribadi('view')", 'token_id'=>Crypt::encrypt($artikel_id), 'ext'=>$real_extention, 'type'=>$type]);
     }
     public function updateDataArtikel(Request $request){
         $status=false;
@@ -520,20 +501,21 @@ class artikelController extends Controller
                         ->first();
                 try{
                     if(!is_null($check_data)){
+                        $rules=[
+                            'judul_artikel' => ['required'],
+                            'kategori_artikel' => ['required','max:4'],
+                            'tentang_artikel' => ['required'],
+                        ];
                         if($check_data['judul'] === null || $check_data['judul'] === ""){
-                            $validated=$request->validate([
-                                'judul_artikel' => ['required'],
-                                'kategori_artikel' => ['required','max:4'],
-                                'tentang_artikel' => ['required'],
-                                'file_artikel' => ['required', 'file'],
-                            ]);
+                            //first insert
+                            $rules['file_artikel']=['required', 'mimes:pdf,doc,docx,rtf'];
                         }else{
-                            $validated=$request->validate([
-                                'judul_artikel' => ['required'],
-                                'kategori_artikel' => ['required','max:4'],
-                                'tentang_artikel' => ['required'],
-                            ]);
+                            //edit
+                            if($request->hasFile('file_artikel')){
+                                $rules['file_artikel']=['required', 'mimes:pdf,doc,docx,rtf'];
+                            }
                         }
+                        $validated=$request->validate($rules);
                         if($check_data['step'] === 1){
                             $step_id=2;
                         }else{
@@ -600,11 +582,15 @@ class artikelController extends Controller
                                     // 'txt' => 'text/plain',
                                     // 'pdf' => 'application/pdf',
                                     if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "application/msword" || $type === "text/rtf"){
-                                        $destination="upload/edoc/artikel";
+                                        $destination="public/upload/edoc/artikel";
                                         $filename=date('YmdHis')."-".$edoc_artikel->getClientOriginalName();
-                                        $edoc_artikel->move($destination, $filename);
-                                        $path=$destination."/".$filename;
-                                        if(File::exists($path)){
+                                        $path=$edoc_artikel->storeAs($destination, $filename);
+
+                                        // $edoc_artikel->move($destination, $filename);
+
+
+                                        // $path=$destination."/".$filename;
+                                        if(Storage::exists($path)){
                                             $upload=true;
                                         }else{
                                             $msg="Terjadi kesalahan pada saat upload file";
@@ -673,21 +659,22 @@ class artikelController extends Controller
         try{
             $file_path=Crypt::decrypt($file);
             //var_dump($file_path);die();
-            if(File::exists($file_path)){
+            if(Storage::exists($file_path)){
                 if($type === "edoc_artikel"){
-                    $prefix_path="upload/edoc/artikel/pdf/";
+                    $prefix_path="public/upload/edoc/artikel/pdf/";
                 }elseif($type === "edoc_artikel_doc"){
-                    $prefix_path="upload/edoc/artikel/";
+                    $prefix_path="public/upload/edoc/artikel/";
                 }elseif($type === "edoc_pengumuman"){
-                    $prefix_path="upload/pengumuman/";
+                    $prefix_path="public/upload/pengumuman/";
                 }elseif($type === "image_config"){
-                    $prefix_path="upload/config/";
+                    $prefix_path="public/upload/config/";
                 }else{
                     echo "<center><h2>404</h2><h5>File not Found</h5></center>";die();
                 }
                 $file_name=str_replace($prefix_path, '', $file_path);
                 // var_dump($file_name);die();
-                return response()->download($file_path, $file_name);
+                // var_dump($file_path);die();
+                return response()->download(storage_path('app/'.$file_path), $file_name);
             }else{
                 echo "<center><h2>404</h2><h5>File not Found</h5></center>";
             }
@@ -1795,12 +1782,14 @@ public function removeHasilReview(Request $request){
                             $size=$file->getSize();
                             $type=$file->getMimeType();
                             if($size <= 6291456){
-                                if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "application/msword"){
-                                    $destination="upload/edoc/artikel";
+                                if($type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "application/msword"){
+                                    $destination="public/upload/edoc/artikel";
                                     $filename=date('YmdHis')."-".$file->getClientOriginalName();
-                                    $file->move($destination, $filename);
-                                    $path=$destination."/".$filename;
-                                    if(File::exists($path)){
+
+                                    // $file->move($destination, $filename);
+                                    // $path=$destination."/".$filename;
+                                    $path=$file->storeAs($destination, $filename);
+                                    if(Storage::exists($path)){
                                         $upload=true;
                                         $get_data->edoc_perbaikan_penulis=$path;
                                     }else{
@@ -2128,7 +2117,7 @@ public function removeHasilReview(Request $request){
     }
 
     public function readDoc($filePath){
-        $phpWord = IOFactory::load($filePath); 
+        $phpWord = IOFactory::load(storage_path('app/'.$filePath)); 
         $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
         // Generate the HTML content
         //$htmlWriter = new HTML($phpWord);
@@ -2165,11 +2154,12 @@ public function removeHasilReview(Request $request){
                         $type=$file->getMimeType();
                         if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "pplication/msword"){
                             if($size <= 6291456){
-                                $destination="upload/edoc/artikel";
+                                $destination="public/upload/edoc/artikel";
                                 $filename=date('YmdHis')."-".$file->getClientOriginalName();
-                                $path=$destination."/".$filename;
-                                $file->move($destination, $filename);
-                                if(File::exists($path)){
+                                // $path=$destination."/".$filename;
+                                // $file->move($destination, $filename);
+                                $path=$file->storeAs($destination, $filename);
+                                if(Storage::exists($path)){
                                     $get_data->edoc=$path;
                                     $update=$get_data->update();
                                     if($update){
@@ -2233,8 +2223,8 @@ public function removeHasilReview(Request $request){
         $output = $dompdf->output();
         //$filename=str_replace(' ', '-',$judul);
         $judul=preg_replace('/[^A-Za-z0-9\-]/', '-', $judul);
-        $filename="upload/edoc/artikel/pdf/".$judul.".pdf";
-        file_put_contents($filename, $output);
+        $filename="public/upload/edoc/artikel/pdf/".$judul.".pdf";
+        file_put_contents(storage_path('app/'.$filename), $output);
         return $filename;
         //$dompdf->stream("codexworld",array("Attachment"=>1));
     }
@@ -2252,7 +2242,7 @@ public function removeHasilReview(Request $request){
                 if(!is_null($get_publish)){
                     $text=$this->readDoc($get_publish['edoc']);
                     $generate=$this->generatePDF($text, $get_publish['judul'], $get_publish['nama']);
-                    if(File::exists($generate)){
+                    if(Storage::exists($generate)){
                         $publish=true;
                         $get_data=Artikel::where('id', $artikel_id)->first();
                         $publish_artikel=Publish_artikel::where('id_artikel', $artikel_id)->first();
@@ -2730,41 +2720,34 @@ public function removeHasilReview(Request $request){
     public function updateFotoPenulis(Request $request){
         $update=false;
         try{
-            $artikel_id=Crypt::decrypt($request->token_a);
-            $get_artikel=Artikel::where('id', $artikel_id)->first();
-            if(!is_null($get_artikel)){
-                $file=$request->foto_penulis;
-                $size=$file->getSize();
-                $type=$file->getMimeType();
-                if($size <= 3145728){
-                    if($type === "image/png" || $type === "image/jpeg" || $type === "image/jpg"){
-                        $destination="upload/image";
-                        $filename=date("YmdHis").'-'.$file->getClientOriginalName();
-                        $file->move($destination, $filename);
-                        $path=$destination."/".$filename;
-                        if(File::exists($path)){
-                            $generateThumbnail=$this->createThumbnail($filename, $path, $type);
-                            $get_artikel->foto_penulis=$path;
-                            $update=$get_artikel->update();
-                            if($update){
-                                $msg="Berhasil mengubah foto penulis";
-                            }else{
-                                $msg="Terjadi kesalahan saat update foto penulis";
-                            }
+            $validate=$request->validate([
+                'foto_penulis'=>['required', 'image', 'mimes:jpeg,jpg,png'],
+            ]);
+            try{
+                $artikel_id=Crypt::decrypt($request->token_a);
+                $get_artikel=Artikel::where('id', $artikel_id)->first();
+                if(!is_null($get_artikel)){
+                    $file=$request->foto_penulis;
+                    $upload=$this->uploadService->uploadImage($file);
+                    if($upload['status']){
+                        $get_artikel->foto_penulis=$upload['path'];
+                        $update=$get_artikel->update();
+                        if($update){
+                            $msg="Berhasil mengubah foto penulis";
                         }else{
-                            $msg="Terjadi kesalahan sistem, saat upload foto";
+                            $msg="Terjadi kesalahan saat update foto penulis";
                         }
                     }else{
-                        $msg="Tipe file harus JPG / PNG /JPEG";
+                        $msg=$upload['msg'];
                     }
                 }else{
-                    $msg="File size maksimal 3MB";
+                    $msg="Artikel yang anda maksud tidak ditemukan";
                 }
-            }else{
-                $msg="Artikel yang anda maksud tidak ditemukan";
+            }catch(DecryptException $e){
+                $msg="Undefined token";
             }
-        }catch(DecryptException $e){
-            $msg="Undefined token";
+        }catch(ValidationException $e){
+            $msg=$e->validator->errors()->first();
         }
         return response()->json(['status'=>$update, 'msg'=>$msg]);
     }

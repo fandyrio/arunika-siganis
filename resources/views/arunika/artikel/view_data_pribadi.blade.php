@@ -35,7 +35,7 @@
                 </table>
             </div>
             <div class='col-3'>
-                <img src="{!! asset($data['foto_penulis']) !!}" width='100%'>
+                <img src="{!! Storage::url($data['foto_penulis']) !!}" width='100%'>
             </div>
         </div>
         <div class='row'>
@@ -50,5 +50,5 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('../resources/views/assets/js/arunika_services.js') !!}"></script>
-<script src="{!! asset('../resources/views/assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>

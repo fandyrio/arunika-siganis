@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\Laravel\Facades\Image;
 
 class arunikaController extends Controller
 {
@@ -689,5 +690,46 @@ class arunikaController extends Controller
         }catch(DecryptException $e){
             return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']); 
         }
+    }
+
+    public function setImage($path){
+        $path = str_replace('..', '', $path); // prevent directory traversal
+
+        $w = request('w');
+        $h = request('h');
+        $q = (int)request('q', 80); // quality
+        $fit = true; // ?fit=1
+        $defaultImage = public_path('img/no-profile.jpg');
+
+      
+        $originalPath = storage_path('app/public/'.$path);
+
+        if (!file_exists($originalPath)) {
+            $originalPath = $defaultImage; // fallback
+        }
+        $image = Image::read($originalPath);
+
+        if ($w || $h) {
+            if ($fit) {
+                $image->cover($w ?? null, $h ?? null);
+            } else {
+                $image->scale(
+                    width: $w ? (int)$w : null,
+                    height: $h ? (int)$h : null
+                );
+            }
+        }
+        // Simpan hasil resize ke cache
+        $ext=strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
+        $mimeMap=[
+            'jpg'=> 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+        ];
+        $encoded = base64_encode($image->toJpeg(quality: $q));
+        $mime=$mimeMap[$ext] ?? 'image/jpeg';
+        return response()->json([
+            'background' => "data:$mime;base64,$encoded"
+        ]);
     }
 }

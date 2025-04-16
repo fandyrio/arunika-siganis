@@ -69,7 +69,7 @@
         </table>
     </div>
     <div class='col-4'>
-        <span class='imagePreview'><img src="{!! $data['foto_penulis'] !!}" width='100%'></span>
+        <span class='imagePreview'><img src="{!! Storage::url($data['foto_penulis']) !!}" width='100%'></span>
         <br /><br />
         @if($data['step'] === 7 && isJM())
             <form id="updateFotoPenulis">
@@ -104,7 +104,7 @@
         @endif   
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js?q=8') !!}"></script>
+<script src="{!! asset('assets/js/fn_arunika.js?q=8123') !!}"></script>
 <script src="{!! asset('assets/js/arunika_services.js?q=4') !!}"></script>
 <script>
     $(document).ready(function(){

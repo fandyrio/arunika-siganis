@@ -145,3 +145,4 @@ Route::get('artikel/{page?}', 'arunikaController@getAllArtikel')->name('all-arti
 Route::get('penulis-artikel/{nama}/{id_pegawai}', 'arunikaController@getArtikelByPenulis')->name('penulis-artikel');
 //Route::get('test-pdf', 'artikelController@testpdf')->name('test-pdf');
 //Route::get('generateAdmin', 'registerController@createUserAdmin')->name('generate-admin');
+Route::get('img/{path}', 'arunikaController@setImage')->where('path', '.*');

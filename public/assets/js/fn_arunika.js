@@ -532,5 +532,5 @@ function sweatLoading(){
         didOpen: function() {
             swal.showLoading()
         }
-    });
+    })
 }
