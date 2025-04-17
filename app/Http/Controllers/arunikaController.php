@@ -703,7 +703,6 @@ class arunikaController extends Controller
 
       
         $originalPath = storage_path('app/public/'.$path);
-
         if (!file_exists($originalPath)) {
             $originalPath = $defaultImage; // fallback
         }
