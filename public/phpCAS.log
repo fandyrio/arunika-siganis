@@ -1912,3 +1912,114 @@ F716 .|    -
 4BF8 .|    |    |    -
 4BF8 .|    |    -
 4BF8 .|    -
+9606 .START (2025-04-17 09:26:52) phpCAS-1.6.0 ****************** [CAS.php:512]
+9606 .Loaded configuration:
+9606 .a:25:{s:12:"cas_hostname";s:23:"sso.mahkamahagung.go.id";s:16:"cas_session_name";s:7:"CASAuth";s:20:"cas_session_lifetime";i:7200;s:16:"cas_session_path";s:1:"/";s:19:"cas_control_session";b:0;s:20:"cas_session_httponly";b:1;s:8:"cas_port";i:443;s:7:"cas_uri";s:4:"/cas";s:14:"cas_validation";s:0:"";s:8:"cas_cert";s:0:"";s:9:"cas_proxy";b:0;s:15:"cas_validate_cn";b:1;s:13:"cas_login_url";s:0:"";s:14:"cas_logout_url";s:42:"https://sso.mahkamahagung.go.id/cas/logout";s:19:"cas_logout_redirect";s:0:"";s:17:"cas_redirect_path";s:0:"";s:15:"cas_enable_saml";b:0;s:11:"cas_version";s:3:"3.0";s:9:"cas_debug";b:1;s:18:"cas_verbose_errors";b:1;s:14:"cas_masquerade";s:0:"";s:18:"cas_session_domain";s:0:"";s:18:"cas_session_secure";b:0;s:14:"cas_real_hosts";s:23:"sso.mahkamahagung.go.id";s:18:"cas_client_service";s:34:"https://bisdev.mahkamahagung.go.id";}
+9606 .=> phpCAS::client('3.0', 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false) [CasManager.php:122]
+9606 .|    => CAS_Client::__construct('3.0', false, 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false, CAS_Session_PhpSession) [CAS.php:369]
+9606 .|    |    Starting a new session 1n386jib2p0hdpg2tv70rvonl3 [Client.php:974]
+9606 .|    |    Session is not authenticated [Client.php:987]
+9606 .|    <= ''
+9606 .<= ''
+9606 .=> phpCAS::setNoCasServerValidation() [CasManager.php:192]
+9606 .|    You have configured no validation of the legitimacy of the cas server. This is not recommended for production use. [CAS.php:1705]
+9606 .<= ''
+9606 .=> phpCAS::setServerLoginURL('') [CasManager.php:56]
+9606 .<= ''
+9606 .=> phpCAS::setServerLogoutURL('https://sso.mahkamahagung.go.id/cas/logout') [CasManager.php:63]
+9606 .<= ''
+9606 .=> phpCAS::checkAuthentication() [CasManager.php:346]
+9606 .|    => CAS_Client::checkAuthentication() [CAS.php:1141]
+9606 .|    |    => CAS_Client::isAuthenticated() [Client.php:1530]
+9606 .|    |    |    => CAS_Client::_wasPreviouslyAuthenticated() [Client.php:1588]
+9606 .|    |    |    |    no user found [Client.php:1834]
+9606 .|    |    |    <= false
+9606 .|    |    |    no ticket found [Client.php:1693]
+9606 .|    |    <= false
+9606 .|    |    user is not authenticated (cache reset) [Client.php:1565]
+9606 .|    |    => CAS_Client::redirectToCas(true) [Client.php:1566]
+9606 .|    |    |    => CAS_Client::getServerLoginURL(true, false) [Client.php:1855]
+9606 .|    |    |    |    => CAS_Client::getURL() [Client.php:364]
+9606 .|    |    |    |    |    => CAS_ServiceBaseUrl_Static::get() [Client.php:3960]
+9606 .|    |    |    |    |    |    Returning static server name: https://bisdev.mahkamahagung.go.id [Static.php:65]
+9606 .|    |    |    |    |    <= true
+9606 .|    |    |    |    |    Final URI: https://bisdev.mahkamahagung.go.id/link-artikel-publish-jm [Client.php:3974]
+9606 .|    |    |    |    <= 'https://bisdev.mahkamahagung.go.id/link-artikel-publish-jm'
+9606 .|    |    |    <= 'https://sso.mahkamahagung.go.id/cas/login?service=https%3A%2F%2Fbisdev.mahkamahagung.go.id%2Flink-artikel-publish-jm&gateway=true'
+9606 .|    |    |    Redirect to : https://sso.mahkamahagung.go.id/cas/login?service=https%3A%2F%2Fbisdev.mahkamahagung.go.id%2Flink-artikel-publish-jm&gateway=true [Client.php:1862]
+9606 .|    |    |    exit()
+9606 .|    |    |    -
+9606 .|    |    -
+9606 .|    -
+6277 .START (2025-04-17 09:26:58) phpCAS-1.6.0 ****************** [CAS.php:512]
+6277 .Loaded configuration:
+6277 .a:25:{s:12:"cas_hostname";s:23:"sso.mahkamahagung.go.id";s:16:"cas_session_name";s:7:"CASAuth";s:20:"cas_session_lifetime";i:7200;s:16:"cas_session_path";s:1:"/";s:19:"cas_control_session";b:0;s:20:"cas_session_httponly";b:1;s:8:"cas_port";i:443;s:7:"cas_uri";s:4:"/cas";s:14:"cas_validation";s:0:"";s:8:"cas_cert";s:0:"";s:9:"cas_proxy";b:0;s:15:"cas_validate_cn";b:1;s:13:"cas_login_url";s:0:"";s:14:"cas_logout_url";s:42:"https://sso.mahkamahagung.go.id/cas/logout";s:19:"cas_logout_redirect";s:0:"";s:17:"cas_redirect_path";s:0:"";s:15:"cas_enable_saml";b:0;s:11:"cas_version";s:3:"3.0";s:9:"cas_debug";b:1;s:18:"cas_verbose_errors";b:1;s:14:"cas_masquerade";s:0:"";s:18:"cas_session_domain";s:0:"";s:18:"cas_session_secure";b:0;s:14:"cas_real_hosts";s:23:"sso.mahkamahagung.go.id";s:18:"cas_client_service";s:34:"https://bisdev.mahkamahagung.go.id";}
+6277 .=> phpCAS::client('3.0', 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false) [CasManager.php:122]
+6277 .|    => CAS_Client::__construct('3.0', false, 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false, CAS_Session_PhpSession) [CAS.php:369]
+6277 .|    |    Starting a new session 1n386jib2p0hdpg2tv70rvonl3 [Client.php:974]
+6277 .|    |    Session is not authenticated [Client.php:987]
+6277 .|    <= ''
+6277 .<= ''
+6277 .=> phpCAS::setNoCasServerValidation() [CasManager.php:192]
+6277 .|    You have configured no validation of the legitimacy of the cas server. This is not recommended for production use. [CAS.php:1705]
+6277 .<= ''
+6277 .=> phpCAS::setServerLoginURL('') [CasManager.php:56]
+6277 .<= ''
+6277 .=> phpCAS::setServerLogoutURL('https://sso.mahkamahagung.go.id/cas/logout') [CasManager.php:63]
+6277 .<= ''
+6277 .=> phpCAS::checkAuthentication() [CasManager.php:346]
+6277 .|    => CAS_Client::checkAuthentication() [CAS.php:1141]
+6277 .|    |    => CAS_Client::isAuthenticated() [Client.php:1530]
+6277 .|    |    |    => CAS_Client::_wasPreviouslyAuthenticated() [Client.php:1588]
+6277 .|    |    |    |    no user found [Client.php:1834]
+6277 .|    |    |    <= false
+6277 .|    |    |    no ticket found [Client.php:1693]
+6277 .|    |    <= false
+6277 .|    <= false
+6277 .<= false
+6277 .=> phpCAS::forceAuthentication() [CasManager.php:207]
+6277 .|    => CAS_Client::forceAuthentication() [CAS.php:1161]
+6277 .|    |    => CAS_Client::isAuthenticated() [Client.php:1481]
+6277 .|    |    |    => CAS_Client::_wasPreviouslyAuthenticated() [Client.php:1588]
+6277 .|    |    |    |    no user found [Client.php:1834]
+6277 .|    |    |    <= false
+6277 .|    |    |    no ticket found [Client.php:1693]
+6277 .|    |    <= false
+6277 .|    |    => CAS_Client::redirectToCas(false) [Client.php:1488]
+6277 .|    |    |    => CAS_Client::getServerLoginURL(false, false) [Client.php:1855]
+6277 .|    |    |    |    => CAS_Client::getURL() [Client.php:364]
+6277 .|    |    |    |    |    => CAS_ServiceBaseUrl_Static::get() [Client.php:3960]
+6277 .|    |    |    |    |    |    Returning static server name: https://bisdev.mahkamahagung.go.id [Static.php:65]
+6277 .|    |    |    |    |    <= true
+6277 .|    |    |    |    |    Final URI: https://bisdev.mahkamahagung.go.id/dashboard [Client.php:3974]
+6277 .|    |    |    |    <= 'https://bisdev.mahkamahagung.go.id/dashboard'
+6277 .|    |    |    <= 'https://sso.mahkamahagung.go.id/cas/login?service=https%3A%2F%2Fbisdev.mahkamahagung.go.id%2Fdashboard'
+6277 .|    |    |    Redirect to : https://sso.mahkamahagung.go.id/cas/login?service=https%3A%2F%2Fbisdev.mahkamahagung.go.id%2Fdashboard [Client.php:1862]
+6277 .|    |    |    exit()
+6277 .|    |    |    -
+6277 .|    |    -
+6277 .|    -
+4A64 .START (2025-04-17 09:27:07) phpCAS-1.6.0 ****************** [CAS.php:512]
+4A64 .Loaded configuration:
+4A64 .a:25:{s:12:"cas_hostname";s:23:"sso.mahkamahagung.go.id";s:16:"cas_session_name";s:7:"CASAuth";s:20:"cas_session_lifetime";i:7200;s:16:"cas_session_path";s:1:"/";s:19:"cas_control_session";b:0;s:20:"cas_session_httponly";b:1;s:8:"cas_port";i:443;s:7:"cas_uri";s:4:"/cas";s:14:"cas_validation";s:0:"";s:8:"cas_cert";s:0:"";s:9:"cas_proxy";b:0;s:15:"cas_validate_cn";b:1;s:13:"cas_login_url";s:0:"";s:14:"cas_logout_url";s:42:"https://sso.mahkamahagung.go.id/cas/logout";s:19:"cas_logout_redirect";s:0:"";s:17:"cas_redirect_path";s:0:"";s:15:"cas_enable_saml";b:0;s:11:"cas_version";s:3:"3.0";s:9:"cas_debug";b:1;s:18:"cas_verbose_errors";b:1;s:14:"cas_masquerade";s:0:"";s:18:"cas_session_domain";s:0:"";s:18:"cas_session_secure";b:0;s:14:"cas_real_hosts";s:23:"sso.mahkamahagung.go.id";s:18:"cas_client_service";s:34:"https://bisdev.mahkamahagung.go.id";}
+4A64 .=> phpCAS::client('3.0', 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false) [CasManager.php:122]
+4A64 .|    => CAS_Client::__construct('3.0', false, 'sso.mahkamahagung.go.id', 443, '/cas', 'https://bisdev.mahkamahagung.go.id', false, CAS_Session_PhpSession) [CAS.php:369]
+4A64 .|    |    Starting a new session 1n386jib2p0hdpg2tv70rvonl3 [Client.php:974]
+4A64 .|    |    Session is not authenticated [Client.php:987]
+4A64 .|    <= ''
+4A64 .<= ''
+4A64 .=> phpCAS::setNoCasServerValidation() [CasManager.php:192]
+4A64 .|    You have configured no validation of the legitimacy of the cas server. This is not recommended for production use. [CAS.php:1705]
+4A64 .<= ''
+4A64 .=> phpCAS::setServerLoginURL('') [CasManager.php:56]
+4A64 .<= ''
+4A64 .=> phpCAS::setServerLogoutURL('https://sso.mahkamahagung.go.id/cas/logout') [CasManager.php:63]
+4A64 .<= ''
+4A64 .=> phpCAS::logoutWithRedirectService('http://127.0.0.1:8000') [unknown_file:unknown_line]
+4A64 .|    => CAS_Client::logout(array (  'service' => 'http://127.0.0.1:8000',)) [CAS.php:1532]
+4A64 .|    |    Prepare redirect to : https://sso.mahkamahagung.go.id/cas/logout?service=http%3A%2F%2F127.0.0.1%3A8000 [Client.php:1895]
+4A64 .|    |    Destroying session : 1n386jib2p0hdpg2tv70rvonl3 [Client.php:1897]
+4A64 .|    |    Session terminated [Client.php:1901]
+4A64 .|    |    exit()
+4A64 .|    |    -
+4A64 .|    -

@@ -24,7 +24,7 @@
                 @foreach($artikel as $list_artikel)
                 <div class="col-lg-3 col-sm-6 mb-3">
                     <div class="card card-plain">
-                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
+                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! $list_artikel['foto_penulis'] !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
                             <a class="d-block blur-shadow-image">
                             </a>
                         </div>
@@ -33,10 +33,12 @@
                 <div class="col-lg-9 col-sm-6 mb-3">
                     <div class="card-body px-0">
                         @php
-                            $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
-                            $explode=explode('.pdf', $clean);
-                            $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
-                            $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
+                            $explode=explode('/', $list_artikel['edoc_pdf']);
+                            $jumlah_clean=count($explode);
+                            $clean=$explode[$jumlah_clean-1];
+                            $link_title=explode('.pdf', $clean);
+                            
+                            $link='baca-artikel/'.strtolower($link_title[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
                         @endphp
                         <span class='text-purple fn-sz-1  text-bold'>{!! $list_artikel['nama'] !!}</span>
                         <h6>
@@ -111,16 +113,14 @@ async function runImg(jumlah_skleton, skleton){
 }
 async function setPhoto(width, height, target, type, x, prefix, skleton){
     $.ajax({
-        url:"{!! url('resize-img-view') !!}",
-        data:{width:width, height:height, target:target, type:type, prefix:prefix},
+        url:'img/'+target+'?w='+width+'&h='+height+'&q=90',
         dataType:'JSON',
-        type:'POST',
+        type:'GET',
         success:function(data){
-        console.log(x);
-        $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
-        $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-        // console.log("background-image:url('img/20241210031407-ari.jpg')");
-        $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
+            $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
+            $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
+            // console.log("background-image:url('img/20241210031407-ari.jpg')");
+            $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
         }
     })
 }

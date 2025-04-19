@@ -16,14 +16,17 @@ use App\Pengumuman_arunika;
 use App\Checklist_review;
 use File;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Kategori_artikel;
 use App\Config;
 use App\Pegawai;
+use App\User;
+use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\ValidationException;
-use Intervention\Image\Laravel\Facades\Image;
 
 class arunikaController extends Controller
 {
@@ -65,14 +68,16 @@ class arunikaController extends Controller
         $get_issue=Issue_artikel::all();
         $jumlah_issue=$get_issue->count();
         foreach($get_publish_populer as $list_artikel_populer){
-            $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel_populer['edoc_pdf']);
+            $explode_edoc=explode('/', $list_artikel_populer['edoc_pdf']);
+            $jumlah_explode=count($explode_edoc);
+            $edoc_real=$explode_edoc[$jumlah_explode-1];
             
             $foto_penulis=$list_artikel_populer['foto_penulis'];
             $str_replace=str_replace("upload/image/", "", $foto_penulis);
             $thumbnail_path="upload/image/thumbnail/thumbnail_".$str_replace;
 
             $tentang_artikel=substr($list_artikel_populer['tentang_artikel'],0,200);
-            $data_artikel_populer[$x]['edoc_pdf']=str_replace('.pdf', '', $replace_1);
+            $data_artikel_populer[$x]['edoc_pdf']=str_replace('.pdf', '', $edoc_real);
             $data_artikel_populer[$x]['judul']=$list_artikel_populer['judul'];
             $data_artikel_populer[$x]['foto_penulis']=$foto_penulis;
             $data_artikel_populer[$x]['publish_at']=$list_artikel_populer['publish_at'];
@@ -99,14 +104,16 @@ class arunikaController extends Controller
         $data_new_artikel=[];
         $x=0;
         foreach($get_new_artikel as $list_new_artikel){
-            $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_new_artikel['edoc_pdf']);
+            $explode_edoc=explode('/', $list_artikel_populer['edoc_pdf']);
+            $jumlah_explode=count($explode_edoc);
+            $edoc_real=$explode_edoc[$jumlah_explode-1];
             
             $foto_penulis=$list_new_artikel['foto_penulis'];
             $str_replace=str_replace("upload/image/", "", $foto_penulis);
             $thumbnail_path="upload/image/thumbnail/thumbnail_".$str_replace;
 
             $tentang_artikel=substr($list_new_artikel['tentang_artikel'],0,200);
-            $data_new_artikel[$x]['edoc_pdf']=str_replace('.pdf', '', $replace_1);
+            $data_new_artikel[$x]['edoc_pdf']=str_replace('.pdf', '', $edoc_real);
             $data_new_artikel[$x]['judul']=$list_new_artikel['judul'];
             $data_new_artikel[$x]['foto_penulis']=$foto_penulis;
             $data_new_artikel[$x]['publish_at']=$list_new_artikel['publish_at'];
@@ -162,14 +169,16 @@ class arunikaController extends Controller
         $x=0;
         $early_view=[];
         foreach($get_early_view as $list_early_view){
-            $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_early_view['edoc_pdf']);
+            $explode_edoc=explode('/', $list_artikel_populer['edoc_pdf']);
+            $jumlah_explode=count($explode_edoc);
+            $edoc_real=$explode_edoc[$jumlah_explode-1];
             
             $foto_penulis=$list_early_view['foto_penulis'];
             $str_replace=str_replace("upload/image/", "", $foto_penulis);
             $thumbnail_path="upload/image/thumbnail/thumbnail_".$str_replace;
 
             $tentang_artikel=substr($list_early_view['tentang_artikel'],0,200);
-            $early_view[$x]['edoc_pdf']=str_replace('.pdf', '', $replace_1);
+            $early_view[$x]['edoc_pdf']=str_replace('.pdf', '', $edoc_real);
             $early_view[$x]['judul']=$list_early_view['judul'];
             $early_view[$x]['foto_penulis']=$foto_penulis;
             $early_view[$x]['publish_at']=$list_early_view['publish_at'];
@@ -214,7 +223,7 @@ class arunikaController extends Controller
                                         })
                                 ->select('artikel.id', 'artikel.judul', 'artikel.tentang_artikel', 'publish_artikel.text_tulisan', 'artikel.foto_penulis', 'penulis_artikel.nama', 'publish_artikel.publish_at', 'publish_artikel.code_issue', 'publish_artikel.edoc_pdf', 'penulis_artikel.id_pegawai')
                                 ->where('id_artikel', $artikel_id)
-                                ->where('edoc_pdf', $edoc_pdf)
+                                // ->where('edoc_pdf', $edoc_pdf)
                                 ->whereRaw('publish_at is not null')
                                 ->where('visible', true)
                                 ->first();
@@ -247,7 +256,7 @@ class arunikaController extends Controller
                                     ->join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
                                     ->select('artikel.judul', 'artikel.id', 'artikel.foto_penulis', 'publish_artikel.edoc_pdf', 'kategori_artikel.kategori', 'penulis_artikel.nama', 'publish_artikel.code_issue', 'penulis_artikel.id_pegawai')
                                     ->whereRaw('publish_artikel.publish_at is not null')
-                                    ->where('artikel.id', '<>', $artikel_id)
+                                    // ->where('artikel.id', '<>', $artikel_id)
                                     ->where('visible', true)
                                     ->take(0)->limit(5)
                                     ->orderBy('artikel.id', 'desc')
@@ -267,13 +276,13 @@ class arunikaController extends Controller
                     }
                     return view('web/baca_artikel', ['artikel'=>$get_artikel, 'keyword'=>$get_keyword, 'jumlah_similar'=>$jumlah_similar, 'similar'=>$get_similar, 'jlh_other'=>$jlh_other, 'other'=>$get_other, 'keyword_string'=>$keyword_string, 'logo'=>$this->data]);
                 }else{
-                    return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);    
+                    return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan [1]']);    
                 }  
             }else{
-                return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);
+                return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan [2]']);
             } 
         }else{
-            return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']);
+            return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan [3]']);
         }    
     }
     public function downloadFile($file, $type){
@@ -691,6 +700,50 @@ class arunikaController extends Controller
             return view('web/404', ['logo'=>$this->data, 'title'=>'Halaman tidak ditemukan']); 
         }
     }
+    public function callFn(){
+        $this->userLocal('199503142017121005');
+        return redirect()->route('dashboard');
+    }
+    // public function userLocal($nip){
+    //     $msg="";
+    //     $get_data=User::where('nip', $nip)->first();
+    //     $check_pegawai=Pegawai::where('nip', $nip)->first();
+    //     if(is_null($get_data)){
+    //         try{
+    //             DB::beginTransaction();
+    //             $user=new User;
+    //             $user->name='name';
+    //             $user->nip=$nip;
+    //             $user->password=Hash::make('redirfromssomahkamahagung');
+    //             $user->role=1;
+    //             $save=$user->save();
+    //             if(is_null($check_pegawai)){
+    //                 $data=DB::select('CALL SPGetHakimByNip('.$nip.')');
+    //                 $json_data=(array)$data[0];
+    //                 $pegawai=new Pegawai;
+    //                 $pegawai->id_pegawai=$json_data['IdPegawai'];
+    //                 $pegawai->nama=$json_data['NamaLengkap'];
+    //                 $pegawai->nip=$json_data['NipBaru'];
+    //                 $pegawai->no_handphone=$json_data['NomorHandphone'];
+    //                 $pegawai->foto_profile=null;
+    //                 $save_pegawai=$pegawai->save();
+    //                 // var_dump($save_pegawai);
+    //             }
+    //             if($save){
+    //                 $this->userLocal($nip);
+    //             }
+    //             DB::commit();
+    //         }catch(\Exception $e){
+    //             DB::rollback();
+    //             $msg="Terjadi kesalahan sistem saat melakukan penyimpanan data : ".$e->getMessage();
+    //             dd($msg);
+    //             exit();
+    //         }
+    //     }else{
+    //         Auth::login($get_data);
+    //     }
+    //     //return response()->json(['data'=>$get_data, 'msg'=>$msg]);
+    // }
 
     public function setImage($path){
         $path = str_replace('..', '', $path); // prevent directory traversal
@@ -703,6 +756,7 @@ class arunikaController extends Controller
 
       
         $originalPath = storage_path('app/public/'.$path);
+
         if (!file_exists($originalPath)) {
             $originalPath = $defaultImage; // fallback
         }

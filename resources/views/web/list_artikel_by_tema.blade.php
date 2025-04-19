@@ -17,7 +17,7 @@
                 @foreach($artikel as $list_artikel)
                 <div class="col-lg-3 col-sm-6 mb-3">
                     <div class="card card-plain">
-                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('upload/image/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
+                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!!  $list_artikel['foto_penulis'] !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
                             <a class="d-block blur-shadow-image">
                             </a>
                         </div>
@@ -75,7 +75,6 @@ setTimeout(function(){
 },1000)
 async function runImg(jumlah_skleton, skleton){
     for(var x=0;x<jumlah_skleton;x++){
-        console.log(x);
         var target=$(skleton[x]).data('target');
         var width=$(skleton[x]).width();
         var height=$(skleton[x]).height();
@@ -87,16 +86,14 @@ async function runImg(jumlah_skleton, skleton){
 }
 async function setPhoto(width, height, target, type, x, prefix, skleton){
     $.ajax({
-        url:"{!! url('resize-img-view') !!}",
-        data:{width:width, height:height, target:target, type:type, prefix:prefix},
+        url:"{!! url('img/"+target+"?w="+width+"&h="+height+"&q=90') !!} ",
         dataType:'JSON',
-        type:'POST',
+        type:'GET',
         success:function(data){
-        console.log(x);
         $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
         $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
         // console.log("background-image:url('img/20241210031407-ari.jpg')");
-        $(skleton[x]).css({"background-image":"url('{!! url('"+data.background+"') !!}')"});
+        $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
         }
     })
 }

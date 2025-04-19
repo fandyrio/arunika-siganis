@@ -18,7 +18,7 @@
                 <div class="card card-plain">
                     <div class="card-header p-0 position-relative" style="min-height:5rem;">
                         <a class="d-block blur-shadow-image">
-                            <img src="{!! url($list_issue['flyer']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy">
+                            <img src="{!! Storage::url($list_issue['flyer']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy">
                         </a>
                     </div>
                     <div class="card-body px-0">

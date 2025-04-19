@@ -280,8 +280,11 @@
                   @php $x=0; @endphp
                   @foreach($similar as $list_similar)
                     @php
-                      $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_similar['edoc_pdf']);
-                      $edoc=str_replace(".pdf", "", $replace_1);
+                      $replace_1=explode('/', $list_similar['edoc_pdf']);
+                      $jumlah_explode=count($replace_1);
+                      $file_pdf=$replace_1[$jumlah_explode-1];
+
+                      $edoc=str_replace(".pdf", "", $file_pdf);
                     @endphp
                     <div class="row mt-2" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
                         <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('{!! Storage::url($list_similar['foto_penulis']) !!}');height:80px;"></div>
@@ -307,8 +310,11 @@
                   @foreach($other as $list_other)
                     @php
                     
-                      $replace_1=str_replace('upload/edoc/artikel/pdf/', '', $list_other['edoc_pdf']);
-                      $edoc=str_replace(".pdf", "", $replace_1);
+                      $replace_1=explode('/', $list_similar['edoc_pdf']);
+                      $jumlah_explode=count($replace_1);
+                      $file_pdf=$replace_1[$jumlah_explode-1];
+
+                      $edoc=str_replace(".pdf", "", $file_pdf);
                     @endphp
                     <div class="row" style='padding-left:2%;padding-right:2%;margin-top:15px;'>
                         <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! $list_other['foto_penulis'] !!}" data-prefix="artikel-img" style="width:30%"></div>
