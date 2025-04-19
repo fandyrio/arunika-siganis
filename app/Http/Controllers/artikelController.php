@@ -2120,7 +2120,11 @@ public function removeHasilReview(Request $request){
     }
 
     public function readDoc($filePath){
-        $phpWord = IOFactory::load(storage_path('app/'.$filePath)); 
+        $clean_path=explode('/', $filePath);
+        $jumlah=count($clean_path);
+        $filename=$clean_path[$jumlah-1];
+
+        $phpWord = IOFactory::load(storage_path('app/public/upload/edoc/artikel/'.$filename)); 
         $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
         // Generate the HTML content
         //$htmlWriter = new HTML($phpWord);
