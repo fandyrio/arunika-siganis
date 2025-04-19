@@ -177,12 +177,12 @@ function readURLFile(input, type, className){
             // 'odt' => 'application/vnd.oasis.opendocument.text',
             // 'txt' => 'text/plain',
             // 'pdf' => 'application/pdf',
-            var allowedType=["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf"];
+            var allowedType=["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
             if(allowedType.includes(input.files[0].type) && input.files[0].size <= 6291456){
                 $(".filename_baru").html("<br />File baru : "+input.files[0].name);
                 return true;
             }else{
-                callSwal("error", "Tipe data harus *.doc / *.docx / *.pdf dan Maximum Ukuran File 6mb", true);
+                callSwal("error", "Tipe data harus *.doc / *.docx / *.rtf dan Maximum Ukuran File 6mb", true);
                 $("."+className).val("");
                 return false;
             }

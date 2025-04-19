@@ -658,7 +658,10 @@ class artikelController extends Controller
     public function downloadFile($file, $type){
         try{
             $file_path=Crypt::decrypt($file);
-            //var_dump($file_path);die();
+
+            $explode=explode('/', $file_path);
+            $jumlah_exp=count($explode);
+            $filename=$explode[$jumlah_exp-1];
             if(Storage::exists($file_path)){
                 if($type === "edoc_artikel"){
                     $prefix_path="public/upload/edoc/artikel/pdf/";
@@ -671,10 +674,10 @@ class artikelController extends Controller
                 }else{
                     echo "<center><h2>404</h2><h5>File not Found</h5></center>";die();
                 }
-                $file_name=str_replace($prefix_path, '', $file_path);
+                // $file_name=str_replace($prefix_path, '', $file_path);
                 // var_dump($file_name);die();
                 // var_dump($file_path);die();
-                return response()->download(storage_path('app/'.$file_path), $file_name);
+                return response()->download(storage_path('app/'.$prefix_path.'/'.$filename), $filename);
             }else{
                 echo "<center><h2>404</h2><h5>File not Found</h5></center>";
             }
