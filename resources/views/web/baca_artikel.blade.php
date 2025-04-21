@@ -310,7 +310,7 @@
                   @foreach($other as $list_other)
                     @php
                     
-                      $replace_1=explode('/', $list_similar['edoc_pdf']);
+                      $replace_1=explode('/', $list_other['edoc_pdf']);
                       $jumlah_explode=count($replace_1);
                       $file_pdf=$replace_1[$jumlah_explode-1];
 

@@ -658,25 +658,26 @@ class artikelController extends Controller
     public function downloadFile($file, $type){
         try{
             $file_path=Crypt::decrypt($file);
-
             $explode=explode('/', $file_path);
             $jumlah_exp=count($explode);
             $filename=$explode[$jumlah_exp-1];
-            if(Storage::exists($file_path)){
-                if($type === "edoc_artikel"){
-                    $prefix_path="public/upload/edoc/artikel/pdf/";
-                }elseif($type === "edoc_artikel_doc"){
-                    $prefix_path="public/upload/edoc/artikel/";
-                }elseif($type === "edoc_pengumuman"){
-                    $prefix_path="public/upload/pengumuman/";
-                }elseif($type === "image_config"){
-                    $prefix_path="public/upload/config/";
-                }else{
-                    echo "<center><h2>404</h2><h5>File not Found</h5></center>";die();
-                }
+            
+            if($type === "edoc_artikel"){
+                $prefix_path="public/upload/edoc/artikel/pdf";
+            }elseif($type === "edoc_artikel_doc"){
+                $prefix_path="public/upload/edoc/artikel";
+            }elseif($type === "edoc_pengumuman"){
+                $prefix_path="public/upload/pengumuman";
+            }elseif($type === "image_config"){
+                $prefix_path="public/upload/config";
+            }else{
+                echo "<center><h2>404</h2><h5>File not Found</h5></center>";die();
+            }
                 // $file_name=str_replace($prefix_path, '', $file_path);
                 // var_dump($file_name);die();
                 // var_dump($file_path);die();
+            // var_dump(Storage::exists($prefix_path.'/'.$filename));
+            if(Storage::exists($prefix_path.'/'.$filename)){
                 return response()->download(storage_path('app/'.$prefix_path.'/'.$filename), $filename);
             }else{
                 echo "<center><h2>404</h2><h5>File not Found</h5></center>";
