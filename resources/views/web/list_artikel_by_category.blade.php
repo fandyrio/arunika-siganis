@@ -23,9 +23,9 @@
                         @for($x=0;$x<$jumlah_data;$x++)
                         <div class="col-lg-4 col-sm-6 mb-3" >
                             <div class="card card-plain">
-                                <div class="card-header p-0 position-relative" style="min-height:5rem;">
+                                <div class="card-header p-0 position-relative skleton_loading" data-target="{{ $artikel[$x]['foto_penulis'] }}" data-prefix="img-artikel" style="min-height:10rem;">
                                     <a class="d-block blur-shadow-image">
-                                        <img src="{!! Storage::url($artikel[$x]['foto_penulis']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy" width="100%;">
+                                        
                                     </a>
                                 </div>
                             </div>
@@ -122,3 +122,4 @@
     </div>
 </div>
 @endsection
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

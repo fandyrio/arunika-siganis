@@ -17,8 +17,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="apple-touch-icon" sizes="76x76" href="{!! Storage::url('web/assets/img/apple-icon.png') !!}">
-<link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
+<link rel="apple-touch-icon" sizes="76x76" href="{!! assets_storage('web/assets/img/apple-icon.png') !!}">
+<link rel="icon" type="image/png" href="{!! assets_storage('upload/config/logo_arunika_complate.png') !!}">
 
 <title>Arunika By SIGANIS</title>
 <!--     Fonts and icons     -->
@@ -37,7 +37,7 @@
 <link href="{!! asset('web/assets/css/style.css') !!}" rel="stylesheet"/>
 <!-- Nepcha Analytics (nepcha.com) -->
 <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-<script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+{{-- <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script> --}}
 </head>
 
 <body class="index-page bg-gray-200">
@@ -52,7 +52,7 @@
   <!-- Navbar -->
   <div class="loadingScreen" style='z-index:999;'>
 <!--My content is the word "soundscape" but the o is replaced with a disc-->
-    <center><img src="{!! Storage::url($logo['loading_animation']) !!}"><br /><br />
+    <center><img src="{!! assets_storage($logo['loading_animation']) !!}"><br /><br />
     <h4>L o a d i n g ... </h4><br /></center>
   </div>
 <div class="container position-sticky z-index-sticky top-0">
@@ -61,7 +61,7 @@
 <nav class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4 bg-white-transparent">
   <div class="container-fluid px-0">
     <a class="navbar-brand font-weight-bolder ms-sm-3 logo-top" href="{!! url('/home') !!}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
-    <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Nusantara</span></span>
+    <img src="{!! assets_storage($logo['logo_arunika']) !!}" class='arunika_top' style=''> <span class='text-arunika'>- Artikel Hukum <span style='background:#344767;color:white;padding:5px;border-radius:10%;'>Hakim Nusantara</span></span>
     </a>
     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon mt-2">
@@ -190,10 +190,10 @@
 </nav>
 <!-- End Navbar -->
 </div></div></div>
-<header class="header-2" style="background-image: url('{!! Storage::url($logo['page_header']) !!}');background-size:cover;background-repeat:no-repeat;background-position:center;height:500px">
+<header class="header-2" style="background-image: url('{!! assets_storage($logo['page_header']) !!}');background-size:cover;background-repeat:no-repeat;background-position:center;height:500px">
   
   <div class="page-header relative" style="height:500px;">
-  <img src="{!! Storage::url($logo['logo_siganis']) !!}" class='siganis_logo'>
+  <img src="{!! assets_storage($logo['logo_siganis']) !!}" class='siganis_logo'>
     <div class="containers" style="bottom:0px;position:absolute;background-image:linear-gradient(to top, #684DF4 0%,  rgba(255,255,255,0) 100%);">
       <div class="row" style="padding-bottom:30px;padding-left:8%;background-image:linear-gradient(to top, #000 0%,  rgba(255,255,255,0) 100%)">
         <div class="col-lg-8 position-relative" style="left:2%;">
@@ -258,14 +258,14 @@
         <div class="col-md-3">
           <div class="rotating-card-container" style='height:60%;'>
             <div class="card card-rotate card-background card-background-mask-primary mt-md-0 mt-5" style=''>
-              <div class="front front-background" style="background-image: url(https://images.unsplash.com/photo-1569683795645-b62e50fbf103?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80); background-size: cover;height:100%;background-position:center;">
+              <div class="front front-background" style="background-image: ; background-size: cover;height:100%;background-position:center;">
                 <div class="card-body py-7 text-center" style="height:100%;padding:0 !important;">
                   <i class="material-icons text-white text-4xl my-3">touch_app</i>
                   <h3 class="text-white">Submit <br /> Artikelmu</h3>
                   <p class="text-white opacity-8">Arunika merupakan wadah bagi Hakim dibawah Badan Peradilan Umum untuk menulis artikel dan opini.</p>
                 </div>
               </div>
-              <div class="back back-backgrounds" style="background-image: url('{!! Storage::url($issue[$jumlah_issue-1]['flyer']) !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
+              <div class="back back-backgrounds" style="background-image: url('{!! assets_storage($issue[$jumlah_issue-1]['flyer']) !!}'); background-size: contain;height:100%;background-position:center;background-repeat:no-repeat;">
                 <div class="card-body pt-7 text-center" >
                   <a href="{!! url($logo['env'] === 'production' || $logo['env'] === 'testing' ? '/sso' : '/login') !!}" target="_blank" class="btn btn-warning btn-sm w-90 mx-auto mt-3" style='bottom:0;position:fixed;'>Submit Now</a>
                 </div>
@@ -410,7 +410,7 @@
           @else
               @foreach($early_view as $list_early_view)
               <div class="col-lg-4 mt-3">
-                <a href="#" onClick='earlyView()'>
+                <a href="#" id="earlyView">
                   <div class="row">
                     <div class="col-lg-4 skleton_loading img early_view_{!! $x !!}" data-prefix="news" data-target="{!! $list_early_view['foto_penulis'] !!}" style=""></div>
                     <div class="col-lg-8 text-judul">
@@ -453,7 +453,7 @@
           @foreach($issue as $list_issue)
             <div class="col-lg-3 list_tema mt-3">
               <div class="row">
-                <div class="col-lg-12 flyer_theme img list_issue_{!! $x !!}" style="background-image:url('{!! Storage::url($list_issue['flyer']) !!}');background-image:">
+                <div class="col-lg-12 flyer_theme img list_issue_{!! $x !!}" style="background-image:url('{!! assets_storage($list_issue['flyer']) !!}');background-image:">
                   <span class='badge bg-theme badge-text' style=''>Arunika {!! $x !!}</span>
                 </div>
                 <div class="col-lg-12" style='font-family:Montserrat-FF,Arial,Tahoma,sans-serif;border-radius: 0 0 5% 5%;background-color:linen;min-height:104px;'>
@@ -575,7 +575,7 @@
       <div class="col-md-3 mb-4 ms-auto">
         <div>
           <a href="{!! url('/home') !!}">
-            <img src="{!! Storage::url($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important;'>
+            <img src="{!! assets_storage($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important;'>
           </a>
           <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
         </div>
@@ -705,7 +705,7 @@
       <div class="col-12">
         <div class="text-center">
           <p class="text-dark my-4 text-sm font-weight-normal">
-            All rights reserved. Copyright © <script>document.write(new Date().getFullYear())</script> Tim Siganis <a href="https://siganisbadilum.mahkamahagung.go.id/" target="_blank">Dev Team</a>.
+            All rights reserved. Copyright © <span class='yearRunning'></span> Tim Siganis <a href="https://siganisbadilum.mahkamahagung.go.id/" target="_blank">Dev Team</a>.
           </p>
         </div>
       </div>
@@ -733,127 +733,7 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="{!! asset('web/assets/js/material-kit.min.js?v=3.0.4') !!}" type="text/javascript"></script>
-
-
-<script type="text/javascript">
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token-web"]').attr('content')
-    }
-});
-  if (document.getElementById('state1')) {
-    const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
-    if (!countUp.error) {
-      countUp.start();
-    } else {
-      //console.error(countUp.error);
-    }
-  }
-  if (document.getElementById('state2')) {
-    const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
-    if (!countUp1.error) {
-      countUp1.start();
-    } else {
-      //console.error(countUp1.error);
-    }
-  }
-  if (document.getElementById('state3')) {
-    const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
-    if (!countUp2.error) {
-      countUp2.start();
-    } else {
-      //console.error(countUp2.error);
-    };
-  }
-  var loadingScreen = document.querySelector(".loadingScreen");
-  window.addEventListener('load', function() {
-    loadingScreen.style.display = 'none';
-    setTimeout(function(){
-      
-    }, 2000)
-    
-  });
-  var jumlah_skleton=$(".skleton_loading").length;
-  var skleton=$(".skleton_loading");
-  runImg(jumlah_skleton, skleton);
-  async function runImg(jumlah_skleton, skleton){
-    for(var x=0;x<jumlah_skleton;x++){
-      //console.log(x);
-      var target=$(skleton[x]).data('target');
-      var width=$(skleton[x]).width();
-      var height=$(skleton[x]).height();
-      var prefix=$(skleton[x]).data('prefix');
-      var type="artikel-img";
-      // alert(width+"x"+height);
-      let printFoto=await setPhoto(width, height, target, type, x, prefix);
-    }
-  }
-  async function setPhoto(width, height, target, type, x, prefix){
-    $.ajax({
-        url:'img/'+target+'?w='+width+'&h='+height+'&q=90',
-        type:'GET',
-        dataType:'json',
-        success:function(data){
-          // console.log(data);
-          $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
-          $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-          //console.log("background-image:url('"+data.background+"')");
-          $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
-        },error:function(data){
-          console.log("err");
-        }
-      })
-  }
-$(".text-hover").mouseenter(function(e){
-  e.preventDefault();
-  e.stopPropagation();
-  var target=$(this).data('target');
-  var index=$(this).data('idx');
-  var classSelector=target+"_"+index;
-  if($("."+classSelector).hasClass('img_kecil')){
-    $("."+target+"_"+index).css({'transform':'scale(1.1)'});
-  }else{
-    $("."+target+"_"+index).css({'transform':'scale(1.02)'});
-  }
-})
-$(".text-hover").mouseleave(function(e){
-  e.preventDefault();
-  e.stopPropagation();
-  var target=$(this).data('target');
-  var index=$(this).data('idx');
-  $("."+target+"_"+index).css({'transform':'scale(1)'});
-  $("."+target+"_"+index).css({'transform':''});
-});
-
-function earlyView(){
-  swal.fire({
-    title: "<span>Perhatian !. Artikel ini sedang dalam proses persiapan publish.</span> ",
-    text: "Artikel ini belum dapat dibaca",
-    icon: "warning",
-    showConfirmButton: true,
-  })
-}
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (isMobile) {
-    //alert('mobile');
-    $(".arunika_top").addClass('arunika_top_mob');
-    $(".arunika_top_mob").removeClass('arunika_top');
-    $(".btn-wb").addClass('btn-mob-100');
-    $(".f_lat_ar_img").addClass('f_lat_ar_img_mob');
-    $(".f_lat_ar_txt").addClass('f_lat_ar_txt_mob');
-    $(".lat_ar_img").addClass('lat_ar_img_mob');
-    $(".lat_ar_txt").addClass('lat_ar_txt_mob');
-    $(".h_lat_ar").addClass('h_lat_ar_mob');
-    $(".padding_lat_ar").addClass('padding_lat_ar_mob');
-    $(".artikel_title").addClass('artikel_title_mob');
-    $(".sisi2_").hide();
-    $(".sisi2_mob").show();
-  }else{
-    $(".foto_besar").attr({width:'100%'});
-    $(".sisi2_mob").hide();
-    $(".sisi2_").show();
-  }
-</script>
+<script src="{{ asset('web/assets/js/web_home.js?1') }}"></script>
 </body>
 
 </html>

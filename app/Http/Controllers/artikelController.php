@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Storage;
 
 class artikelController extends Controller
 {
+    protected $uploadService;
     public function __construct(uploadImageService $uploadService){
         $this->uploadService=$uploadService;
     }
@@ -262,7 +263,7 @@ class artikelController extends Controller
             }else{
                 $msg="Data anda tidak valid. Silahkan input NIP yang sesuai ";
             }
-        }catch(DecyptException $e){
+        }catch(DecryptException $e){
             $msg="Data NIP Tidak valid";
         }
         return response()->json(['status'=>$status, 'msg'=>$msg, 'data'=>$data]);
@@ -650,7 +651,7 @@ class artikelController extends Controller
             }else{
                 $msg="Anda tidak dapat melakukan perubahan data.";
             }
-        }catch(DecryptExcecption $e){
+        }catch(DecryptException $e){
             $msg="Invalid token";
         }
         return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>$callForm]);
@@ -746,7 +747,7 @@ class artikelController extends Controller
             }else{
                 $msg="Data tidak ditemukan";
             }
-        }catch(DecryptExcecption $e){
+        }catch(DecryptException $e){
             $msg="Invalid token";
         }
         return response()->json(['status'=>false, 'msg'=>$msg]);
@@ -780,7 +781,8 @@ class artikelController extends Controller
             }else{
                 $msg="Anda tidak dapat mengirimkan artikel ini.";
             }
-        }catch(DecryptExecption $e){
+        }catch(DecryptException $e){
+            
             $msg="Token tidak valid";
         }
         return response()->json(['status'=>$update, 'msg'=>$msg]);
@@ -1245,7 +1247,7 @@ class artikelController extends Controller
                                 $msg="Berhasil menyimpan reviewer";
                                 $update_step=true;
                                 DB::commit();   
-                            }catch(Exception $e){
+                            }catch(\Exception $e){
                                 DB::rollback();
                                 $msg="Terjadi kesalahan sistem saat menyimpan reviewer";
                             }
@@ -2114,7 +2116,7 @@ public function removeHasilReview(Request $request){
             }else{
                 echo "Data tidak ditemukan";
             }
-        }catch(DecryptExceptio $e){
+        }catch(DecryptException $e){
             echo "Token tidak valid";
             die();
         }

@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
   <link rel="apple-touch-icon" sizes="76x76" href="{!! url('web/assets/img/apple-icon.png') !!}">
-  <link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="icon" type="image/png" href="{!! url('storage/upload/config/logo_arunika_complate.png') !!}">
   <title>
     {!! $title !!}
   </title>
@@ -28,7 +28,7 @@
   <link href="{!! url('web/assets/css/nucleo-icons.css') !!}" rel="stylesheet" />
   <link href="{!! url('web/assets/css/nucleo-svg.css') !!}" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
@@ -36,12 +36,12 @@
   <link href="{!! asset('web/assets/css/style.css') !!}" rel="stylesheet"/>
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  {{-- <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script> --}}
 </head>
 
 <body class="contact-us">
   <div class="loadingScreen" style='z-index:999;'>
-    <center><img src="{!! Storage::url($logo['loading_animation']) !!}"><br /><br />
+    <center><img src="{!! assets_storage($logo['loading_animation']) !!}"><br /><br />
     <h4>L o a d i n g ... Please Wait ...</h4><br /></center>
   </div>
 <div class="container position-sticky z-index-sticky top-0">
@@ -332,7 +332,7 @@
       <div class="col-12">
         <div class="text-center">
           <p class="text-dark my-4 text-sm font-weight-normal">
-            All rights reserved. Copyright © <script>document.write(new Date().getFullYear())</script> Tim Siganis <a href="https://siganisbadilum.mahkamahagung.go.id/" target="_blank">Dev Team</a>.
+            All rights reserved. Copyright © <span class='runningText'></span> Tim Siganis <a href="https://siganisbadilum.mahkamahagung.go.id/" target="_blank">Dev Team</a>.
           </p>
         </div>
       </div>
@@ -345,20 +345,9 @@
   <script src="{!! url('web/assets/js/plugins/perfect-scrollbar.min.js') !!}"></script>
   <!-- Control Center for Material UI Kit: parallax effects, scripts for the example pages etc -->
   <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
   <script src="{!! url('web/assets/js/material-kit.min.js?v=3.0.4') !!}" type="text/javascript"></script>
-
-  <script>
-    var loadingScreen = document.querySelector(".loadingScreen");
-    window.addEventListener('load', function() {
-      loadingScreen.style.display = 'none';
-    });
-    $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token-web"]').attr('content')
-            }
-        });
-  </script>
+  <script src={{ asset('web/assets/js/web_published.js?q=2') }}> </script>
+  
 </body>
 
 </html>

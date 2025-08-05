@@ -11,11 +11,15 @@
             function __construct($fileName)
             {
                 // *** Open up the file
-                $this->image = $this->openImage($fileName);
-
-                // *** Get width and height
-                $this->width  = imagesx($this->image);
-                $this->height = imagesy($this->image);
+                    $this->image = $this->openImage($fileName);
+                    if($this->image){
+                        // *** Get width and height
+                        $this->width  = imagesx($this->image);
+                        $this->height = imagesy($this->image);
+                    }else{
+                        echo "Gambar tidak ditemukan ".$fileName;
+                    }
+                
             }
 
             ## --------------------------------------------------------

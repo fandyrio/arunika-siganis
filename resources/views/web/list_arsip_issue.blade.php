@@ -16,9 +16,9 @@
             @foreach($issue as $list_issue)
             <div class="col-lg-3 col-sm-6">
                 <div class="card card-plain">
-                    <div class="card-header p-0 position-relative" style="min-height:5rem;">
+                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="img-artikel" data-target="{{ $list_issue['flyer'] }}" style="min-height:5rem;">
                         <a class="d-block blur-shadow-image">
-                            <img src="{!! Storage::url($list_issue['flyer']) !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy">
+                            {{-- <img src="{!! $list_issue['flyer'] !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy"> --}}
                         </a>
                     </div>
                     <div class="card-body px-0">
@@ -42,11 +42,4 @@
     </div>
 </div>
 @endsection
-<script>
-    <script>
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-  })
-</script>
-</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

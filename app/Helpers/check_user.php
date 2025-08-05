@@ -6,7 +6,8 @@
     use App\Artikel;
     use App\Resize;
     use App\Reviewer_artikel;
-    use Illuminate\Support\Facades\Session;
+    use App\Config;
+    use Illuminate\Support\Facades\Storage;
 
     if(!function_exists('checkUserByNip')){
         function checkUserByNip($nip, $action){
@@ -18,10 +19,25 @@
             return false;
         }
     }
+
+    function isProd(){
+        $get_data=Config::where('config_name', 'environment')->first();
+        if(!is_null($get_data)){
+            $env=$get_data['config_value'];
+            if($env === "production"){
+                return true;
+            }
+        }
+        return false;
+    }
+
     if(!function_exists('isReviewer')){
         function isReviewer(){
-            //$nip=Auth::user()->nip;
-            $nip=Session::get('cas')['nip'];
+            if(isProd()){
+                $nip=Session::get('cas')['nip'];
+            }else{
+                $nip=Auth::user()->nip;
+            }
             $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->where('editorial_team.active', true)
                             ->where('editorial_team.sebagai', 'editor')
@@ -35,8 +51,11 @@
     }
     if(!function_exists('isYourReviewArtikel')){
         function isYourReviewArtikel($review_id, $artikel_id){
-            // $nip=Auth::user()->nip;
-            $nip=Session::get('cas')['nip'];
+            if(isProd()){
+                $nip=Session::get('cas')['nip'];
+            }else{
+                $nip=Auth::user()->nip;
+            }
             $get_data=Reviewer_artikel::join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
                         ->where('reviewer_artikel.id_review', $review_id)
                         ->where('reviewer_artikel.id_artikel', $artikel_id)
@@ -52,8 +71,11 @@
     }
     if(!function_exists('isJM')){
         function isJM(){
-            // $nip=Auth::user()->nip;
-            $nip=Session::get('cas')['nip'];
+            if(isProd()){
+                $nip=Session::get('cas')['nip'];
+            }else{
+                $nip=Auth::user()->nip;
+            }
             $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->where('editorial_team.active', true)
                             ->where('editorial_team.sebagai', 'jurnal_manager')
@@ -69,7 +91,7 @@
         function isYourArtikel($artikel_id){
             $get_data=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                     ->where('artikel.id', $artikel_id)
-                    ->where('penulis_artikel.nip', Session::get('cas')['nip'])
+                    ->where('penulis_artikel.nip', Auth::user()->nip)
                     ->first();
             if(isset($get_data)){
                 return true;
@@ -78,11 +100,11 @@
         }
     }
     if(!function_exists('resizeImage')){
-        function resizeImage($path, $width, $height, $type, $prefix){
+        function resizeImage($path, $width, $height, $type, $prefix, $file_path){
             // *** 1) Initialise / load image
             $real_path="img/no-profile.jpg";
             if($type === "artikel-img"){
-                $real_path="upload/image/".$path;
+                $real_path=$path;
             }
             $resizeObj = new Resize($real_path);
             $width+=150;
@@ -90,9 +112,39 @@
             $resizeObj -> resizeImage($width, $height, 'landscape');
     
             // *** 3) Save image ('image-name', 'quality [int]')
-            $new_path="img/".$prefix."_".$path;
+                        $explode=explode("/", $file_path);
+            $jlh=count($explode);
+            $new_path="img/".$explode[$jlh-1];
             $resizeObj -> saveImage($new_path, 100);
             return $new_path;
+        }
+    }
+
+    if(!function_exists('assets_storage')){
+        function assets_storage($path){
+            return asset(Storage::url($path));
+        }
+    }
+
+    if(!function_exists('path_storage')){
+        function path_storage($path){
+            return Storage::path($path);
+        }
+    }
+
+    if(!function_exists('cleanSanitize')){
+        function cleanSanitize($string){
+            $allowed_tags='<b><i><u><strong><em><p><br><ul><ol><li><a>';
+            $cleaned=strip_tags($string, $allowed_tags);
+            $cleaned = preg_replace_callback('/<[^>]+>/', function ($matches) {
+                return preg_replace(
+                    '/\s*(on\w+|style|xmlns)[^=>]*=["\'][^"\']*["\']|javascript:[^"\']*/i',
+                    '',
+                    $matches[0]
+                );
+            }, $cleaned);
+
+            return $cleaned;
         }
     }
 ?>

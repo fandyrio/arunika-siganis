@@ -27,9 +27,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class arunikaController extends Controller
 {
+    protected $data;
     public function __construct(Request $request){
         checkUniqueVisitor();
         $id_config=["2", "4",  "5", "6"];
@@ -606,7 +608,7 @@ class arunikaController extends Controller
                 $tentang_artikel=substr($list_artikel['tentang_artikel'],0,200);
                 $data_artikel[$x]['edoc_pdf']=str_replace('.pdf', '', $replace_1);
                 $data_artikel[$x]['judul']=$list_artikel['judul'];
-                $data_artikel[$x]['foto_penulis']=$thumbnail_path;
+                $data_artikel[$x]['foto_penulis']=$foto_penulis;
                 $data_artikel[$x]['publish_at']=$list_artikel['publish_at'];
                 $data_artikel[$x]['tentang_artikel']=$tentang_artikel;
                 $data_artikel[$x]['nama']=$list_artikel['nama'];
@@ -627,7 +629,7 @@ class arunikaController extends Controller
         $file=$request->target;
         $type=$request->type;
         $prefix=$request->prefix;
-        $resize=resizeImage($file, $width, $height, $type, $prefix);
+        $resize=resizeImage(Storage::path('public/'.$file), $width, $height, $type, $prefix, $file);
         return response()->json(['background'=>$resize]);
     }
     public function getSyaratPenulisan(){

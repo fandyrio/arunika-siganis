@@ -24,14 +24,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="{!! $artikel['judul'] !!}" />
   <meta property="og:description" content="{!! $artikel['tentang_artikel'] !!}" />
-  <meta property="og:image" content="{!! Storage::url($artikel['foto_penulis']) !!}" />
+  <meta property="og:image" content="{!! assets_storage($artikel['foto_penulis']) !!}" />
   <meta name="author" content="{!! $artikel['nama'] !!}">
   <meta name="keyword" content="{!! $keyword_string !!}">
-  <meta name="thumbnailUrl" content="{!! Storage::url($artikel['foto_penulis']) !!}">
+  <meta name="thumbnailUrl" content="{!! assets_storage($artikel['foto_penulis']) !!}">
   <meta property="og:image:width" content="300">
   <meta property="og:image:height" content="300">
-  <link rel="apple-touch-icon" sizes="76x76" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
-  <link rel="icon" type="image/png" href="{!! Storage::url('upload/config/logo_arunika_complate.png') !!}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{!! assets_storage($artikel['foto_penulis']) !!}">
+  <link rel="icon" type="image/png" href="{!! assets_storage($artikel['foto_penulis']) !!}">
   <title>
     {!! $artikel['judul'] !!}
   </title>
@@ -41,7 +41,7 @@
   <link href="{!! asset('web/assets/css/nucleo-icons.css') !!}" rel="stylesheet" />
   <link href="{!! asset('web/assets/css/nucleo-svg.css') !!}" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
@@ -50,20 +50,19 @@
   <link href="{!! asset('assets/plugins/global/plugins.bundle.css') !!}" rel="stylesheet" type="text/css" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  {{-- <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script> --}}
   <style>p {line-height:2 !important}</style>
 </head>
-
 <body class="blog-author bg-gray-200">
   <!-- Navbar Transparent -->
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
       <a class="navbar-brand  text-white " href="{!! url('/home') !!}" rel="tooltip" title="Kembali Ke Home" data-placement="bottom" style='width:50%;'>
-      <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style='scale:1 !important'> 
+      <img src="{!! assets_storage($logo['logo_arunika']) !!}" class='arunika_top' style='scale:1 !important'> 
         Arunika (Artikel Hukum Hakim Nusantara)
       </a>
       <a class="navbar-brand-mob" href="{!! url('/home') !!}" style='width:70%;display:none;'>
-        <img src="{!! Storage::url($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
+        <img src="{!! assets_storage($logo['logo_arunika']) !!}" class='arunika_top' style='scale:2 !important'> 
           <span class='text-white' style='margin-left:10%;'>Arunika - Siganis</span>
       </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -199,7 +198,7 @@
   <!-- End Navbar -->
   <!-- -------- START HEADER 4 w/ search book a ticket form ------- -->
   <header>
-    <div class="page-header min-height-200" style="background-image: url('{!! Storage::url('assets-img/city-profile.jpg') !!}')" loading="lazy">
+    <div class="page-header min-height-200" style="background-image: url('{!! assets_storage('assets-img/city-profile.jpg') !!}')" loading="lazy">
       <span class="mask bg-gradient-dark opacity-8"></span>
     </div>
   </header>
@@ -238,7 +237,7 @@
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! Storage::url($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
+                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! assets_storage($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
@@ -287,7 +286,7 @@
                       $edoc=str_replace(".pdf", "", $file_pdf);
                     @endphp
                     <div class="row mt-2" style='padding-left:2%;padding-right:2%;margin-top:10px;'>
-                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('{!! Storage::url($list_similar['foto_penulis']) !!}');height:80px;"></div>
+                        <div class="col-lg-3 foto_penulis img artikel_terbaru_{!! $x !!}" style="background-image:url('{!! assets_storage($list_similar['foto_penulis']) !!}');height:80px;"></div>
                         <div class="col-lg-9" style='width:70%'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_similar['id'].'arn'.$list_similar['code_issue']) !!}">
                           <span class='artikel-title text-hover' data-target='artikel_terbaru' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_similar['judul'])) !!}</span></a>
@@ -587,87 +586,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <script src="{!! asset('web/assets/js/material-kit.min.js?v=3.0.4') !!}" type="text/javascript"></script>
-  <script>
-    $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token-web"]').attr('content')
-      }
-    });
-    var x=0;
-    setTimeout(function(e){
-      $.post('{!! url("validate-reader") !!}', {token:"{!! Crypt::encrypt($artikel['id']) !!}"}, function(data)
-      {
-          //console.log('validate');
-      });
-    }, 90000);
-
-    var jumlah_skleton=$(".skleton_loading").length;
-    var skleton=$(".skleton_loading");
-    runImg(jumlah_skleton, skleton);
-    async function runImg(jumlah_skleton, skleton){
-      for(var x=0;x<jumlah_skleton;x++){
-        //console.log(x);
-        var target=$(skleton[x]).data('target');
-        var width=$(skleton[x]).width();
-        var height=width-20;
-        $(skleton[x]).css({'height':height});
-        var prefix=$(skleton[x]).data('prefix');
-        var type="artikel-img";
-        //console.log(width+"x"+height);
-        let printFoto=await setPhoto(width, height, target, type, x, prefix);
-      }
-    }
-    async function setPhoto(width, height, target, type, x, prefix){
-      $.ajax({
-          url:"{!! url('img/"+target+"?w="+width+"&h="+height+"&q=90') !!}",
-          dataType:'JSON',
-          type:'GET',
-          success:function(data){
-            // console.log(x);
-            $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
-            $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-            // console.log("background-image:url('img/20241210031407-ari.jpg')");
-            $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
-
-          }
-        })
-    }
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      //alert('mobile');
-      $(".text_mob").show();
-      $(".text_desktop").hide();
-      $(".navbar-brand").hide();
-      $(".navbar-brand-mob").show();
-      $(".foto_besar").attr({width:'100%'});
-    }else{
-      $(".text_mob").hide();
-      $(".text_desktop").show();
-      $(".navbar-brand-mob").hide();
-      $(".navbar-brand").show();
-      $(".foto_besar").attr({width:'100%'});
-    }
-    // console.log($(".all_div").width());
-    function copyClipboard() {
-      // Get the text field
-      var copyText = document.getElementById("webURL");
-
-      // Select the text field
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); // For mobile devices
-
-      // Copy the text inside the text field
-      navigator.clipboard.writeText(copyText.value);
-
-      // Alert the copied text
-      swal.fire({
-        position: "bottom-end",
-        text: "Link Copied",
-        showConfirmButton: false,
-        timer:1500,
-      })
-    }
-  </script>
+  <script src="{{ asset('web/assets/js/baca_artikel.js') }}"></script>
 </body>
 
 </html>
