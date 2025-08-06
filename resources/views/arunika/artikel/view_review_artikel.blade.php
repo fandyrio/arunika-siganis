@@ -205,7 +205,7 @@
                                             <hr />
                                             <center>
                                             <button class='btn btn-success btn-sm saveArtikel'>Simpan</button><br />
-                                            <span style='color:red;font-weight:bold;font-size:0.8rem;'>*Jika sudah menyimpan, silahkan menekan tombol kirim. <br />Tombol kirim akan aktif bila anda telah menyimpan dokumen perbaikan</span>
+                                            <span style='color:red;font-weight:bold;font-size:0.8rem;'>*Jika sudah menyimpan, silahkan menekan tombol kirim Pada Point no 5. <br />Tombol kirim akan aktif bila anda telah menyimpan dokumen perbaikan</span>
                                             </center>
                                         </div>
                                     </div>
@@ -225,7 +225,7 @@
                             </div>
                             @if($data_review->data_review[$x]->send_reviewer_at === null)
                                 {!! $data_review->data_review[$x]->edoc_perbaikan_penulis === null ? "<span style='color:red;font-weight:bold;'>Belum dapat mengirimkan perbaikan" : "<br />
-                                    <button class='btn btn-success btn-sm sendReviewToAuthor' data-link='send-perbaikan-penulis' data-token='".Crypt::encrypt($token_a)."' data-target='".Crypt::encrypt($token_r)."'><span class='fab fa-telegram-plane'></span> Kirim Perbaikan</button>" !!}
+                                    <button class='btn btn-danger btn-sm sendReviewToAuthor' data-link='send-perbaikan-penulis' data-token='".Crypt::encrypt($token_a)."' data-target='".Crypt::encrypt($token_r)."'><span class='fab fa-telegram-plane'></span> Kirim Perbaikan</button>" !!}
                             @else
                                 <br />
                                 <b>Waktu Kirim :</b>{!! date('d M Y', strtotime($data_review->data_review[$x]->send_reviewer_at)) !!} Pukul {!! date('H:i', strtotime($data_review->data_review[$x]->send_reviewer_at)) !!} wib
@@ -244,5 +244,3 @@
         </div>
     @endfor
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=30') !!}"></script>

@@ -30,13 +30,17 @@ use App\Issue_artikel;
 use PhpOffice\PhpWord\IOFactory;
 use Dompdf\Dompdf;
 use App\Services\uploadImageService;
+use App\Services\artikelService;
 use Illuminate\Support\Facades\Storage;
 
 class artikelController extends Controller
 {
     protected $uploadService;
-    public function __construct(uploadImageService $uploadService){
+    protected $artikelServices;
+
+    public function __construct(uploadImageService $uploadService, artikelService $artikel_service){
         $this->uploadService=$uploadService;
+        $this->artikelServices=$artikel_service;
     }
     public function formNewArtikel($id_artikel, $v_init=null){
         $id_artikel_dec=Crypt::decrypt($id_artikel);
@@ -1028,9 +1032,25 @@ class artikelController extends Controller
             echo "Invalid token";
         }
     }
-    public function getDataReview($artikel_id){
+    public function getDataReview($artikel_id, $as){
         $data_review=[];
         $get_checklist_result=[];
+
+        if($as === "reviewer"){
+            $get_review_stage=Review_stage::where('status', false)
+                                ->where('step', 4)
+                                ->whereRaw('send_reviewer_at is null')
+                                ->whereRaw('send_author_at is null')
+                                ->first();
+            if(!is_null($get_review_stage)){
+                $get_review_stage->status=true;
+                $get_review_stage->update();
+
+                $get_artikel=Artikel::where('id', $artikel_id)->first();
+                $get_artikel->step=4;
+                $get_artikel->update();
+            }
+        }
         $get_review_stage=Review_stage::join('reviewer_artikel', function($join){
                                     $join->on('reviewer_artikel.id_review', '=', 'review_stage.id')
                                         ->where('reviewer_artikel.status', true);
@@ -1038,6 +1058,7 @@ class artikelController extends Controller
                                 ->leftJoin('step_master', 'step_master.step_id', '=', 'review_stage.step')
                                 ->select('review_stage.*', 'step_master.step_text')
                                 ->where('reviewer_artikel.id_artikel', $artikel_id)
+                                ->where('review_stage.status', true)
                                 ->orderBy('reviewer_artikel.id', 'desc')
                                 ->get();
         $jumlah_review=$get_review_stage->count();
@@ -1094,7 +1115,8 @@ class artikelController extends Controller
             $get_data=Reviewer_artikel::join('pegawai', 'pegawai.id', '=', 'reviewer_artikel.id_pegawai')
                         ->join('review_stage', function($q){
                             $q->on('review_stage.id', '=', 'reviewer_artikel.id_review')
-                                ->where('reviewer_artikel.status', true);
+                                ->where('reviewer_artikel.status', true)
+                                ->where('review_stage.status', true);
                         })
                         ->join('artikel', 'artikel.id', '=', 'review_stage.id_artikel')
                         ->select('pegawai.*', 'reviewer_artikel.tgl_pilih', 'reviewer_artikel.tgl_mulai', 'reviewer_artikel.tgl_estimasi_selesai', 'reviewer_artikel.status', 'review_stage.review_ke', 'artikel.edoc_artikel', 'review_stage.edoc_perbaikan_penulis')
@@ -1103,7 +1125,7 @@ class artikelController extends Controller
                         ->orderBy('reviewer_artikel.id', 'desc')
                         ->get();
             $jumlah_reviewer=$get_data->count();
-            $data_review=$this->getDataReview($artikel_id);
+            $data_review=$this->getDataReview($artikel_id, 'author');
             //var_dump(count($data_review->data_review));die();
             //$get_hasil_review=Catatan_hasil_review::where('id_review', )
             $get_config=Config::where('config_name', 'blind_review')->first();
@@ -1128,7 +1150,7 @@ class artikelController extends Controller
                         ->orderBy('reviewer_artikel.id', 'desc')
                         ->get();
             $jumlah_reviewer=$get_data->count();
-            $data_review=$this->getDataReview($artikel_id);
+            $data_review=$this->getDataReview($artikel_id, 'reviewer');
             $get_config=Config::where('config_name', 'blind_review')->first();
             if(!is_null($get_config)){
                 $blind_review=strip_tags($get_config['config_value']);
@@ -1814,8 +1836,12 @@ public function removeHasilReview(Request $request){
                             if($update_perbaikan){
                                 $msg="Berhasil menyimpan data";
                                 //set reviewer lama
-
-                                
+                                $save_reviewer=$this->artikelServices->saveNextReviewer($id_artikel);
+                                if($save_reviewer['status']){
+                                    $msg.=" dan Reviewer";
+                                }else{
+                                    $msg.=" ".$save_reviewer['msg'];
+                                }
 
                             }else{
                                 $msg="Terjadi kesalahan sistem saat menyimpan data";
@@ -1900,7 +1926,7 @@ public function removeHasilReview(Request $request){
                         $this->sendWaNotification('send_perbaikan_author', $data_wa);
                     }
                 }else{
-                    $msg="Artikel ini tidak pada tahap pengiriman perbaikan";
+                    $msg="Artikel ini tidak pada tahap pengiriman perbaikan ";
                 }
             }else{
                 $msg="Anda tidak dapat melakukan pengiriman";
@@ -2082,7 +2108,7 @@ public function removeHasilReview(Request $request){
                         $publish=true;
                     }catch(\Exception $e){
                         DB::rollback();
-                        $msg="Terjadi kesalahan saat menyimpan data publish ".$e->getMessage(). " ".$get_review_stage->review_ke - 1;
+                        $msg="Terjadi kesalahan saat menyimpan data publish ".$e->getMessage();
                     }
                 }else{
                     $msg="Data tidak ditemukan";
