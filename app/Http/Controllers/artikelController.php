@@ -505,7 +505,7 @@ class artikelController extends Controller
                         $rules=[
                             'judul_artikel' => ['required'],
                             'kategori_artikel' => ['required','max:4'],
-                            'tentang_artikel' => ['required'],
+                            // 'tentang_artikel' => ['required'],
                         ];
                         if($check_data['judul'] === null || $check_data['judul'] === ""){
                             //first insert
@@ -609,7 +609,7 @@ class artikelController extends Controller
                                 if($path !== null){
                                     $check_data->edoc_artikel=$path;
                                 }
-                                $check_data->tentang_artikel=filter_var(str_replace(array("\n","\r"), '', (str_replace('"', "'", $request->tentang_artikel))), FILTER_SANITIZE_STRING);
+                                $check_data->tentang_artikel="";
                                 $check_data->step=$step_id;
                                 $update=$check_data->update();
                                 if($update){
@@ -1813,6 +1813,10 @@ public function removeHasilReview(Request $request){
                             $update_perbaikan=$get_data->update();
                             if($update_perbaikan){
                                 $msg="Berhasil menyimpan data";
+                                //set reviewer lama
+
+                                
+
                             }else{
                                 $msg="Terjadi kesalahan sistem saat menyimpan data";
                             }

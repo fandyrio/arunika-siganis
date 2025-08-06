@@ -39,12 +39,12 @@
                         </select>
                     </div>
                 </div>
-                <div class='row mb-6'>
+                {{-- <div class='row mb-6'>
                     <div class='col-lg-10'>
                         <label>Tentang artikel</label>
                         <textarea name='tentang_artikel' id="textStatement">{!! $tentang_artikel !!}</textarea>
                     </div>
-                </div>
+                </div> --}}
                 <div class='row mb-6'>
                     <div class='col-lg-8'>
                         <label>Keywords</label>
