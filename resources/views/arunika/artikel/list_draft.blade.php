@@ -52,5 +52,3 @@
             </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=12') !!}"></script>

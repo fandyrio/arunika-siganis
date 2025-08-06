@@ -36,7 +36,7 @@
             var url="img";
         }
       $.ajax({
-          url:url+"/"+target+"?w="+width+"&h="+height+"&q=90') !!}",
+          url:url+"/"+target+"?w="+width+"&h="+height+"&q=90",
           dataType:'JSON',
           type:'GET',
           success:function(data){
@@ -84,4 +84,7 @@
         timer:1500,
       })
     }
-  
+  $(".copyClipBoard").click(function(e){
+    e.preventDefault();
+    copyClipboard();
+  })

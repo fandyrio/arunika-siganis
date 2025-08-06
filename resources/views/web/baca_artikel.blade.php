@@ -232,12 +232,12 @@
                   <div class="col-lg-12">
                     <span class="h6" style='font-size:0.8rem;'>{!! date('d F Y', strtotime($artikel['publish_at'])) !!}</span> | 
                     <a class="text-warning icon-move-right" href="{!! url('penulis-artikel/'.preg_replace('/[^A-Za-z0-9\-]/', '-', strtolower($artikel['nama']))).'/'.Crypt::encrypt($artikel['id_pegawai']) !!}" style='font-size:0.8rem;font-weight:bold'><u>{!! $artikel['nama'] !!}</u></a>
-                    <span style='float:right;'><button class='btn btn-default btn-sm' onClick='copyClipboard()'><i class='fa fa-copy' style='font-size:1rem;'></i> <span class='text_desktop'>Copy Link</span></button></span>
+                    <span style='float:right;'><button class='btn btn-default btn-sm copyClipBoard'><i class='fa fa-copy' style='font-size:1rem;'></i> <span class='text_desktop'>Copy Link</span></button></span>
                   </div>
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! assets_storage($artikel['foto_penulis']) !!}" alt="bruce" loading="lazy"></center>
+                    <center><img class="shadow-xl position-relative z-index-2 foto_besar" src="{!! assets_storage(str_replace('public/', '', $artikel['foto_penulis'])) !!}" alt="{{ $artikel['nama'] }}" loading="lazy"></center>
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black;font-size:1rem;'>
@@ -316,7 +316,7 @@
                       $edoc=str_replace(".pdf", "", $file_pdf);
                     @endphp
                     <div class="row" style='padding-left:2%;padding-right:2%;margin-top:15px;'>
-                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! $list_other['foto_penulis'] !!}" data-prefix="artikel-img" style="width:30%"></div>
+                        <div class="col-lg-3 skleton_loading img artikel_terbaru_{!! $x !!}" data-target="{!! str_replace('public/', '', $list_other['foto_penulis']) !!}" data-prefix="artikel-img" style="width:30%"></div>
                         <div class="col-lg-9" style='width:70%;padding-right:5px !important;'>
                           <a href="{!! url('baca-artikel/'.strtolower($edoc).'/a-'.$list_other['id'].'arn'.$list_other['code_issue']) !!}">
                             <span class='text-red text-bold' style='font-size:0.7rem'>{!! $list_other['kategori'] !!}</span><br />
@@ -584,7 +584,6 @@
   <!-- Control Center for Material UI Kit: parallax effects, scripts for the example pages etc -->
   <!--  Google Maps Plugin    -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
   <script src="{!! asset('web/assets/js/material-kit.min.js?v=3.0.4') !!}" type="text/javascript"></script>
   <script src="{{ asset('web/assets/js/baca_artikel.js') }}"></script>
 </body>

@@ -26,7 +26,7 @@
         </table>
     </div>
     <div class='col-md-4'>
-        <img src="{!! Storage::url($data['foto_penulis']) !!}" width="100%">
+        <img src="{!! assets_storage($data['foto_penulis']) !!}" width="100%">
     </div>
 </div>
 <div class="row mb-3">

@@ -1,6 +1,6 @@
 <h5 style='color:#1BC5BD;font-weight:bold;'>Checklist Form Artikel</h5>
 <label class="checkbox" style='float:right'>
-    <input type="checkbox" onClick='checkuncheck(this)'> Check Lengkap Semua
+    <input type="checkbox" class="checkAll"> Check Lengkap Semua
     <span></span>
 </label><br />
 <form action="save-checklist-review">
@@ -35,5 +35,9 @@
             </tr>
     </table>
 </form>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
+<script nonce="arunika123">
+    $(".checkAll").click(function(e){
+        e.preventDefault();
+        checkuncheck(this);
+    })
+</script>

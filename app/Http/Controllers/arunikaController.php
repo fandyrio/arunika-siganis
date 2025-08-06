@@ -761,6 +761,7 @@ class arunikaController extends Controller
 
         if (!file_exists($originalPath)) {
             $originalPath = $defaultImage; // fallback
+            echo "File tidak ditemukan";
         }
         $image = Image::read($originalPath);
 

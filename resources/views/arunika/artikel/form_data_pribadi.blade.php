@@ -73,7 +73,7 @@
                    <input type='file' class='form-control foto_hakim <?= isset($foto_penulis) ? '' :'required_field' ?>' name='foto_hakim'>
                </div>
                <div class='col-lg-6 imagePreview'>
-                   <?= isset($foto_penulis) ? "<img src='".Storage::url($foto_penulis)."' width='40%'>" : "" ?>
+                   <?= isset($foto_penulis) ? "<img src='".assets_storage($foto_penulis)."' width='40%'>" : "" ?>
                </div>
            </div>
            <div class='row'>
@@ -81,23 +81,29 @@
                    <hr />
                        <center>
                            <button class='btn btn-primary btn-sm saveArtikel' type='submit'>Simpan</button>     
-                           <button class='btn btn-danger btn-sm back' onClick="loadDataPribadi('view')">Kembali</button>
+                           <button class='btn btn-danger btn-sm back'>Kembali</button>
                        </center>
                </div>
            </div>
     </form>
     <!--end::Form-->
    </div>
-   <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-   <script src="{!! asset('assets/js/arunika_services.js?q=1234') !!}"></script>
    @if($is_manual === 1)
-       <script>
+       <script nonce="arunika123">
            $(".input_manual").attr('checked', true);
        </script>
    @endif
    @if(!isset($hakim))
-       <script>
+       <script nonce="arunika123">
            $(".nip").val("{!! $nip !!}")
            $(".search-nip").trigger('click');
        </script>
    @endif
+   <script nonce="arunika123">
+    $(".back").click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        loadDataPribadi('view');
+    })
+   </script>

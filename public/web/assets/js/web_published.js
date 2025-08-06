@@ -28,7 +28,7 @@ async function runImg(jumlah_skleton, skleton){
 }
 async function setPhoto(width, height, target, type, x, prefix, skleton){
     const baseURL = window.location.pathname;
-    if(baseURL.includes('issue') || baseURL.includes('category')){
+    if(baseURL.includes('issue') || baseURL.includes('category') || baseURL.includes('tags')){
         var url="../img";
     }else{
         var url="img";

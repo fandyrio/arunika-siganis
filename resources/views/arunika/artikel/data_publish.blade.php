@@ -69,7 +69,7 @@
         </table>
     </div>
     <div class='col-4'>
-        <span class='imagePreview'><img src="{!! Storage::url($data['foto_penulis']) !!}" width='100%'></span>
+        <span class='imagePreview'><img src="{!! assets_storage($data['foto_penulis']) !!}" width='100%'></span>
         <br /><br />
         @if($data['step'] === 7 && isJM())
             <form id="updateFotoPenulis">
@@ -95,7 +95,7 @@
                 @if($data['code_issue'] === null)
                     <button class='btn btn-success btn-sm' disabled><span class='fab fa-telegram-plane'></span> Direct Publish</button>
                 @else
-                    <button class='btn btn-success btn-sm confirmPublish' data-target="{!! Crypt::encrypt($data['id']) !!}" onClick="confirmPublsih()"><span class='fab fa-telegram-plane'></span> Direct Publish</button>
+                    <button class='btn btn-success btn-sm confirmPublish' data-target="{!! Crypt::encrypt($data['id']) !!}"><span class='fab fa-telegram-plane'></span> Direct Publish</button>
                 @endif
                 @if($data['code_issue'] === null)
                     <button class='btn btn-warning btn-sm addTema' data-target="{!! Crypt::encrypt($data['id']) !!}">Masukkan Tema Artikel</button>
@@ -104,9 +104,7 @@
         @endif   
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js?q=8123') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=4') !!}"></script>
-<script>
+<script nonce="arunika123">
     $(document).ready(function(){
         $("#textTulisan").summernote({
             height:400,
@@ -124,6 +122,13 @@
         });
         //$("#textTulisan").summernote('fontName', 'Times New Roman');
         $('.note-editable').css({'font-family': 'Times New Roman', 'text-align':'justify'});
+
+        $(".confirmPublish").click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            confirmPublsih();
+        })
     }); 
     // $("#textTulisan").summernote("code", "<?php echo filter_var(str_replace(array("\n","\r"), '', (str_replace('"', "'", $text))), FILTER_SANITIZE_STRING) ?>");
 

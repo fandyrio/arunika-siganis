@@ -79,7 +79,7 @@ $(document).on("click",".list_menu", function(e){
         }
     })
 });
-$(".input_manual").change(function(e){
+$(document).on("change", ".input_manual", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -89,7 +89,7 @@ $(".input_manual").change(function(e){
         $(".input_manual").val(false);
     }
 })
-$(".search-nip").click(function(e){
+$(document).on("click", ".search-nip", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -130,37 +130,37 @@ $(".search-nip").click(function(e){
         }
     })
 });
-$(".foto_hakim").change(function(e){
+$(document).on("change", ".foto_hakim", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     readURLFile(this, "image", "foto_hakim");  
 });
-$(".edoc_artikel").change(function(e){
+$(document).on("change", ".edoc_artikel", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();   
     var read = readURLFile(this, 'edoc', 'edoc_artikel');
 })
-$(".changeDoc").click(function(e){
+$(document).on("click", ".changeDoc", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     $(".edoc_artikel").trigger('click');
 });
-$(".edoc_artikel_pub").change(function(e){
+$(document).on("change", ".edoc_artikel_pub", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();   
     readURLFile(this, 'edoc_pub', 'edoc_artikel_pub');
 })
-$(".changeDocPub").click(function(e){
+$(document).on("click", ".changeDocPub", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     $(".edoc_artikel_pub").trigger('click');
 })
-$("form").submit(function(e){
+$(document).on("submit", "form", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -223,10 +223,16 @@ $("form").submit(function(e){
                     $(".token_a").val(data.token_id);
                 }
                 if(typeof data.callForm !== "undefined"){
-                    eval(data.callForm);
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                 }
                 if(typeof data.callLink !== "undefined"){
-                    eval(data.callLink);
+                    callLink(data.callLink)
                 }
             }
             if(typeof data.closeModal !== "undefined"){
@@ -275,7 +281,7 @@ $(document).on("click",".tabs", function(e){
         loadDataPreparePublish();
     }
 });
-$(".remove_keyword").click(function(e){
+$(document).on("click", ".remove_keyword", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -298,7 +304,7 @@ $(".remove_keyword").click(function(e){
         }
     })
 });
-$(".agreement").change(function(e){
+$(document).on("change", ".agreement", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -309,7 +315,7 @@ $(".agreement").change(function(e){
     }
 });
 
-$(".btn-send").click(function(e){
+$(document).on("click", ".btn-send", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -341,7 +347,7 @@ $(".btn-send").click(function(e){
         }
     })
 });
-$(".detil_artikel").click(function(e){
+$(document).on("click", ".detil_artikel", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -358,7 +364,7 @@ $(".detil_artikel").click(function(e){
         }
     })
 });
-$(".addReviewer").click(function(e){
+$(document).on("click", ".addReviewer", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -377,7 +383,7 @@ $(".addReviewer").click(function(e){
     })
 });
 
-$(".addTema").click(function(e){
+$(document).on("click", ".addTema", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -397,7 +403,7 @@ $(".addTema").click(function(e){
     })
 })
 
-$(".addReview").click(function(e){
+$(document).on("click", ".addReview", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -424,7 +430,7 @@ $(".addReview").click(function(e){
         }
     })
 });
-$(".hasilReview").click(function(e){
+$(document).on("click", ".hasilReview", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -444,7 +450,7 @@ $(".hasilReview").click(function(e){
         }
     })
 });
-$(".cancelPublish").click(function(e){
+$(document).on("click", ".cancelPublish", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -465,7 +471,7 @@ $(".cancelPublish").click(function(e){
     })
 
 })
-$(".tgl_selesai").change(function(e){
+$(document).on("change", ".tgl_selesai", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -479,7 +485,7 @@ $(".tgl_selesai").change(function(e){
         return false;
     }
 });
-$(".editHasilReview").click(function(e){
+$(document).on("click", ".editHasilReview", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -500,7 +506,7 @@ $(".editHasilReview").click(function(e){
         }
     })
 });
-$(".sendReviewToAuthor").click(function(e){
+$(document).on("click", ".sendReviewToAuthor", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -520,9 +526,16 @@ $(".sendReviewToAuthor").click(function(e){
             sweatLoading();
             $.post(attr, {token:token, target:target}, function(data){
                 if(data.status){
-                    eval(data.callLink);
+                    // eval(data.callLink);
+                    
                     var icon="success";
-                    eval(data.callForm);
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                     $(".btn_place").html("Success sent data");
                 }else{
                     var icon="error";
@@ -540,7 +553,7 @@ $(".sendReviewToAuthor").click(function(e){
         }
     })
 })
-$(".addNotesToAuthor").click(function(e){
+$(document).on("click", ".addNotesToAuthor", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -560,7 +573,7 @@ $(".addNotesToAuthor").click(function(e){
         }
     })
 });
-$(".removeHasil").click(function(e){
+$(document).on("click", ".removeHasil", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -579,7 +592,13 @@ $(".removeHasil").click(function(e){
         if (result.value) {
             $.post('remove-hasil-review', {target_id:target_id, token:$("input[name='token_a']").val(), target:$(input[index]).val()}, function(data){
                 if(data.status){
-                    eval(data.callLink);
+                    // eval(data.callLink);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                     var icon="success";
                     var label="Dihapus";
                 }else{
@@ -603,7 +622,7 @@ $(".removeHasil").click(function(e){
         }
     });
 })
-$(".hapusEdoc").click(function(e){
+$(document).on("click", ".hapusEdoc", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -621,7 +640,13 @@ $(".hapusEdoc").click(function(e){
         if (result.value) {
             $.post('remove-edoc-perbaikan', {target_id:target_id, token:token}, function(data){
                 if(data.status){
-                    eval(data.callForm);
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                     var icon="success";
                     var label="Dihapus";
                 }else{
@@ -645,7 +670,7 @@ $(".hapusEdoc").click(function(e){
         }
     });
 });
-$(".acceptToPublish").click(function(e){
+$(document).on("click", ".acceptToPublish", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -664,7 +689,13 @@ $(".acceptToPublish").click(function(e){
         if (result.value) {
             $.post('accept-to-publish', {token_a:token_a, token_r:token_r}, function(data){
                 if(data.status){
-                    eval(data.callForm);
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                     var icon="success";
                     var label="Dihapus";
                 }else{
@@ -688,7 +719,7 @@ $(".acceptToPublish").click(function(e){
         }
     });
 })
-$(".directPublish").click(function(e){
+$(document).on("click", ".directPublish", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -705,7 +736,13 @@ $(".directPublish").click(function(e){
         if (result.value) {
             $.post('direct-to-publish', {target:target}, function(data){
                 if(data.status){
-                    eval(data.callForm);
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
                     var icon="success";
                     var label="Dihapus";
                 }else{
@@ -729,7 +766,7 @@ $(".directPublish").click(function(e){
         }
     });
 })
-$(".driven").click(function(e){
+$(document).on("click", ".driven", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -757,7 +794,7 @@ $(".driven").click(function(e){
         $(".review_"+target).hide('slow');
     }
 });
-$(".edit").click(function(e){
+$(document).on("click", ".edit", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -784,13 +821,13 @@ $(".edit").click(function(e){
         }
     })
 });
-$(".changePhoto").click(function(e){
+$(document).on("click", ".changePhoto", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     $(".changePhotoPenulis").trigger('click');
 });
-$(".changePhotoPenulis").change(function(e){
+$(document).on("change", ".changePhotoPenulis", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -845,6 +882,12 @@ $(document).on("click", ".toogleShowHide", function(e){
             sweatLoading();
             $.post('hide-artikel', {dest:dest, target:target}, function(data){
                 if(data.status){
+                    // if (data.function && typeof window[data.function] === 'function') {
+                    //     const args = Array.isArray(data.args) ? data.args : [data.args];
+                    //     window[data.function](...args);
+                    // } else {
+                    //     console.warn("Fungsi tidak ditemukan:", data.function);
+                    // }
                     callLink(data.callLink);
                     var icon="success";
                 }else{
@@ -863,7 +906,7 @@ $(document).on("click", ".toogleShowHide", function(e){
         }
     })
 });
-$(".deleteArtikel").click(function(e){
+$(document).on("click", ".delete_artikel", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -903,7 +946,7 @@ $(".deleteArtikel").click(function(e){
         }
     })
 });
-$(".removeArtikel").click(function(e){
+$(document).on("click", ".removeArtikel", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -943,3 +986,15 @@ $(".removeArtikel").click(function(e){
         }
     })
 });
+$(document).on("click",".editDataPribadi", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    loadDataPribadi('form');
+})
+$(document).on("click", ".editDataArtikel",  function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    loadDataArtikel('form');
+})

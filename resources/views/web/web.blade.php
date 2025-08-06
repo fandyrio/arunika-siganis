@@ -306,7 +306,7 @@
                 <div class="col-md-12">
                   <div class="row">
                   <!-- style="background-image:url({!! $list_artikel['foto_penulis'] !!});" -->
-                    <div class="col-md-3 img img_{!! $index !!} skleton_loading" data-prefix="pop" data-target="{!! $list_artikel['foto_penulis'] !!}" id="">
+                    <div class="col-md-3 img img_{!! $index !!} skleton_loading" data-prefix="pop" data-target="{!! str_replace('public/', '', $list_artikel['foto_penulis']) !!}" id="">
                       
                     </div>
                     <div class="col-md-9 mt-3 text-judul text-hover" data-target='img' data-idx='{!! $index !!}'>
@@ -367,7 +367,7 @@
           <div class="col-lg-3 {!! $class_home !!}">
             <a href="{!! url('baca-artikel/'.strtolower($list_artikel['edoc_pdf']).'/a-'.Crypt::decrypt($list_artikel['token_a']).'arn'.$list_artikel['code_issue']) !!}">
               <div class="row padding_lat_ar" style='padding:3%;'>
-                <div class="col-lg-12 {!! $class_img !!} skleton_loading foto_penulis_grid img artikel_terbaru_{!! $x !!}" data-prefix="news" data-target="{!! $list_artikel['foto_penulis'] !!}" style=""></div>
+                <div class="col-lg-12 {!! $class_img !!} skleton_loading foto_penulis_grid img artikel_terbaru_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('public/', '', $list_artikel['foto_penulis']) !!}" style=""></div>
                 <div class="col-lg-12 {!! $class_txt !!} text-judul text-hover" data-target='artikel_terbaru' data-idx="{!! $x !!}" style='padding:0'>
                   <span class='text-sm text-red text-bold line-height-3'>{!! $list_artikel['kategori_artikel'] !!}</span><br />
                   <span class='artikel-title'>{!! ucwords(strtolower($list_artikel['judul'])) !!}</span><br />
@@ -412,7 +412,7 @@
               <div class="col-lg-4 mt-3">
                 <a href="#" id="earlyView">
                   <div class="row">
-                    <div class="col-lg-4 skleton_loading img early_view_{!! $x !!}" data-prefix="news" data-target="{!! $list_early_view['foto_penulis'] !!}" style=""></div>
+                    <div class="col-lg-4 skleton_loading img early_view_{!! $x !!}" data-prefix="news" data-target="{!! str_replace('public/', '', $list_early_view['foto_penulis']) !!}" style=""></div>
                     <div class="col-lg-8 text-judul">
                       <span class='text-red text-bold line-height-3'>{!! $list_early_view['kategori_artikel'] !!}</span><br />
                       <span class='artikel-title text-hover' data-target='early_view' data-idx="{!! $x !!}">{!! ucwords(strtolower($list_early_view['judul'])) !!}</span><br />

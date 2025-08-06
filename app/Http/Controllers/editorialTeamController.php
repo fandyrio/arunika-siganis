@@ -136,10 +136,10 @@ class editorialTeamController extends Controller
                     $msg="Terjadi kesalahan pada saat penyimpanan data editor";
                 }
             }
-        }catch(DecrpytException $e){
+        }catch(DecryptException $e){
             $msg="Invalid data NIP";
         }
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'callLink'=>"list-editorial-team"]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'function'=>'callLink', 'args'=>["list-editorial-team"]]);
     }
     public function removeEditor(Request $request){
         $status=false;
@@ -157,11 +157,11 @@ class editorialTeamController extends Controller
                     $msg="Terjadi kesalahan saat menghapus data";
                 }
             }else{
-                $msg="Data tidak ditemukan ".$editor_id;
+                $msg="Data tidak ditemukan ";
             }
         }catch(DecryptException $e){
             $msg="Data tidak valid";
         }
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'callLink'=>"callLink('list-editorial-team')"]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'function'=>"callLink", "args"=>["list-editorial-team"]]);
     }
 }

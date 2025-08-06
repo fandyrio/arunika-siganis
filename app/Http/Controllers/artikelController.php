@@ -393,7 +393,7 @@ class artikelController extends Controller
                 }   
             }
         }
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>$token_id, 'callForm'=>$callFn, 'ext'=>$real_extention]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>$token_id, 'callForm'=>true, 'function'=>'loadDataPribadi', 'args'=>'view', 'ext'=>$real_extention]);
     }
     public function updateDataPribadi(Request $request){
         $status=false;
@@ -487,7 +487,7 @@ class artikelController extends Controller
             $msg="Data Hakim tidak sesuai";
         }
         
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'callForm'=>"loadDataPribadi('view')", 'token_id'=>Crypt::encrypt($artikel_id), 'ext'=>$real_extention, 'type'=>$type]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataPribadi', 'args'=>['view'], 'token_id'=>Crypt::encrypt($artikel_id), 'ext'=>$real_extention, 'type'=>$type]);
     }
     public function updateDataArtikel(Request $request){
         $status=false;
@@ -654,7 +654,7 @@ class artikelController extends Controller
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>$callForm]);
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'loadDataArtikel', 'args'=>['view']]);
     }
     public function downloadFile($file, $type){
         try{
@@ -1263,7 +1263,7 @@ class artikelController extends Controller
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_step, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>'loadDataReview()', 'closeModal'=>true]);
+        return response()->json(['status'=>$update_step, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[], 'closeModal'=>true]);
     }
     public function formTambahReview(Request $request){
         try{
@@ -1353,7 +1353,7 @@ class artikelController extends Controller
             //$msg="Pastikan semua telah dicheck";
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$save_hasil, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'closeModal'=>$close_modal, 'callForm'=>'loadDataReview()']);
+        return response()->json(['status'=>$save_hasil, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'closeModal'=>$close_modal, 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[]]);
     }
     public function formTambahHasilReview(Request $request){
         try{
@@ -1431,7 +1431,7 @@ class artikelController extends Controller
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$save_hasil, 'msg'=>$msg, 'closeModal'=>$close_modal, 'callForm'=>'loadDataReview()', 'token_id'=>Crypt::encrypt($artikel_id)]);
+        return response()->json(['status'=>$save_hasil, 'msg'=>$msg, 'closeModal'=>$close_modal, 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[], 'token_id'=>Crypt::encrypt($artikel_id)]);
     }
     public function updateHasilReview(Request $request){
         $update_hasil=false;
@@ -1479,7 +1479,7 @@ class artikelController extends Controller
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_hasil, 'msg'=>$msg, 'closeModal'=>$close_modal, 'callForm'=>'loadDataReview()', 'token_id'=>Crypt::encrypt($artikel_id)]);
+        return response()->json(['status'=>$update_hasil, 'msg'=>$msg, 'closeModal'=>$close_modal, 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[], 'token_id'=>Crypt::encrypt($artikel_id)]);
     }
 public function removeHasilReview(Request $request){
         $remove_hasil=false;
@@ -1519,7 +1519,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$remove_hasil, 'msg'=>$msg, 'callLink'=>'loadDataReview()', 'token_id'=>Crypt::encrypt($artikel_id)]);
+        return response()->json(['status'=>$remove_hasil, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[], 'token_id'=>Crypt::encrypt($artikel_id)]);
     }
     public function formTambahCatatan(Request $request){
         try{
@@ -1594,7 +1594,7 @@ public function removeHasilReview(Request $request){
         }catch(ValidationException $e){
             $msg=$e->validator->errors()->first();
         }
-        return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>'loadDataReview()', 'token_id'=>Crypt::encrypt($artikel_id), 'closeModal'=>$close_modal]);
+        return response()->json(['status'=>$update, 'msg'=>$msg, 'function'=>'loadDataReview', 'args'=>[], 'token_id'=>Crypt::encrypt($artikel_id), 'closeModal'=>$close_modal]);
     }
     public function sendReviewResult(Request $request){
         $update_review_stage=false;
@@ -1686,7 +1686,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_review_stage, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>'loadDataReview()']);
+        return response()->json(['status'=>$update_review_stage, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=> 'loadDataReview', 'args'=>[]]);
     }
     public function cancelReviewResultSent(Request $request){
         $update_review_stage=false;
@@ -1754,7 +1754,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_review_stage, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>'loadDataReview()']);        
+        return response()->json(['status'=>$update_review_stage, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[]]);        
     }
     public function savePerbaikanArtikel(Request $request){
         $update_perbaikan=false;
@@ -1829,7 +1829,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
            $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_perbaikan, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($id_artikel), 'callForm'=>"loadDataReviewAuthor()"]);
+        return response()->json(['status'=>$update_perbaikan, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($id_artikel), 'callForm'=>true, 'function'=>'loadDataReviewAuthor', 'args'=>[]]);
     }
     public function removeEdocPerbaikan(Request $request){
         $update_edoc_perbaikan=false;
@@ -1860,7 +1860,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_edoc_perbaikan, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>'loadDataReviewAuthor()']);
+        return response()->json(['status'=>$update_edoc_perbaikan, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'loadDataReviewAuthor', 'args'=>[]]);
     }
     public function sendPerbaikanPenulis(Request $request){
         $update_step=false;
@@ -1904,7 +1904,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update_step, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>'loadDataReviewAuthor()']);
+        return response()->json(['status'=>$update_step, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'loadDataReviewAuthor', 'args'=>[]]);
     }
     public function formCancelPublish(Request $request){
         try{
@@ -1979,7 +1979,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             echo "Invalid token";
         }
-        return response()->json(['status'=>$update_data, 'msg'=>$msg, 'callForm'=>'loadDataReview()', 'token_id'=>$request->token_a, 'closeModal'=>true]);
+        return response()->json(['status'=>$update_data, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataReview', 'args'=>[], 'token_id'=>$request->token_a, 'closeModal'=>true]);
     }
     public function acceptToPublish(Request $request){
         $publish=false;
@@ -2050,7 +2050,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>'loadDataPublish()']);
+        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>[]]);
     }
     public function directToPublish(Request $request){
         $publish=false;
@@ -2089,7 +2089,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>'loadDataPublish()']);
+        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>[]]);
     }
     public function dataPublish(Request $request){
         try{
@@ -2198,7 +2198,7 @@ public function removeHasilReview(Request $request){
         }else{
             $msg="Akses ditolak";
         }
-        return response()->json(['status'=>$update, 'callForm'=>'loadDataPublish()', 'msg'=>$msg]);
+        return response()->json(['status'=>$update, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>true, 'msg'=>$msg]);
     }
     public function previewArtikel($artikel_id){
         if(isJM()){
@@ -2314,7 +2314,7 @@ public function removeHasilReview(Request $request){
         }else{
             $msg="Akses ditolak";
         }
-        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>'loadDataPublish()']);
+        return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>true, 'args'=>[], 'function'=>'loadDataPublish']);
     }
     public function checkDataPersonal(Request $request){
         $check=false;
@@ -2456,7 +2456,7 @@ public function removeHasilReview(Request $request){
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update, 'msg'=>$msg, 'callForm'=>'loadDataPublish()', 'token_id'=>Crypt::encrypt($get_publish_data['id_artikel']), 'closeModal'=>true]);
+        return response()->json(['status'=>$update, 'msg'=>$msg, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>[], 'token_id'=>Crypt::encrypt($get_publish_data['id_artikel']), 'closeModal'=>true]);
     }
     public function sendWaNotification($category, $data_wa){
         $domain="domain belum disetting";

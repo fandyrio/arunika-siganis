@@ -35,14 +35,14 @@
                 </table>
             </div>
             <div class='col-3'>
-                <img src="{!! Storage::url($data['foto_penulis']) !!}" width='100%'>
+                <img src="{!! assets_storage($data['foto_penulis']) !!}" width='100%'>
             </div>
         </div>
         <div class='row'>
             <div class="col-12">
                 <hr />
                     @if($data['step'] < 3)
-                        <button class='btn btn-danger btn-sm' onClick="loadDataPribadi('form')">Edit</button>
+                        <button class='btn btn-danger btn-sm editDataPribadi'>Edit</button>
                     @endif
                     <button class='btn btn-info btn-sm tabs' style='float:right;' data-target="artikel">Selanjutnya ></button>
 
@@ -50,5 +50,3 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>

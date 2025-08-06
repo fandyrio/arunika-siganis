@@ -63,8 +63,6 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=123451111112') !!}"></script>
-<script>
+<script nonce="arunika123">
     loadDataDetilArtikel();
 </script>

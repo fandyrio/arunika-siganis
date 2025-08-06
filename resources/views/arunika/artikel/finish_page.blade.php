@@ -6,5 +6,3 @@
         <button class='btn btn-info btn-md list_menu' data-target="list_artikel_proses">< Kembali ke Daftar Artikel</button>
     </p>
 </center>
-<script src="{!! asset('assets/js/arunika_services.js?q=12345') !!}"></script>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>

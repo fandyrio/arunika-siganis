@@ -74,10 +74,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js?q=123') !!}"></script>
-<script>
+<script nonce="arunika123">
     // setTimeout(function(){
     //     loadDataPribadi();
     // }, 4000);

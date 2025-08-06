@@ -95,9 +95,7 @@
         </div>
     </div>
 </div>
-<script src="{!! asset('assets/js/arunika_services.js?q=123123') !!}"></script>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="arunika123">
 $(document).ready(function(){
     $("#textStatement").summernote({
         height:400,

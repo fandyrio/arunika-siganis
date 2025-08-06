@@ -19,5 +19,3 @@
             </div>
         </div>
 </form>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services.js') !!}"></script>

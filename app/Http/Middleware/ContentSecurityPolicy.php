@@ -18,7 +18,7 @@ class ContentSecurityPolicy
         // return $next($request);
         $response=$next($request);
         $response->headers->set('Content-Security-Policy',
-        "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none';");
+        "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com https://fonts.googleapis.com https://keenthemes.com/ 'nonce-arunika123'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' data: https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none';");
 
         return $response;
     }

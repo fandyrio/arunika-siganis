@@ -23,5 +23,3 @@
         </div>
     </div>
 </form>
-<script src="{!! asset('assets/js/arunika_services.js?q=2') !!}"></script>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>

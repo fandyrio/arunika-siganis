@@ -15,7 +15,7 @@
                     <div class="valid-feedback">Valid.</div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class='col-lg-1'><br /><button class='btn btn-info btn-sm search-nip'>Cari NIP</button></div>
+                <div class='col-lg-1'><br /><button class='btn btn-info btn-sm search-nip-editorial'>Cari NIP</button></div>
                 <div class='col-lg-5'>
                 <label>Sebagai</label>
                 <select class='form-control required_field' name='sebagai'>
@@ -60,5 +60,5 @@
         </form>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js') !!}"></script>
+{{-- <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js') !!}"></script> --}}

@@ -169,7 +169,7 @@
                 </div>
                 <div class="row mb-4">
                   <div class="col-lg-12">
-                  <img class=" z-index-2" src="{!! asset($artikel['foto_penulis']) !!}" width="100%" alt="bruce" loading="lazy">
+                  <img class=" z-index-2" src="{!! assets_storage(str_replace('public/', '', $artikel['foto_penulis'])) !!}" width="100%" alt="bruce" loading="lazy">
                   </div>
                 </div>
                 <p class="fn-sz-md mb-0 artikel-read-text" style='text-align:justify;color:black !important;font-size:1rem;'>
