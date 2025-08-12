@@ -16,7 +16,7 @@
             @foreach($issue as $list_issue)
             <div class="col-lg-3 col-sm-6">
                 <div class="card card-plain">
-                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="img-artikel" data-target="{{ $list_issue['flyer'] }}" style="min-height:5rem;">
+                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="img-artikel" data-target="{{ str_replace('public/', '', $list_issue['flyer']) }}" style="min-height:5rem;">
                         <a class="d-block blur-shadow-image">
                             {{-- <img src="{!! $list_issue['flyer'] !!}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg" loading="lazy"> --}}
                         </a>
