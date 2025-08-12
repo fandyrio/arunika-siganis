@@ -6,7 +6,7 @@
     });
     var x=0;
     setTimeout(function(e){
-      $.post('{!! url("validate-reader") !!}', {token:"{!! Crypt::encrypt($artikel['id']) !!}"}, function(data)
+      $.post('validate-reader', {token:"{!! Crypt::encrypt($artikel['id']) !!}"}, function(data)
       {
           //console.log('validate');
       });

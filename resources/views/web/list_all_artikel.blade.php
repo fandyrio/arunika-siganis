@@ -24,7 +24,7 @@
                 @foreach($artikel as $list_artikel)
                 <div class="col-lg-3 col-sm-6 mb-3">
                     <div class="card card-plain">
-                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! $list_artikel['foto_penulis'] !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
+                        <div class="card-header p-0 position-relative skleton_loading" data-prefix="artikel-img" data-target="{!! str_replace('public/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;background-size:cover;border-radius:10px 10px 10px 10px;">
                             <a class="d-block blur-shadow-image">
                             </a>
                         </div>
@@ -86,43 +86,3 @@
 </div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-<script>
-
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-})
-
-setTimeout(function(){
-    var skleton=$(".skleton_loading");
-    var jumlah_skleton=$(".skleton_loading").length;
-    runImg(jumlah_skleton, skleton);
-},1000)
-async function runImg(jumlah_skleton, skleton){
-    for(var x=0;x<jumlah_skleton;x++){
-        console.log(x);
-        var target=$(skleton[x]).data('target');
-        var width=$(skleton[x]).width();
-        var height=$(skleton[x]).height();
-        var prefix=$(skleton[x]).data('prefix');
-        var type="artikel-img";
-        //alert(width+"x"+height);
-        let printFoto=await setPhoto(width, height, target, type, x, prefix, skleton);
-    }
-}
-async function setPhoto(width, height, target, type, x, prefix, skleton){
-    $.ajax({
-        url:'img/'+target+'?w='+width+'&h='+height+'&q=90',
-        dataType:'JSON',
-        type:'GET',
-        success:function(data){
-            $(".skleton_loading[data-target='"+target+"']").addClass('foto_penulis');
-            $(".skleton_loading[data-target='"+target+"']").removeClass('skleton_loading');
-            // console.log("background-image:url('img/20241210031407-ari.jpg')");
-            $(skleton[x]).css({"background-image":"url('"+data.background+"')"});
-        }
-    })
-}
-
-</script>

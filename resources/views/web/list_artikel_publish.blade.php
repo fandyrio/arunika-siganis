@@ -16,7 +16,7 @@
             @foreach($artikel as $list_artikel)
             <div class="col-lg-3 col-sm-3">
                 <div class="card card-plain">
-                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="img-artikel" data-target="{!! $list_artikel['foto_penulis'] !!}" style="min-height:200px;width:100%;">
+                    <div class="card-header p-0 position-relative skleton_loading" data-prefix="img-artikel" data-target="{!! str_replace('public/', '', $list_artikel['foto_penulis']) !!}" style="min-height:200px;width:100%;">
                         <a class="d-block blur-shadow-image">
                             
                         </a>

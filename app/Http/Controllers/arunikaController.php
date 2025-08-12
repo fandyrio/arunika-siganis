@@ -503,7 +503,7 @@ class arunikaController extends Controller
             }else{
                 $msg="exists";
             }
-        }catch(DecrpytException $e){
+        }catch(DecryptException $e){
             $msg="Invalid token";//should be save
         }
         return response()->json(['status'=>$update, 'msg'=>$msg]);
