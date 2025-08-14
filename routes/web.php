@@ -32,6 +32,7 @@ Route::get('test/{a}', 'loginController@test')->name('test');
 
 Route::get('dashboard', 'dashboardController@index')->name('dashboard')->middleware('cas.auth');
 
+
 Route::get('form-new-artikel/{token}/{v_init?}', 'artikelController@formNewArtikel')->name('form-new-artikel')->middleware('cas.auth');
 Route::post('form-data-pribadi', 'artikelController@formDataPribadi')->name('form-data-pribadi')->middleware('cas.auth');
 Route::post('search-nip', 'artikelController@searchNIP')->name('search-nip')->middleware('cas.auth');

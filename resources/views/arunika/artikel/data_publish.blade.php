@@ -71,7 +71,7 @@
     <div class='col-4'>
         <span class='imagePreview'><img src="{!! assets_storage($data['foto_penulis']) !!}" width='100%'></span>
         <br /><br />
-        @if($data['step'] === 7 && isJM())
+        @if(($data['step'] === 7 || $data['step'] === 8)  && isJM())
             <form id="updateFotoPenulis">
                 <input type='hidden' name='token_a' value="{!! Crypt::encrypt($data['id']) !!}">
                 <input type='file' class='form-control changePhotoPenulis' name='foto_penulis' style='display:none;'>

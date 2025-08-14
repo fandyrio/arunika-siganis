@@ -29,7 +29,7 @@
                             $clean=str_replace('upload/edoc/artikel/pdf/', '', $list_artikel['edoc_pdf']);
                             $explode=explode('.pdf', $clean);
                             $link='baca-artikel/'.strtolower($explode[0]).'/'.Crypt::encrypt($list_artikel['id']);
-                            $link='baca-artikel/'.strtolower($explode[0]).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
+                            $link='baca-artikel/'.strtolower(str_replace('public/', '', $explode[0])).'/a-'.''.$list_artikel['id'].'arn'.$list_artikel['code_issue'];
                         @endphp
                         <span class='text-purple fn-sz-1  text-bold'>{!! $list_artikel['nama'] !!}</span>
                         <h6>
