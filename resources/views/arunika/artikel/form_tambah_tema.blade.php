@@ -1,4 +1,4 @@
-<form action="update-tema">
+<form action="update-tema" class="form-config">
     @csrf
         <div class='row mb-12'>
             <div class='col-lg-12'>

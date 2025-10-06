@@ -103,6 +103,7 @@ $(document).on("submit", "form", function(e){
                 if(typeof data.callLink !== "undefined"){
                     callLink(data.callLink);
                 }else if(typeof data.btnBack !== "undefined"){
+                    console.log(data.btnBack);
                     $("."+data.btnBack).trigger('click');
                 }
             }
@@ -189,7 +190,7 @@ $(document).on("click", ".edit", function(e){
     e.stopImmediatePropagation();
     var pattern=$(this).data('pattern');
     var token_id=$(this).data('token_i');
-    //alert(pattern +" "+token_id);
+    // alert(pattern +" "+token_id);
     if(pattern === "issue_artikel"){
         var url="edit-issue-artikel";
         setHeader('Artikel', 'Edit Issue Artikel');
@@ -199,6 +200,12 @@ $(document).on("click", ".edit", function(e){
     }else if(pattern === "pengumuman_arunika"){
         var url="edit-pengumuman";
         setHeader("Pengumuman", "Edit Pengumuman");
+    }else if(pattern === "issue_artikel"){
+        var url="edit-issue-artikel";
+        setHeader('Artikel', 'Edit Issue Artikel');
+    }else if(pattern === "pertanyaan"){
+        var url="edit-pertanyaan";
+        setHeader('Config', 'Edit Pertanyaan Artikel');
     }
 
     $.ajax({
@@ -215,6 +222,9 @@ $(document).on("click", ".edit", function(e){
                 return false;
             }
             $(".container").html(data);
+        },error:function(data){
+            console.log(data);
+            closeLoading();
         }
     })
 });
@@ -312,4 +322,12 @@ $(document).on("click", ".removePegawai", function(e){
             )
         }
     })
+});
+$(document).on("click", ".backToList", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var fn=$(this).data('fn');
+    var dst=$(this).data('dst');
+    window[fn](dst);
 })

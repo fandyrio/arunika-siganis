@@ -103,11 +103,11 @@
                 <div class='col-lg-8'>
                     <hr />
                     <button class='btn btn-success btn-md saveArtikel'>Simpan</button>
-                    <button class="btn btn-danger btn-md back" type="button" onClick="callLink('list-issue-artikel')">Kambali</button>
+                    <button class="btn btn-danger btn-md backToList" type="button"  data-fn="callLink"  data-dst="list-issue-artikel" data-paste="callLink('list-issue-artikel')">Kambali</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js?q=1234') !!}"></script>
+{{-- <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js?q=1234') !!}"></script> --}}

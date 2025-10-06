@@ -18,9 +18,9 @@
                     <td>{!! $x !!}</td>
                     <td style='width:50%;'>{!! $list_checklist['pertanyaan'] !!}</td>
                     <td>
-                        <input type='checkbox' class='form-check ya' name="pertanyaan_{!! $list_checklist['id'] !!}"  onClick="onlyCheckOne(this)" value="1" {!! $list_checklist['hasil'] === 1 ? 'checked' : '' !!}>
+                        <input type='checkbox' class='form-check ya' name="pertanyaan_{!! $list_checklist['id'] !!}"  value="1" {!! $list_checklist['hasil'] === 1 ? 'checked' : '' !!}>
                     </td>
-                    <td><input type='checkbox' class='form-check' value="0" onClick="onlyCheckOne(this)" name="pertanyaan_{!! $x !!}" {!! $list_checklist['hasil'] === 0 ? 'checked' : '' !!}></td>
+                    <td><input type='checkbox' class='form-check' value="0" name="pertanyaan_{!! $x !!}" {!! $list_checklist['hasil'] === 0 ? 'checked' : '' !!}></td>
                     <td>
                         <textarea class="form-control" name="catatan_{!! $x !!}">{!! $list_checklist['keterangan'] !!}</textarea>
                     </td>
@@ -39,5 +39,10 @@
     $(".checkAll").click(function(e){
         e.preventDefault();
         checkuncheck(this);
+    })
+    $(document).on("click", "input[type=checkbox]", function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        onlyCheckOne(this);
     })
 </script>

@@ -160,7 +160,7 @@ $(document).on("click", ".changeDocPub", function(e){
     e.stopImmediatePropagation();
     $(".edoc_artikel_pub").trigger('click');
 })
-$(document).on("submit", "form", function(e){
+$(document).on("submit", ".form-artikel", function(e){
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -794,33 +794,30 @@ $(document).on("click", ".driven", function(e){
         $(".review_"+target).hide('slow');
     }
 });
-$(document).on("click", ".edit", function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    var pattern=$(this).data('pattern');
-    var token_id=$(this).data('token_i');
-    if(pattern === "issue_artikel"){
-        var url="edit-issue-artikel";
-        setHeader('Artikel', 'Edit Issue Artikel');
-    }
+// $(document).on("click", ".edit-tema", function(e){
+//     e.preventDefault();
+//     e.stopPropagation();
+//     e.stopImmediatePropagation();
+//     var pattern=$(this).data('pattern');
+//     var token_id=$(this).data('token_i');
+    
 
-    $.ajax({
-        beforeSend:function(){
-            showLoading();
-        },
-        url:url,
-        data:{pattern:pattern, token_id:token_id},
-        type:'POST',
-        success:function(data){
-            if(typeof data.status !== "undefined"){
-                callSwal('error', data.msg, true);
-                return false;
-            }
-            $(".container").html(data);
-        }
-    })
-});
+//     $.ajax({
+//         beforeSend:function(){
+//             showLoading();
+//         },
+//         url:url,
+//         data:{pattern:pattern, token_id:token_id},
+//         type:'POST',
+//         success:function(data){
+//             if(typeof data.status !== "undefined"){
+//                 callSwal('error', data.msg, true);
+//                 return false;
+//             }
+//             $(".container").html(data);
+//         }
+//     })
+// });
 $(document).on("click", ".changePhoto", function(e){
     e.preventDefault();
     e.stopPropagation();

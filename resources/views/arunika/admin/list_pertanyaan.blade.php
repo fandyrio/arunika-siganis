@@ -11,6 +11,7 @@
                 <th>No</td>
                 <th>Pertanyaan</th>
                 <th></th>
+                <th></th>
             </tr>
             @if($total > 0)
                 @foreach($list_pertanyaan as $list)
@@ -18,8 +19,13 @@
                         <td>{!! $no !!}</td>
                         <td>{!! $list['pertanyaan'] !!}</td>
                         <td>
-                            <button class='btn btn-danger btn-sm remove_config' style='border-radius:30%;height:100%;' data-pattern='remove-pertanyaan' data-target="{!! Crypt::encrypt($list['id']) !!}">
-                                <span class='far fa-trash-alt'></span>
+                             <button class="btn btn-info btn-sm edit" style='border-radius:30%;height:100%;' data-pattern='pertanyaan' data-token_i="{!! Crypt::encrypt($list['id']) !!}">
+                                <span class="far fa-edit"></span>
+                             </button>
+                        </td>
+                        <td>
+                             <button class='btn btn-danger btn-sm remove_config' style='border-radius:30%;height:100%;' data-pattern='remove-pertanyaan' data-target="{!! Crypt::encrypt($list['id']) !!}">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
@@ -38,10 +44,10 @@
                     $class_btn="btn-info";
                 }
             @endphp
-            <button class='btn {!! $class_btn !!} btn-sm' onClick="callLink('list-pertanyaan-review/{!! Crypt::encrypt($x) !!}')">{!! $x !!}</button> 
+            <button class='btn {!! $class_btn !!} btn-sm backToList' data-fn="callLink" data-dst="list-pertanyaan-review/{!! Crypt::encrypt($x) !!}" data-paste="callLink('list-pertanyaan-review/{!! Crypt::encrypt($x) !!}')">{!! $x !!}</button> 
         @endfor
         <span style='float:right;font-weight:bold'>Total data : {!! $total !!}</span>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js?q=test1') !!}"></script>
+{{-- <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js?q=test1') !!}"></script> --}}

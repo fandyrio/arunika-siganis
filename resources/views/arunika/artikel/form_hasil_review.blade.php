@@ -1,5 +1,5 @@
 <h5 style='color:#1BC5BD;font-weight:bold;'>Form Hasil Review Artikel</h5>
-<form action="{!! $action !!}">
+<form action="{!! $action !!}" class="form-artikel">
     @csrf
     <div class='row mb-6'>
         <div class='col-lg-12'>

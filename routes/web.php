@@ -20,111 +20,114 @@ Route::get('/', 'arunikaController@index');
 
 // Route::get('register', 'registerController@index')->name('register')->middleware('isNotLogin');
 Route::post('validate-input', 'registerController@validateNIP')->name('validate-nip')->middleware('isNotLogin');
-//Route::get('login', 'loginController@index')->name('login')->middleware('isNotLogin');
+Route::get('login', 'loginController@index')->name('login')->middleware('isNotLogin');
+Route::post('login', 'loginController@login')->name('login-post')->middleware('isNotLogin');
 /* Route::get('login', function(){
     cas()->authenticate();
 }); */
 Route::get('sso', 'loginController@sso')->name('sso')->middleware('isNotLogin');
 //Route::get('login', 'loginController@index')->name('check-login')->middleware('isNotLogin');
 // Route::get('logout', 'loginController@logout')->name('logout')->middleware('auth');
-Route::get('logout', 'loginController@logoutSso')->name('logout');
+Route::get('logout', 'loginController@logout')->name('logout');
 Route::get('test/{a}', 'loginController@test')->name('test');
 
-Route::get('dashboard', 'dashboardController@index')->name('dashboard')->middleware('cas.auth');
+Route::get('dashboard', 'dashboardController@index')->name('dashboard')->middleware('web');
 
 
-Route::get('form-new-artikel/{token}/{v_init?}', 'artikelController@formNewArtikel')->name('form-new-artikel')->middleware('cas.auth');
-Route::post('form-data-pribadi', 'artikelController@formDataPribadi')->name('form-data-pribadi')->middleware('cas.auth');
-Route::post('search-nip', 'artikelController@searchNIP')->name('search-nip')->middleware('cas.auth');
-Route::post('save-data-pribadi', 'artikelController@saveDataPribadi')->name('save-data-pribadi')->middleware('cas.auth');
-Route::post('update-data-pribadi', 'artikelController@updateDataPribadi')->name('update-data-pribadi')->middleware('cas.auth');
-Route::post('form-data-artikel', 'artikelController@formDataArtikel')->name('form-data-artikel')->middleware('cas.auth');
-Route::post('update-data-artikel', 'artikelController@updateDataArtikel')->name('update-data-artikel')->middleware('cas.auth');
-Route::get('download/{file}/{type}', 'artikelController@downloadFile')->name('download')->middleware('cas.auth');
-Route::post("remove-keyword", 'artikelController@removeKeyword')->name('remove-keyword')->middleware('cas.auth');
-Route::post('view-data-konfirmasi', 'artikelController@dataKonfirmasi')->name('view-data-konfirmasi')->middleware('cas.auth');
-Route::get('list-editorial-team', 'editorialTeamController@listTeam')->name('list-editorial-team')->middleware('cas.auth');
+Route::get('form-new-artikel/{token}/{v_init?}', 'artikelController@formNewArtikel')->name('form-new-artikel')->middleware('web');
+Route::post('form-data-pribadi', 'artikelController@formDataPribadi')->name('form-data-pribadi')->middleware('web');
+Route::post('search-nip', 'artikelController@searchNIP')->name('search-nip')->middleware('web');
+Route::post('save-data-pribadi', 'artikelController@saveDataPribadi')->name('save-data-pribadi')->middleware('web');
+Route::post('update-data-pribadi', 'artikelController@updateDataPribadi')->name('update-data-pribadi')->middleware('web');
+Route::post('form-data-artikel', 'artikelController@formDataArtikel')->name('form-data-artikel')->middleware('web');
+Route::post('update-data-artikel', 'artikelController@updateDataArtikel')->name('update-data-artikel')->middleware('web');
+Route::get('download/{file}/{type}', 'artikelController@downloadFile')->name('download')->middleware('web');
+Route::post("remove-keyword", 'artikelController@removeKeyword')->name('remove-keyword')->middleware('web');
+Route::post('view-data-konfirmasi', 'artikelController@dataKonfirmasi')->name('view-data-konfirmasi')->middleware('web');
+Route::get('list-editorial-team', 'editorialTeamController@listTeam')->name('list-editorial-team')->middleware('web');
 
-Route::post('add-new-editor', 'editorialTeamController@formAddNew')->name('add-new-editor')->middleware('cas.auth');
-Route::post('search-nip-editorial', 'editorialTeamController@searchNip')->name('search-nip-editorial')->middleware('cas.auth');
-Route::post('save-editor', 'editorialTeamController@saveEditor')->name('save-editor')->middleware('cas.auth');
-Route::post('remove-editor', 'editorialTeamController@removeEditor')->name('remove-editor')->middleware('cas.auth');
+Route::post('add-new-editor', 'editorialTeamController@formAddNew')->name('add-new-editor')->middleware('web');
+Route::post('search-nip-editorial', 'editorialTeamController@searchNip')->name('search-nip-editorial')->middleware('web');
+Route::post('save-editor', 'editorialTeamController@saveEditor')->name('save-editor')->middleware('web');
+Route::post('remove-editor', 'editorialTeamController@removeEditor')->name('remove-editor')->middleware('web');
 
-Route::get('list-config-web', 'configController@listConfig')->name('list-config-web')->middleware('cas.auth');
-Route::get('list-pengumuman', 'artikelController@listPengumuman')->name('list-pengumuman')->middleware('cas.auth');
-Route::post('delete-pengumuman', 'artikelController@deletePengumuman')->name('delete-pengumuman')->middleware('cas.auth');
-Route::post('add-pengumuman-arunika', 'artikelController@addPengumuman')->name('add-pengumuman-arunika')->middleware('cas.auth');
-Route::post('save-pengumuman', 'artikelController@savePengumuman')->name('save-pengumuman')->middleware('cas.auth');
-Route::post('edit-pengumuman', 'artikelController@editPengumuman')->name('edit-pengumuman')->middleware('cas.auth');
-Route::post('update-pengumuman', 'artikelController@updatePengumuman')->name('update-pengumuman')->middleware('cas.auth');
-Route::post('add-new-config', 'configController@formAddConfig')->name('add-new-config')->middleware('cas.auth');
-Route::post('save-config', 'configController@saveWebContent')->name('save-config')->middleware('cas.auth');
-Route::post('finish-page-artikel', 'artikelController@finishPage')->name('finish-page-artikel')->middleware('cas.auth');
-Route::post('prepare-publish', 'artikelController@preparePublish')->name('prepare-publish')->middleware('cas.auth');
-Route::post('send-artikel', 'artikelController@sendArtikel')->name('send-artikel')->middleware('cas.auth');
-Route::get('list-artikel-proses', 'artikelController@listArtikelProses')->name('list-artikel-proses')->middleware('cas.auth');
-Route::get('list-artikel-proses-reviewer', 'artikelController@listArtikelProsesReviewer')->name('list-artikel-proses-reviewer')->middleware('cas.auth');
-Route::get('list-artikel-proses-jm', 'artikelController@listArtikelProsesJM')->name('list-artikel-proses-jm')->middleware('cas.auth');
-Route::get('list-artikel-selesai-review', 'artikelController@listArtikelSelesaiReview')->name('list-artikel-selesai-review')->middleware('cas.auth');
-Route::get('link-artikel-publish-jm', 'artikelController@linkArtikelPublishJM')->name('link-artikel-publish-jm')->middleware('cas.auth');
-Route::get('detil-artikel/{id}/{v_init}', 'artikelController@detilArtikel')->name('detil-artikel')->middleware('cas.auth');
-Route::post('data-umum-artikel', 'artikelController@dataUmumArtikel')->name('data-umum-artikel')->middleware('cas.auth');
-Route::post('data-review', 'artikelController@dataReview')->name('data-review')->middleware('cas.auth');
-Route::post('data-review-author', 'artikelController@dataReviewAuthor')->name('data-review')->middleware('cas.auth');
-Route::post('form-tambah-reviewer', 'artikelController@formTambahReviewer')->name('form-tambah-reviewer')->middleware('cas.auth');
-Route::post('save-reviewer', 'artikelController@saveReviewer')->name('save-reviewer')->middleware('cas.auth');//harus admin
-Route::get('list-pertanyaan-review/{page}', 'configController@listPertanyaan')->name('list-pertanyaan-review')->middleware('cas.auth');
-Route::post('save-pertanyaan', 'configController@savePertanyaan')->name('save-pertanyaan')->middleware('cas.auth');//harus admin
-Route::post('add-new-pertanyaan', 'configController@formNewPertanyaan')->name('form-new-pertanyaan')->middleware('cas.auth');//harus admin
-Route::post('remove-pertanyaan', 'configController@removePertanyaan')->name('remove-pertanyaan')->middleware('cas.auth');
+Route::get('list-config-web', 'configController@listConfig')->name('list-config-web')->middleware('web');
+Route::get('list-pengumuman', 'artikelController@listPengumuman')->name('list-pengumuman')->middleware('web');
+Route::post('delete-pengumuman', 'artikelController@deletePengumuman')->name('delete-pengumuman')->middleware('web');
+Route::post('add-pengumuman-arunika', 'artikelController@addPengumuman')->name('add-pengumuman-arunika')->middleware('web');
+Route::post('save-pengumuman', 'artikelController@savePengumuman')->name('save-pengumuman')->middleware('web');
+Route::post('edit-pengumuman', 'artikelController@editPengumuman')->name('edit-pengumuman')->middleware('web');
+Route::post('update-pengumuman', 'artikelController@updatePengumuman')->name('update-pengumuman')->middleware('web');
+Route::post('add-new-config', 'configController@formAddConfig')->name('add-new-config')->middleware('web');
+Route::post('save-config', 'configController@saveWebContent')->name('save-config')->middleware('web');
+Route::post('finish-page-artikel', 'artikelController@finishPage')->name('finish-page-artikel')->middleware('web');
+Route::post('prepare-publish', 'artikelController@preparePublish')->name('prepare-publish')->middleware('web');
+Route::post('send-artikel', 'artikelController@sendArtikel')->name('send-artikel')->middleware('web');
+Route::get('list-artikel-proses', 'artikelController@listArtikelProses')->name('list-artikel-proses')->middleware('web');
+Route::get('list-artikel-proses-reviewer', 'artikelController@listArtikelProsesReviewer')->name('list-artikel-proses-reviewer')->middleware('web');
+Route::get('list-artikel-proses-jm', 'artikelController@listArtikelProsesJM')->name('list-artikel-proses-jm')->middleware('web');
+Route::get('list-artikel-selesai-review', 'artikelController@listArtikelSelesaiReview')->name('list-artikel-selesai-review')->middleware('web');
+Route::get('link-artikel-publish-jm', 'artikelController@linkArtikelPublishJM')->name('link-artikel-publish-jm')->middleware('web');
+Route::get('detil-artikel/{id}/{v_init}', 'artikelController@detilArtikel')->name('detil-artikel')->middleware('web');
+Route::post('data-umum-artikel', 'artikelController@dataUmumArtikel')->name('data-umum-artikel')->middleware('web');
+Route::post('data-review', 'artikelController@dataReview')->name('data-review')->middleware('web');
+Route::post('data-review-author', 'artikelController@dataReviewAuthor')->name('data-review')->middleware('web');
+Route::post('form-tambah-reviewer', 'artikelController@formTambahReviewer')->name('form-tambah-reviewer')->middleware('web');
+Route::post('save-reviewer', 'artikelController@saveReviewer')->name('save-reviewer')->middleware('web');//harus admin
+Route::get('list-pertanyaan-review/{page}', 'configController@listPertanyaan')->name('list-pertanyaan-review')->middleware('web');
+Route::post('save-pertanyaan', 'configController@savePertanyaan')->name('save-pertanyaan')->middleware('web');//harus admin
+Route::post('add-new-pertanyaan', 'configController@formNewPertanyaan')->name('form-new-pertanyaan')->middleware('web');//harus admin
+Route::post('remove-pertanyaan', 'configController@removePertanyaan')->name('remove-pertanyaan')->middleware('web');
+Route::post('edit-pertanyaan', 'configController@editPertanyaan')->name('edit-pertanyaan')->middleware('web');
+Route::post('update-pertanyaan', 'configController@updatePertanyaan')->name('update-pertanyaan')->middleware('web');
 Route::get('dec/{str}', 'configController@dec')->name('dec');
-Route::post('form-tambah-review', 'artikelController@formTambahReview')->name('form-tambah-review')->middleware('cas.auth');
-Route::post('save-checklist-review', 'artikelController@saveChecklistReview')->name('save-checklist-review')->middleware('cas.auth');
-Route::post('form-tambah-hasil-review', 'artikelController@formTambahHasilReview')->name('form-tambah-hasil-review')->middleware('cas.auth');
-Route::post('save-hasil-review', 'artikelController@saveHasilReview')->name('save-hasil-review')->middleware('cas.auth');//harus reviewer
-Route::post("update-hasil-review", 'artikelController@updateHasilReview')->name('update-hasil-review')->middleware('cas.auth');
-Route::post('remove-hasil-review', 'artikelController@removeHasilReview')->name('remove-hasil-review')->middleware('cas.auth');//harus reviewer
-Route::post('form-tambah-catatan', 'artikelController@formTambahCatatan')->name('form-tambah-catatan')->middleware('cas.auth');
-Route::post('save-catatan-reviewer', 'artikelController@saveCatatanReviewer')->name('save-catatan-reviewer')->middleware('cas.auth');
-Route::post('send-review-result', 'artikelController@sendReviewResult')->name('send-review-result')->middleware('cas.auth');
-Route::post('cancel-review-result', 'artikelController@cancelReviewResultSent')->name('cancel-review-result')->middleware('cas.auth');
-Route::post('save-perbaikan-artikel', 'artikelController@savePerbaikanArtikel')->name('save-perbaikan-artikel')->middleware('cas.auth');
-Route::post('remove-edoc-perbaikan', 'artikelController@removeEdocPerbaikan')->name('remove-edoc-perbaikan')->middleware('cas.auth');
-Route::post('update-foto-penulis', 'artikelController@updateFotoPenulis')->name('update-foto-penulis')->middleware('cas.auth');
-Route::post('send-perbaikan-penulis', 'artikelController@sendPerbaikanPenulis')->name('send-perbaikan-penulis')->middleware('cas.auth');
-Route::post('form-cancel-publish', 'artikelController@formCancelPublish')->name('form-cancel-publish')->middleware('cas.auth');
-Route::post('cancel-publish', 'artikelController@cancelPublish')->name('cancel-publish')->middleware('cas.auth');
-Route::post('accept-to-publish', 'artikelController@acceptToPublish')->name('accept-to-publish')->middleware('cas.auth');
-Route::post('direct-to-publish', 'artikelController@directToPublish')->name('direct-to-publish')->middleware('cas.auth');
-Route::post('data-publish', 'artikelController@dataPublish')->name('data-publish')->middleware('cas.auth');
-Route::post('update-edoc-pub', 'artikelController@updateEdocPub')->name('update-edoc-pub')->middleware('cas.auth');
-Route::get('preview/{id}', 'artikelController@previewArtikel')->name('preivew')->middleware('cas.auth');
-Route::post('publish-artikel', 'artikelController@publishArtikel')->name('publish')->middleware('cas.auth');
-Route::post('check-data-personal', 'artikelController@checkDataPersonal')->name('check-data-personal')->middleware('cas.auth');
-Route::post('check-data-artikel', 'artikelController@checkDataArtikel')->name('check-data-artikel')->middleware('cas.auth');
-Route::post('check-data-review', 'artikelController@checkDataReview')->name('check-data-review')->middleware('cas.auth');
-Route::post('check-data-publish', 'artikelController@checkDataPublish')->name('check-data-publish')->middleware('cas.auth');
-Route::post('hide-artikel', 'artikelController@hideShowArtikel')->name('hide-artikel')->middleware('cas.auth');
-Route::post('delete-artikel-draft', 'artikelController@deleteArtikelDraft')->name('delete-artikel-draft')->middleware('cas.auth');
-Route::post('remove-artikel', 'artikelController@removeArtikel')->name('remove-artikel')->middleware('cas.auth');
-Route::post('delete-config', 'configController@deleteConfig')->name('delete-config')->middleware('cas.auth');
-Route::get('list-artikel-waiting-publish', 'artikelController@listArtikelWaitingPublish')->name('list-artikel-waiting-publish')->middleware('cas.auth');
-Route::get('list-artikel-publish', 'artikelController@listArtikelPublish')->name('list-artikel-publish')->middleware('cas.auth');
-Route::get('list-issue-artikel', 'issueArtikelController@index')->name('list-issue-artikel')->middleware('cas.auth');
-Route::post('add-issue-artikel', 'issueArtikelController@formAddIssue')->name('add-issue-artikel')->middleware('cas.auth');
-Route::post('save-issue-artikel', 'issueArtikelController@saveIssueArtikel')->name('save-issue-artikel')->middleware('cas.auth');
-Route::post('update-issue-artikel', 'issueArtikelController@updateIssueArtikel')->name('update-issue-artikel')->middleware('cas.auth');
-Route::post('edit-config', 'configController@editConfig')->name('edit-config')->middleware('cas.auth');
-Route::post('update-config', 'configController@updateConfig')->name('update-config')->middleware('cas.auth');
-Route::get('list-pengguna/{page?}', 'configController@listPengguna')->name('list-pengguna')->middleware('cas.auth');
-Route::post('remove-pengguna', 'configController@removePengguna')->name('remove-pengguna')->middleware('cas.auth');
-Route::get('list-draft', 'artikelController@listDraft')->name('list-draft')->middleware('cas.auth');
+Route::post('form-tambah-review', 'artikelController@formTambahReview')->name('form-tambah-review')->middleware('web');
+Route::post('save-checklist-review', 'artikelController@saveChecklistReview')->name('save-checklist-review')->middleware('web');
+Route::post('form-tambah-hasil-review', 'artikelController@formTambahHasilReview')->name('form-tambah-hasil-review')->middleware('web');
+Route::post('save-hasil-review', 'artikelController@saveHasilReview')->name('save-hasil-review')->middleware('web');//harus reviewer
+Route::post("update-hasil-review", 'artikelController@updateHasilReview')->name('update-hasil-review')->middleware('web');
+Route::post('remove-hasil-review', 'artikelController@removeHasilReview')->name('remove-hasil-review')->middleware('web');//harus reviewer
+Route::post('form-tambah-catatan', 'artikelController@formTambahCatatan')->name('form-tambah-catatan')->middleware('web');
+Route::post('save-catatan-reviewer', 'artikelController@saveCatatanReviewer')->name('save-catatan-reviewer')->middleware('web');
+Route::post('send-review-result', 'artikelController@sendReviewResult')->name('send-review-result')->middleware('web');
+Route::post('cancel-review-result', 'artikelController@cancelReviewResultSent')->name('cancel-review-result')->middleware('web');
+Route::post('save-perbaikan-artikel', 'artikelController@savePerbaikanArtikel')->name('save-perbaikan-artikel')->middleware('web');
+Route::post('remove-edoc-perbaikan', 'artikelController@removeEdocPerbaikan')->name('remove-edoc-perbaikan')->middleware('web');
+Route::post('update-foto-penulis', 'artikelController@updateFotoPenulis')->name('update-foto-penulis')->middleware('web');
+Route::post('send-perbaikan-penulis', 'artikelController@sendPerbaikanPenulis')->name('send-perbaikan-penulis')->middleware('web');
+Route::post('form-cancel-publish', 'artikelController@formCancelPublish')->name('form-cancel-publish')->middleware('web');
+Route::post('cancel-publish', 'artikelController@cancelPublish')->name('cancel-publish')->middleware('web');
+Route::post('accept-to-publish', 'artikelController@acceptToPublish')->name('accept-to-publish')->middleware('web');
+Route::post('direct-to-publish', 'artikelController@directToPublish')->name('direct-to-publish')->middleware('web');
+Route::post('data-publish', 'artikelController@dataPublish')->name('data-publish')->middleware('web');
+Route::post('update-edoc-pub', 'artikelController@updateEdocPub')->name('update-edoc-pub')->middleware('web');
+Route::get('preview/{id}', 'artikelController@previewArtikel')->name('preivew')->middleware('web');
+Route::post('publish-artikel', 'artikelController@publishArtikel')->name('publish')->middleware('web');
+Route::post('check-data-personal', 'artikelController@checkDataPersonal')->name('check-data-personal')->middleware('web');
+Route::post('check-data-artikel', 'artikelController@checkDataArtikel')->name('check-data-artikel')->middleware('web');
+Route::post('check-data-review', 'artikelController@checkDataReview')->name('check-data-review')->middleware('web');
+Route::post('check-data-publish', 'artikelController@checkDataPublish')->name('check-data-publish')->middleware('web');
+Route::post('hide-artikel', 'artikelController@hideShowArtikel')->name('hide-artikel')->middleware('web');
+Route::post('delete-artikel-draft', 'artikelController@deleteArtikelDraft')->name('delete-artikel-draft')->middleware('web');
+Route::post('remove-artikel', 'artikelController@removeArtikel')->name('remove-artikel')->middleware('web');
+Route::post('delete-config', 'configController@deleteConfig')->name('delete-config')->middleware('web');
+Route::get('list-artikel-waiting-publish', 'artikelController@listArtikelWaitingPublish')->name('list-artikel-waiting-publish')->middleware('web');
+Route::get('list-artikel-publish', 'artikelController@listArtikelPublish')->name('list-artikel-publish')->middleware('web');
+Route::get('list-issue-artikel', 'issueArtikelController@index')->name('list-issue-artikel')->middleware('web');
+Route::post('add-issue-artikel', 'issueArtikelController@formAddIssue')->name('add-issue-artikel')->middleware('web');
+Route::post('save-issue-artikel', 'issueArtikelController@saveIssueArtikel')->name('save-issue-artikel')->middleware('web');
+Route::post('update-issue-artikel', 'issueArtikelController@updateIssueArtikel')->name('update-issue-artikel')->middleware('web');
+Route::post('edit-config', 'configController@editConfig')->name('edit-config')->middleware('web');
+Route::post('update-config', 'configController@updateConfig')->name('update-config')->middleware('web');
+Route::get('list-pengguna/{page?}', 'configController@listPengguna')->name('list-pengguna')->middleware('web');
+Route::post('remove-pengguna', 'configController@removePengguna')->name('remove-pengguna')->middleware('web');
+Route::get('list-draft', 'artikelController@listDraft')->name('list-draft')->middleware('web');
 
 Route::get('home', 'arunikaController@index')->name('home');
-Route::post('edit-issue-artikel', 'issueArtikelController@getIssueById')->name('edit-issue-artikel')->middleware('cas.auth');
-Route::post('delete-issue-artikel', 'issueArtikelController@deleteIssueArtikel')->name('delete-issue-artikel')->middleware('cas.auth');
-Route::post('form-tambah-tema', 'artikelController@formTambahTema')->name('form-tambah-tema')->middleware('cas.auth');
-Route::post('update-tema', 'artikelController@updateTema')->name('update-tema')->middleware('cas.auth');
+Route::post('edit-issue-artikel', 'issueArtikelController@getIssueById')->name('edit-issue-artikel')->middleware('web');
+Route::post('delete-issue-artikel', 'issueArtikelController@deleteIssueArtikel')->name('delete-issue-artikel')->middleware('web');
+Route::post('form-tambah-tema', 'artikelController@formTambahTema')->name('form-tambah-tema')->middleware('web');
+Route::post('update-tema', 'artikelController@updateTema')->name('update-tema')->middleware('web');
 Route::get('issue/{code}', 'arunikaController@getListArtikelByIssue')->name('issue');
 Route::get('category/{key}/{any?}', 'arunikaController@getArtikelByCategory')->name('category-by-key-category');
 

@@ -61,16 +61,14 @@
                 <div class='col-12'>
                 <center>
                     <button class='btn btn-info btn-md saveArtikel'>Simpan</button>
-                    <button class='btn btn-danger btn-md backToList' onClick="callLink('list-config-web')" type='button'>Kembali</button>
+                    <button class='btn btn-danger btn-md backToList' data-fn="callLink" data-dst="list-config-web" data-paste="callLink('list-config-web')" type='button'>Kembali</button>
                 </center>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js?q=test1234') !!}"></script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="arunika123">
     $(document).ready(function(){
         $("#value").summernote({
             height:400,

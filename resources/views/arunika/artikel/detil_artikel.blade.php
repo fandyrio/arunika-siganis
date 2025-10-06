@@ -33,7 +33,7 @@
                     <span class='append'>
                     @if($step >= 7 && $step < 9)
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link tabs publsih" data-target="publsih" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Publsih</button>
+                        <button class="nav-link tabs publsih" data-target="publsih" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Publish</button>
                     </li>
                     @endif
                     </span>

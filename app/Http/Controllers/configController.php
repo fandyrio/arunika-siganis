@@ -9,10 +9,15 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use App\Config;
 use App\Pegawai;
 use App\Checklist_review;
+use App\Services\configService;
 use File;
 
 class configController extends Controller
 {
+    protected $configService;
+    public function __construct(configService $config_service){   
+        $this->configService=$config_service;
+    }
     public function listConfig(){
         $get_data=Config::where('active', true)->get();
         $jumlah=$get_data->count();
@@ -207,11 +212,15 @@ class configController extends Controller
             $pertanyaan=new Checklist_review;
             $pertanyaan->pertanyaan=$request->pertanyaan;
             $pertanyaan->active=true;
-            $save=$pertanyaan->save();
-            if($save){
-                $msg="Berhasil menyimpan data pertanyaan";
+            if(isJM()){
+                $save=$pertanyaan->save();
+                if($save){
+                    $msg="Berhasil menyimpan data pertanyaan";
+                }else{
+                    $msg="Terjadi kesalahan saat menyimpan pertanyaan";
+                }
             }else{
-                $msg="Terjadi kesalahan saat menyimpan pertanyaan";
+                $msg="Akses ditolak";
             }
         }catch(ValidationException $e){
             $msg="Pertanyaan harus diisi";
@@ -228,11 +237,15 @@ class configController extends Controller
             $get_data=Checklist_review::where('id', $pertanyaan_id)->first();
             if(!is_null($get_data)){
                 $get_data->active=false;
-                $update=$get_data->update();
-                if($update){
-                    $msg="Berhasil menghapus data";
+                if(isJM()){
+                    $update=$get_data->update();
+                    if($update){
+                        $msg="Berhasil menghapus data";
+                    }else{
+                        $msg="Terjadi kesalahan pada sistem saat menghapus data";
+                    }
                 }else{
-                    $msg="Terjadi kesalahan pada sistem saat menghapus data";
+                    $msg="Akses ditolak";
                 }
             }else{
                 $msg="Data tidak ditemukan";
@@ -242,6 +255,49 @@ class configController extends Controller
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>"callLink('list-pertanyaan-review/".Crypt::encrypt('1')."')"]);
     }
+
+    public function editPertanyaan(Request $request){
+        $data=[];
+        try{
+            $id_pertanyaan_dec=Crypt::decrypt($request->token_id);
+            $get_data=$this->configService->getPertanyaanById($id_pertanyaan_dec);
+            if(is_null($get_data)){
+                echo "Data tidak ditemukan";
+            }else{
+                $data['pertanyaan']=$get_data['pertanyaan'];
+                $data['token_id']=Crypt::encrypt($get_data['id']);
+                return view('arunika/admin/form_new_pertanyaan', ['data'=>$data, 'page'=>Crypt::encrypt('1')]);
+            }
+        }catch(DecryptException $e){
+            echo "Data tidak valid";
+        }
+    }
+
+    public function updatePertanyaan(Request $request){
+        $update=false;
+        try{
+            $request->validate([
+                'pertanyaan'=>['required'],
+                'token_i'=>['required']
+            ]);
+            try{
+                $token_id=Crypt::decrypt($request->token_i);
+                if(isJM()){
+                    $update_pertanyaan=$this->configService->updatePertanyaan($request, $token_id);
+                    $update=$update_pertanyaan['status'];
+                    $msg=$update_pertanyaan['msg'];
+                }else{
+                    $msg="Akses ditolak";
+                }
+            }catch(DecryptException $e){
+                $msg="Invalid token id";
+            }
+        }catch(ValidationException $e){
+            $msg=$e->validator->errors()->first();
+        }
+        return response()->json(['status'=>$update, 'msg'=>$msg, 'btnBack'=>'backToList']);
+    }
+
     public function listPengguna($page=null){
         if($page === null){
             $page=1;
@@ -250,12 +306,15 @@ class configController extends Controller
         $total=Pegawai::all()->count();
         $jumlah_halaman=ceil($total/$limit);
         $skip=$page * $limit - $limit;
-
-        $get_pegawai=Pegawai::leftJoin('users', 'users.nip', '=', 'pegawai.nip')
+        $get_pegawai=null;
+        $jumlah=0;
+        if(isJM()){
+            $get_pegawai=Pegawai::leftJoin('users', 'users.nip', '=', 'pegawai.nip')
                         ->select('pegawai.nama', 'pegawai.no_handphone', 'pegawai.id_pegawai', 'pegawai.id as id_pegawai_lokal', 'users.nip as nip_users')
                         ->orderBy('pegawai.nama')
                         ->get();
-        $jumlah=$get_pegawai->count();
+            $jumlah=$get_pegawai->count();
+        }
         return view('arunika/admin/list_pengguna', ['jumlah_halaman'=>$jumlah_halaman, 'data'=>$get_pegawai, 'total'=>$total, 'jumlah'=>$jumlah, 'jumlah_halaman'=>$jumlah_halaman]);
 
     }

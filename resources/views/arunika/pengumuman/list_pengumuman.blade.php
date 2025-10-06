@@ -36,6 +36,6 @@
         </table>
     </div>
 </div>
-
+{{-- 
 <script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-<script src="{!! asset('assets/js/arunika_services_config.js?q=451234') !!}"></script>
+<script src="{!! asset('assets/js/arunika_services_config.js?q=451234') !!}"></script> --}}

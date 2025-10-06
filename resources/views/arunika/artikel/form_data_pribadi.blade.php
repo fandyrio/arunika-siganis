@@ -11,7 +11,7 @@
      </div>
     </div>
     <!--begin::Form-->
-    <form action="{!! $link_save !!}">
+    <form action="{!! $link_save !!}" class="form-artikel">
        @csrf
      <div class="card-body">
       <div class="form-group mb-8">

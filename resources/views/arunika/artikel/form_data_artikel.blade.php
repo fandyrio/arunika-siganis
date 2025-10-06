@@ -13,7 +13,7 @@
         </h3>
     </div>
         <div class="card-toolbar">
-            <form action="update-data-artikel" data-target='artikel'>
+            <form action="update-data-artikel" data-target='artikel' class="form-artikel">
                 <div class='row mb-6'>
                     <div class='col-lg-10'>
                         <label>Judul Artikel</label>

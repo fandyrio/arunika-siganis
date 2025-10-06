@@ -2412,7 +2412,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="{!! asset('assets/js/pages/widgets.js') !!}"></script>
 		<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
 		<script src="{!! asset('assets/js/arunika_services.js?q=5') !!}"></script>
-		<script src="{!! asset('assets/js/arunika_services_config.js?q=test1') !!}"></script> --}}
+		<script src="{!! asset('assets/js/arunika_services_config.js?q=test30') !!}"></script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->

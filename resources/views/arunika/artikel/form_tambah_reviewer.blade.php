@@ -1,6 +1,6 @@
 <div class='row mb-6'>
     <div class='col-8'>
-        <form action='save-reviewer'>
+        <form action='save-reviewer' class="form-artikel">
             @csrf
             <input type='hidden' name='token' value='{!! $token !!}'>
             <div class='row mb-6'>

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class issueArtikelController extends Controller
 {
+    protected $uploadService;
     public function __construct(uploadImageService $uploadService){
         $this->uploadService=$uploadService;
     }
@@ -82,7 +83,7 @@ class issueArtikelController extends Controller
         }catch(ValidationException $e){
             $msg=$e->validator->errors()->first();
         }
-        return response()->json(['status'=>$save, 'msg'=>$msg, 'btnBack'=>'back']);
+        return response()->json(['status'=>$save, 'msg'=>$msg, 'btnBack'=>'backToList']);
     }
     public function getIssueById(Request $request){
         try{
@@ -151,13 +152,13 @@ class issueArtikelController extends Controller
                         $msg="Terjadi kesalahan sistem saat mengubah data";
                     }
                 }
-            }catch(\Exception $e){
+            }catch(ValidationException $e){
                 $msg=$e->validator->errors()->first();
             }
         }catch(DecryptException $e){
             $msg="Invalid token";
         }
-        return response()->json(['status'=>$update, 'msg'=>$msg, 'btnBack'=>'back']);
+        return response()->json(['status'=>$update, 'msg'=>$msg, 'btnBack'=>'backToList']);
     }
     public function deleteIssueArtikel(Request $request){
         $delete=false;
