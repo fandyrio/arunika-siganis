@@ -12,7 +12,7 @@
 			$path="";
 			$validate_image=$this->validateImage($file_foto);
 			if($validate_image['status']){
-				$filename=date('YmdHis')."-".$file_foto->getClientOriginalName();
+				$filename=date('YmdHis')."-".str_replace(" ", "_", $file_foto->getClientOriginalName());
 	            // $file_foto->move($destination, $filename);
 	            $img=Image::read($file_foto)->encodeByExtension($validate_image['ext'], quality:70);
 	            // $path=$destination."/".$filename;
