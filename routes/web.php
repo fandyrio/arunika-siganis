@@ -20,8 +20,8 @@ Route::get('/', 'arunikaController@index');
 
 // Route::get('register', 'registerController@index')->name('register')->middleware('isNotLogin');
 Route::post('validate-input', 'registerController@validateNIP')->name('validate-nip')->middleware('isNotLogin');
-Route::get('login', 'loginController@index')->name('login')->middleware('isNotLogin');
-Route::post('login', 'loginController@login')->name('login-post')->middleware('isNotLogin');
+// Route::get('login', 'loginController@index')->name('login')->middleware('isNotLogin');
+// Route::post('login', 'loginController@login')->name('login-post')->middleware('isNotLogin');
 /* Route::get('login', function(){
     cas()->authenticate();
 }); */
@@ -51,7 +51,7 @@ Route::post('search-nip-editorial', 'editorialTeamController@searchNip')->name('
 Route::post('save-editor', 'editorialTeamController@saveEditor')->name('save-editor')->middleware('cas.auth');
 Route::post('remove-editor', 'editorialTeamController@removeEditor')->name('remove-editor')->middleware('cas.auth');
 
-Route::get('list-config-cas.auth', 'configController@listConfig')->name('list-config-cas.auth')->middleware('cas.auth');
+Route::get('list-config-web', 'configController@listConfig')->name('list-config-web')->middleware('cas.auth');
 Route::get('list-pengumuman', 'artikelController@listPengumuman')->name('list-pengumuman')->middleware('cas.auth');
 Route::post('delete-pengumuman', 'artikelController@deletePengumuman')->name('delete-pengumuman')->middleware('cas.auth');
 Route::post('add-pengumuman-arunika', 'artikelController@addPengumuman')->name('add-pengumuman-arunika')->middleware('cas.auth');
@@ -59,7 +59,7 @@ Route::post('save-pengumuman', 'artikelController@savePengumuman')->name('save-p
 Route::post('edit-pengumuman', 'artikelController@editPengumuman')->name('edit-pengumuman')->middleware('cas.auth');
 Route::post('update-pengumuman', 'artikelController@updatePengumuman')->name('update-pengumuman')->middleware('cas.auth');
 Route::post('add-new-config', 'configController@formAddConfig')->name('add-new-config')->middleware('cas.auth');
-Route::post('save-config', 'configController@savecas.authContent')->name('save-config')->middleware('cas.auth');
+Route::post('save-config', 'configController@saveWebContent')->name('save-config')->middleware('cas.auth');
 Route::post('finish-page-artikel', 'artikelController@finishPage')->name('finish-page-artikel')->middleware('cas.auth');
 Route::post('prepare-publish', 'artikelController@preparePublish')->name('prepare-publish')->middleware('cas.auth');
 Route::post('send-artikel', 'artikelController@sendArtikel')->name('send-artikel')->middleware('cas.auth');
