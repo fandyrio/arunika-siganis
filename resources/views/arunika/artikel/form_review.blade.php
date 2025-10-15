@@ -3,7 +3,7 @@
     <input type="checkbox" class="checkAll"> Check Lengkap Semua
     <span></span>
 </label><br />
-<form action="save-checklist-review">
+<form action="save-checklist-review" class="form-artikel">
     <table class='table' style='font-size:0.8vw;'>
         <tr>
             <th>No</th>
@@ -20,9 +20,9 @@
                     <td>
                         <input type='checkbox' class='form-check ya' name="pertanyaan_{!! $list_checklist['id'] !!}"  value="1" {!! $list_checklist['hasil'] === 1 ? 'checked' : '' !!}>
                     </td>
-                    <td><input type='checkbox' class='form-check' value="0" name="pertanyaan_{!! $x !!}" {!! $list_checklist['hasil'] === 0 ? 'checked' : '' !!}></td>
+                    <td><input type='checkbox' class='form-check' value="0" name="pertanyaan_{!! $list_checklist['id'] !!}" {!! $list_checklist['hasil'] === 0 ? 'checked' : '' !!}></td>
                     <td>
-                        <textarea class="form-control" name="catatan_{!! $x !!}">{!! $list_checklist['keterangan'] !!}</textarea>
+                        <textarea class="form-control" name="catatan_{!! $list_checklist['id'] !!}">{!! $list_checklist['keterangan'] !!}</textarea>
                     </td>
                 </tr>
                 @php $x++; @endphp

@@ -1323,10 +1323,12 @@ class artikelController extends Controller
         $token_id=$request->token_a;
         $msg="";
         try{
-            $artikel_id=Crypt::decrypt($request->token_a);
+            // $artikel_id=Crypt::decrypt($request->token_a);
             $review_id=Crypt::decrypt($request->token_r);
+            $get_review=Review_stage::where('id', $review_id)->first();
+            $artikel_id=$get_review['id_artikel'];
             if(isYourReviewArtikel($review_id, $artikel_id)){
-                $check=$this->checkValidateTabsRequest($request->token_a, 4);
+                $check=$this->checkValidateTabsRequest(Crypt::encrypt($artikel_id), 4);
                 $get_pertanyaan=Checklist_review::where('active', true)->get();
                 if($check->status){
                     $x=0;
