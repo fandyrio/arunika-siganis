@@ -18,7 +18,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <link rel="apple-touch-icon" sizes="76x76" href="{!! assets_storage('web/assets/img/apple-icon.png') !!}">
-<link rel="icon" type="image/png" href="{!! assets_storage('upload/config/logo_arunika_complate.png') !!}">
+<link rel="icon" type="image/png" href="{!! assets_storage('upload/config/logo_arunika_complate.png?time='.time()) !!}">
 
 <title>Arunika By SIGANIS</title>
 <!--     Fonts and icons     -->
