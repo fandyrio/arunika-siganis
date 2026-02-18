@@ -551,3 +551,13 @@ function sweatLoading(){
         }
     })
 }
+
+function updateJlhAngka(classAngka, action){
+    var jlh_proses=parseInt($("."+classAngka).text());
+    if(action === "tambah"){
+        var sisa_proses=jlh_proses+1;   
+    }else{
+        var sisa_proses=jlh_proses-1;
+    }
+    $("."+classAngka).html(sisa_proses);
+}

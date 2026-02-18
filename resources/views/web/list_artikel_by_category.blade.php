@@ -23,7 +23,7 @@
                         @for($x=0;$x<$jumlah_data;$x++)
                         <div class="col-lg-4 col-sm-6 mb-3" >
                             <div class="card card-plain">
-                                <div class="card-header p-0 position-relative skleton_loading" data-target="{{ $artikel[$x]['foto_penulis'] }}" data-prefix="img-artikel" style="min-height:10rem;">
+                                <div class="card-header p-0 position-relative skleton_loading" data-target="{{ str_replace('public/','', $artikel[$x]['foto_penulis']) }}" data-prefix="img-artikel" style="min-height:10rem;">
                                     <a class="d-block blur-shadow-image">
                                         
                                     </a>
@@ -37,6 +37,7 @@
                                     $explode=explode('.pdf', $clean);
                                     $link='baca-artikel/'.strtolower($explode[0]).'/'.$artikel[$x]['token_a'];
                                     $link='baca-artikel/'.strtolower($explode[0]).'/a-'.Crypt::decrypt($artikel[$x]['token_a']).'arn'.$artikel[$x]['code_issue'];
+                                    $link=str_replace('public/', '', $link);
 
                                 @endphp
                                 <span class='text-purple fn-sz-1  text-bold'>{!! $artikel[$x]['nama'] !!}</span>

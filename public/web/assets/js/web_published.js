@@ -27,12 +27,8 @@ async function runImg(jumlah_skleton, skleton){
     }
 }
 async function setPhoto(width, height, target, type, x, prefix, skleton){
-    const baseURL = window.location.pathname;
-    if(baseURL.includes('issue') || baseURL.includes('category') || baseURL.includes('tags') || baseURL.includes('artikel/')){
-        var url="../img";
-    }else{
-        var url="img";
-    }
+    let baseUrl = document.querySelector('base').href;
+    var url=baseUrl+"img";
     $.ajax({
         url:url+'/'+target+'?w='+width+'&h='+height+'&q=90',
         data:{width:width, height:height, target:target, type:type, prefix:prefix},

@@ -66,6 +66,9 @@ $(document).on("click",".list_menu", function(e){
     }else if(target === "pengguna"){
         var url="list-pengguna";
         setHeader('Pengguna', "Pengguna System");
+    }else if(target === "list_artikel_dikembalikan_jm"){
+        var url="list-artikel-dikembalikan-jm";
+        setHeader('Artikel', 'Artikel yang Dikembalikan');
     }
     $.ajax({
         beforeSend:function(){
@@ -994,4 +997,170 @@ $(document).on("click", ".editDataArtikel",  function(e){
     e.stopPropagation();
     e.stopImmediatePropagation();
     loadDataArtikel('form');
+});
+
+$(document).on("click", ".savePengembalian", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var data=$("#form_pengembalian").serialize();
+    $.ajax({
+        beforeSend:function(){
+            $(".savePengembalian").prop("disabled", true);
+            $(".savePengembalian").html("Menyimpan ...");
+        },
+        url:'save-pengembalian',
+        type:'POST',
+        dataType:'JSON',
+        data:data,
+        success:function(data){
+            var status=data.status;
+            var icon="error";
+            if(status === true){
+                icon="success";
+                updateJlhAngka("jumlah_proses", "kurang");
+                $(".tabs[data-target='review']").trigger("click");
+            }
+             $(".modal").modal('hide');
+            callSwal(icon, data.msg, true);
+        },error:function(data){
+            console.log(data);
+            callSwal('error', 'Error System', true);
+        }
+    })
+});
+
+$(document).on('click', '.cancelPengembalian', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    swal.fire({
+        title: "<span style='color:red'>Perhatian !. Batalkan Pengembalian Artikel</span> ",
+        text: "Apakah anda yakin untuk membatalkan pengembalian artikel ini ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+    }).then(function(result) {
+        if (result.value) {
+            sweatLoading();
+            $.post('cancel-pengembalian-artikel', {target:target}, function(data){
+                if(data.status){
+                    var icon="success";
+                    updateJlhAngka("jumlah_proses", "tambah");
+                    $(".tabs[data-target='review']").trigger("click");
+                }else{
+                    var icon="error";
+                }
+                callSwal(icon, data.msg, true);
+            })
+            // result.dismiss can be "cancel", "overlay",
+            // "close", and "timer"
+        } else if (result.dismiss === "cancel") {
+            swal.fire(
+                "Cancelled",
+                "Permintaan dibatalkan",
+                "error"
+            )
+        }
+    })
+})
+
+$(document).on("click", ".modalKembalikan", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    $.ajax({
+        beforeSend:function(){
+            $("#modal-data-review").modal('show');
+            $(".modal-body").html("Loading ...");
+            $(".modal-title").html('Form Pengembalian Artikel');
+        },
+        url:'form-kembalikan-artikel',
+        data:{target:target},
+        type:'POST',
+        success:function(data){
+            if(typeof data.status !== "undefined"){
+                callSwal('error', data.msg, true);  
+                return false; 
+            }
+            $(".modal-body").html(data);
+            
+        },error:function(data){
+            console.log(data);
+            callSwal('error', 'Error System', true);
+        }
+    })
+});
+
+$(document).on("click", ".savePengembalian", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var data=$("#form_pengembalian").serialize();
+    $.ajax({
+        beforeSend:function(){
+            $(".savePengembalian").prop("disabled", true);
+            $(".savePengembalian").html("Menyimpan ...");
+        },
+        url:'save-pengembalian',
+        type:'POST',
+        dataType:'JSON',
+        data:data,
+        success:function(data){
+            var status=data.status;
+            var icon="error";
+            if(status === true){
+                icon="success";
+                updateJlhAngka("jumlah_proses", "kurang");
+                $(".tabs[data-target='review']").trigger("click");
+            }
+             $(".modal").modal('hide');
+            callSwal(icon, data.msg, true);
+        },error:function(data){
+            console.log(data);
+            callSwal('error', 'Error System', true);
+        }
+    })
+});
+
+$(document).on('click', '.cancelPengembalian', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target=$(this).data('target');
+    swal.fire({
+        title: "<span style='color:red'>Perhatian !. Batalkan Pengembalian Artikel</span> ",
+        text: "Apakah anda yakin untuk membatalkan pengembalian artikel ini ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+    }).then(function(result) {
+        if (result.value) {
+            sweatLoading();
+            $.post('cancel-pengembalian-artikel', {target:target}, function(data){
+                if(data.status){
+                    var icon="success";
+                    updateJlhAngka("jumlah_proses", "tambah");
+                    $(".tabs[data-target='review']").trigger("click");
+                }else{
+                    var icon="error";
+                }
+                callSwal(icon, data.msg, true);
+            })
+            // result.dismiss can be "cancel", "overlay",
+            // "close", and "timer"
+        } else if (result.dismiss === "cancel") {
+            swal.fire(
+                "Cancelled",
+                "Permintaan dibatalkan",
+                "error"
+            )
+        }
+    })
 })

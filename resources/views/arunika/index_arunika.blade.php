@@ -342,6 +342,14 @@ License: You must have a valid license purchased only from themeforest(the above
 														<span class="menu-text">Published</span>
 													</a>
 												</li>
+												<li class="menu-item menu-item-submenu list_menu" data-target="list_artikel_dikembalikan_jm" aria-haspopup="true" data-menu-toggle="hover">
+													<a href="javascript:;" class="menu-link menu-toggle">
+														<i class="menu-bullet menu-bullet-dot">
+															<span></span>
+														</i>
+														<span class="menu-text">Dikembalikan</span>
+													</a>
+												</li>
 											</ul>
 										</div>
 									</li>

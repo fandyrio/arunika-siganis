@@ -18,6 +18,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
+    <base href="{{ url('/') }}/">
   <meta name="description" content="{!! $artikel['tentang_artikel'] !!}">
   <meta name="title" content="{!! $artikel['judul'] !!}">
   <meta name="originalTitle" content="{!! $artikel['judul'] !!}">

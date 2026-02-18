@@ -19,6 +19,7 @@
   <meta name="csrf-token-web" content="{{ csrf_token() }}">
   <link rel="apple-touch-icon" sizes="76x76" href="{!! url('web/assets/img/apple-icon.png') !!}">
   <link rel="icon" type="image/png" href="{!! url('storage/upload/config/logo_arunika_complate.png') !!}">
+  <base href="{{ url('/') }}/">
   <title>
     {!! $title !!}
   </title>
@@ -201,7 +202,7 @@
       <div class="col-md-3 mb-4 ms-auto">
         <div>
           <a href="{!! url('/home') !!}">
-            <img src="{!! asset($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important'>
+            <img src="{!! assets_storage($logo['logo_arunika']) !!}" class="mb-3 footer-logo" alt="main_logo" style='max-width:7rem;scale:1;margin-left:3%;margin-bottom:0 !important'>
             <h6 class="font-weight-bolder mb-4">By Siganis Badilum</h6>
           </a>
           

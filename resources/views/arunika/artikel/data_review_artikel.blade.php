@@ -3,10 +3,16 @@
         <br />
         <h5 style='color:#1BC5BD;font-weight:bold;'>Reviewer</h5>
         @if(isJM())
-            <button class='btn btn-success btn-xs addReviewer' style='float:right;'>Tambah Reviewer</button>
+            @if($data_review->artikel->step !== 9)
+                <button class='btn btn-success btn-xs addReviewer' style='float:right;'>Tambah Reviewer</button>
             <br /><br /><br />
+            @else($data_review->artikel->step === 9)
+                <button class='btn btn-info btn-xs cancelPengembalian' data-target='{!! Crypt::encrypt($artikel_id) !!}' style='float:right;'>Batalkan Pengembalian</button>
+            @endif
             @if($data_review->artikel->step === 3)
                 <button class='btn btn-warning btn-sm directPublish' style='float:right;' data-target='{!! Crypt::encrypt($artikel_id) !!}'><span class='fas fa-check'></span> Langsung Publish</button>
+                <br /><br /><br />
+                <button class='btn btn-danger btn-sm modalKembalikan' style='float:right;' data-target='{!! Crypt::encrypt($artikel_id) !!}'><i class="fa fa-times" aria-hidden="true"></i> Dikembalikan</button>
             @endif
         @endif
         @if($jumlah_reviewer > 0)

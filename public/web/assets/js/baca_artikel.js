@@ -29,12 +29,9 @@
       }
     }
     async function setPhoto(width, height, target, type, x, prefix){
-        var base_url=window.location.pathname;
-        if(base_url.includes('baca-artikel')){
-            var url="../../img";
-        }else{
-            var url="img";
-        }
+        let baseUrl = document.querySelector('base').href;
+        var url=baseUrl+"img";
+        // alert(url);
       $.ajax({
           url:url+"/"+target+"?w="+width+"&h="+height+"&q=90",
           dataType:'JSON',
