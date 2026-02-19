@@ -2839,13 +2839,10 @@ public function removeHasilReview(Request $request){
 
     public function listArtikelDikembalikan(){
         if(isJM()){
-            $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
-                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
-                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'step_master.step_text')
-                            ->where('step', 9)
-                            ->get();
-            $jumlah=$get_data->count();
-            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Dikembalikan', 'keterangan_title'=>'List Artikel Dikembalikan', 'v_init'=>'list_artikel_dikembalikan_jm']);
+            $get_data=$this->artikelServices->listArtikelDikembalikan();
+            $data=$get_data['data'];
+            $jumlah=$get_data['jumlah'];
+            return view('arunika/artikel/list_artikel', ['data'=>$data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Dikembalikan', 'keterangan_title'=>'List Artikel Dikembalikan', 'v_init'=>'list_artikel_dikembalikan_jm']);
         }else{
             echo "Access denied";die();
         }
@@ -2892,37 +2889,22 @@ public function removeHasilReview(Request $request){
             $artikel_id_enc=$request->token;
             try{
                 $artikel_id=Crypt::decrypt($artikel_id_enc);
-                $get_artikel=Artikel::where('id', $artikel_id)
-                            ->where('step', '>', 2)
-                            ->where('step', '<', 6)
-                            ->first();
-                if(!is_null($get_artikel)){
-                    $get_penulis=Penulis_artikel::where('id', $get_artikel['id_penulis'])->first();
-                    if(!is_null($get_penulis)){
-                        $get_artikel->keterangan=$request->alasan_pengembalian;
-                        $get_artikel->step=9;
-                        if($get_artikel->update()){
-                            $status=true;
-                            $msg="Berhasil mengembalikan artikel";
-                            $data_wa['judul']=$get_artikel['judul'];
-                            $data_wa['nama_penerima']=$get_penulis['nama'];
-                            $data_wa['no_handphone']=$get_penulis['no_handphone'];
-                            $data_wa['alasan']=$request->alasan_pengembalian;
-                            $send_wa=$this->sendWaNotification("notification_pengembalian", $data_wa);
-                            if($send_wa === "ok"){
-                                $msg.="\nNotifikasi telah dikirimkan kepada penulis";
-                            }else{
-                                $status=false;
-                                $msg.="\nNotifikasi tidak dapat dikirimkan.";
-                            }
+                if(isJM()){
+                    $save=$this->artikelServices->savePengembalian($artikel_id, $request->alasan_pengembalian);
+                    $status=$save['status'];
+                    $msg=$save['msg'];
+                    $data_wa=$save['data_wa'];
+                    if($status === true){
+                        $send_wa=$this->sendWaNotification("notification_pengembalian", $data_wa);
+                        if($send_wa === "ok"){
+                            $msg.="\nNotifikasi telah dikirimkan kepada penulis";
                         }else{
-                            $msg="Terjadi kesalahan sistem saat update data";
+                            $status=false;
+                            $msg.="\nNotifikasi tidak dapat dikirimkan.";
                         }
-                    }else{
-                        $msg="Data Penulis tidak ditemukan";
                     }
                 }else{
-                    $msg="Data artikel tidak ditemukan";
+                    $msg="Akses ditolak";
                 }
             }catch(DecryptException $e){
                 $msg="Invalid token";
@@ -2941,38 +2923,22 @@ public function removeHasilReview(Request $request){
             $artikel_id_enc=$request->target;
             try{
                 $artikel_id=Crypt::decrypt($artikel_id_enc);
-                $get_artikel=Artikel::where('id', $artikel_id)
-                            ->where('step', 9)
-                            ->first();
-                if(!is_null($get_artikel)){
-                    $get_penulis=Penulis_artikel::where('id', $get_artikel['id_penulis'])->first();
-                    if(!is_null($get_penulis)){
-                        $data_wa['judul']=$get_artikel['judul'];
-                        $data_wa['nama_penerima']=$get_penulis['nama'];
-                        $data_wa['no_handphone']=$get_penulis['no_handphone'];
-                        
-                        //update artikel
-                        $get_artikel->step=3;
-                        $get_artikel->keterangan=null;
-                        if($get_artikel->update()){
-                            $status=true;
-                            $msg="Berhasil menyimpan data ";
-                            $send_wa=$this->sendWaNotification("cancel_pengembalian_artikel", $data_wa);
-                            if($send_wa === "ok"){
-                                $msg.="\nNotifikasi berhasil dikirimkan";
-                            }else{
-                                $status=false;
-                                $msg.="\nNotifikasi tidak dikirimlan";
-                            }
+                if(isJM()){
+                    $cancel=$this->artikelServices->cancelPengembalianArtikel($artikel_id);
+                    $status=$cancel['status'];
+                    $msg=$cancel['msg'];
+                    $data_wa=$cancel['data_wa'];
+                    if($status === true){
+                        $send_wa=$this->sendWaNotification("cancel_pengembalian_artikel", $data_wa);
+                        if($send_wa === "ok"){
+                            $msg.="\nNotifikasi berhasil dikirimkan";
                         }else{
-                            $msg="Terjadi kesalahan sistem saat mengubah data";
+                            $status=false;
+                            $msg.="\nNotifikasi tidak dikirimlan";
                         }
-                    }else{
-                        $msg="Data Penulis artikel tidak ditemukan";
                     }
-                    
                 }else{
-                    $msg="Artikel tidak ditemukan";
+                    $msg="Akses ditolak";
                 }
             }catch(DecryptException $e){
                 $msg="Invalid Token";

@@ -285,4 +285,11 @@
         <span style='color:red;font-weight:bold;'>Reviewer tidak dapat dilaksanakan karena reviewer belum dipilih</span>
         @endif
     </div>
+    @if($data_review->artikel->step === 9)
+        <div class="col-12 mb-6">
+            <div class="separator separator-dashed separator-border-2 mb-6"></div>
+            <h5 style='color:#1BC5BD;font-weight:bold;'>Keterangan</h5>
+            <span style='color:red;font-weight:bold;'>Dikembalikan:<br />{{ $data_review->artikel->keterangan }}</span>
+        </div>
+    @endif
 </div>

@@ -316,7 +316,7 @@ License: You must have a valid license purchased only from themeforest(the above
 														<span class="menu-text">Proses</span>
 														@if($data['total_artikel_proses_jm'] > 0)
 															<div style='width:20px;height:20px;background-color:red;color:white;position:relative;border-radius:2px;margin-top:7%;'>
-																<span style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['total_artikel_proses_jm'] !!}</span>
+																<span class="jumlah_proses" style='position:absolute;left:28%;font-size:1rem;font-weight:bold;'>{!! $data['total_artikel_proses_jm'] !!}</span>
 															</div>
 														@endif
 													</a>
@@ -2418,9 +2418,9 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{!! asset('assets/js/pages/widgets.js') !!}"></script>
-		<script src="{!! asset('assets/js/fn_arunika.js') !!}"></script>
-		<script src="{!! asset('assets/js/arunika_services.js?q=5') !!}"></script>
-		<script src="{!! asset('assets/js/arunika_services_config.js?q=test30') !!}"></script>
+		<script src="{!! asset('assets/js/fn_arunika.js?q=2') !!}"></script>
+		<script src="{!! asset('assets/js/arunika_services.js?q=512') !!}"></script>
+		<script src="{!! asset('assets/js/arunika_services_config.js?q=test301') !!}"></script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->

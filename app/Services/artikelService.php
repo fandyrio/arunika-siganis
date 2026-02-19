@@ -7,7 +7,9 @@
     use Illuminate\Support\Facades\DB;
     use App\Review_stage;
     use App\Pegawai;
-    use App\Services\notificationWA;
+use App\Penulis_artikel;
+use App\Services\notificationWA;
+use App\Step_master;
 
     class artikelService{
 
@@ -94,6 +96,99 @@
                 'nama'=>$get_data['nama'], 
                 'no_handphone'=>$get_data['no_handphone']
             ];
+        }
+
+        public function getStepArtikelByStepId($step_id){
+            $get_step=Step_master::where('step_id', $step_id)->first();
+            return $get_step;
+        }
+
+        public function saveNewStepArtikel($step_id, $step_text){
+            $step=new Step_master;
+            $step->step_id=$step_id;
+            $step->step_text=$step_text;
+            return $step->save();
+        }
+
+        public function listArtikelDikembalikan(){
+            $get_step=$this->getStepArtikelByStepId(9);
+            if(is_null($get_step)){
+                $this->saveNewStepArtikel(9, "Ditolak");
+            }
+
+            $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'step_master.step_text')
+                            ->where('step', 9)
+                            ->get();
+            $jumlah=$get_data->count();
+            return ['data'=>$get_data, 'jumlah'=>$jumlah];
+        }
+
+        public function savePengembalian($artikel_id, $alasan_pengembalian){
+            $data_wa=[];
+            $status=false;
+            $get_artikel=Artikel::where('id', $artikel_id)
+                            ->where('step', '>', 2)
+                            ->where('step', '<', 6)
+                            ->first();
+            if(!is_null($get_artikel)){
+                $get_penulis=Penulis_artikel::where('id', $get_artikel['id_penulis'])->first();
+                if(!is_null($get_penulis)){
+                    $get_artikel->keterangan=$alasan_pengembalian;
+                    $get_artikel->step=9;
+                    if($get_artikel->update()){
+                        $data_wa['judul']=$get_artikel['judul'];
+                        $data_wa['nama_penerima']=$get_penulis['nama'];
+                        $data_wa['no_handphone']=$get_penulis['no_handphone'];
+                        $data_wa['alasan']=$alasan_pengembalian;
+                        
+                        $status=true;
+                        $msg="Berhasil mengembalikan artikel";
+                    }else{
+                        $msg="Terjadi kesalahan sistem saat update data";
+                    }
+                }else{
+                    $msg="Data Penulis tidak ditemukan";
+                }
+            }else{
+                $msg="Data artikel tidak ditemukan";
+            }
+
+            return ['status'=>$status, 'msg'=>$msg, 'data_wa'=>$data_wa];
+        }
+
+        public function cancelPengembalianArtikel($artikel_id){
+            $status=false;
+            $data_wa=[];
+            $get_artikel=Artikel::where('id', $artikel_id)
+                            ->where('step', 9)
+                            ->first();
+            if(!is_null($get_artikel)){
+                $get_penulis=Penulis_artikel::where('id', $get_artikel['id_penulis'])->first();
+                if(!is_null($get_penulis)){
+                    $data_wa['judul']=$get_artikel['judul'];
+                    $data_wa['nama_penerima']=$get_penulis['nama'];
+                    $data_wa['no_handphone']=$get_penulis['no_handphone'];
+                    
+                    //update artikel
+                    $get_artikel->step=3;
+                    $get_artikel->keterangan=null;
+                    if($get_artikel->update()){
+                        $status=true;
+                        $msg="Berhasil menyimpan data ";
+                    }else{
+                        $msg="Terjadi kesalahan sistem saat mengubah data";
+                    }
+                }else{
+                    $msg="Data Penulis artikel tidak ditemukan";
+                }
+                
+            }else{
+                $msg="Artikel tidak ditemukan";
+            }
+
+            return ['status'=>$status, 'msg'=>$msg, 'data_wa'=>$data_wa];
         }
 
     }
