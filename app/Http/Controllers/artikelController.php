@@ -763,7 +763,10 @@ class artikelController extends Controller
             if(isYourArtikel($artikel_id) || isJM()){
                 $validate_page=$this->checkValidateTabsRequest($request->token, 3);
                 if($validate_page->status){
-                    $get_data=Artikel::where('id', $artikel_id)->first();
+                    $get_data=Artikel::where('id', $artikel_id)
+                                ->join("penulis_artikel", "penulis_artikel.id", "=", "artikel.id_penulis")
+                                ->select("artikel.*", "penulis_artikel.nip")
+                                ->first();
                     $step=(int)$get_data['step'];
                     if(!is_null($get_data)){
                         $get_data->step=$step+1;
@@ -1253,6 +1256,7 @@ class artikelController extends Controller
                                 $reviewer_artikel->tgl_mulai=$request->tgl_mulai;
                                 $reviewer_artikel->tgl_estimasi_selesai=$request->tgl_selesai;
                                 $reviewer_artikel->status=true;
+
                                 $reviewer_artikel->save();
                                 
                                 //set artikel step menjadi sedang di review
@@ -1265,6 +1269,7 @@ class artikelController extends Controller
                                 $data_wa['judul']=$get_artikel['judul'];
                                 $data_wa['no_handphone']=$data_pegawai->no_handphone;
                                 $data_wa['nama_penerima']=$data_pegawai->nama;
+                                $data_wa['nip_penerima'] = $data_pegawai->nip;
                                 $this->sendWaNotification('assign_reviewer', $data_wa);
                                 $msg="Berhasil menyimpan reviewer";
                                 $update_step=true;
@@ -1678,10 +1683,10 @@ public function removeHasilReview(Request $request){
                                         $category="reviewer_result";
                                         //judul, no_hp, nama_penerima
                                         $data_wa['judul']=$artikel['judul'];
-                                        //$data_wa['no_wa']="081273861528";
                                         $data_wa['no_wa']=$get_pegawai['no_handphone'];
                                         $data_wa['nama_penerima']=$get_pegawai['nama'];
                                         $data_wa['hasil_reviewer']=$get_review_stage['step_text'];
+                                        $data_wa['nip_penerima'] = $get_pegawai['nip'];
                                         $this->sendWaNotification($category, $data_wa);
 
                                         //kirim kepada jm bila accepted
@@ -1783,6 +1788,7 @@ public function removeHasilReview(Request $request){
     public function savePerbaikanArtikel(Request $request){
         $update_perbaikan=false;
         $id_artikel="null";
+        $msg = "";
         try{
             $id_review=Crypt::decrypt($request->token_r);
             $id_artikel=Crypt::decrypt($request->token_a);
@@ -2330,6 +2336,7 @@ public function removeHasilReview(Request $request){
                             $data_wa['judul']=$get_data['judul'];
                             $data_wa['nama_penerima']=$get_penulis['nama'];
                             $data_wa['no_handphone']=$get_penulis['no_handphone'];
+                            $data_wa['nip_penerima'] = $get_penulis['nip'];
                             $category="notification_publish";
                             $status_wa=$this->sendWaNotification($category, $data_wa);
                             
@@ -2492,6 +2499,7 @@ public function removeHasilReview(Request $request){
     }
     public function sendWaNotification($category, $data_wa){
         $domain="domain belum disetting";
+        $msg = "";
         $get_config=Config::where('config_name', 'domain')->first();
         if(!is_null($get_config)){
             $domain=$get_config['config_value'];
@@ -2502,6 +2510,7 @@ public function removeHasilReview(Request $request){
             $data_penerima=$get_jm->getData();
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
+            $nip_penerima = $data_penerima->nip;
 
             $msg="Artikel dengan judul : *_".$judul."_* baru saja di kirimkan.";
             $msg.="\r\rSilahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.";
@@ -2512,6 +2521,8 @@ public function removeHasilReview(Request $request){
             $judul=$data_wa['judul'];
             $no_wa=$data_wa['no_handphone'];
             $nama_penerima=$data_wa['nama_penerima'];
+            $nip_penerima = $data_wa['nip_penerima'];
+
         }else if($category === "reviewer_result"){    //hasil review reviewer kepada author
             $judul=$data_wa['judul'];
             $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  \rdengan hasil : _".$data_wa['hasil_reviewer']."_\r\r";
@@ -2523,12 +2534,14 @@ public function removeHasilReview(Request $request){
             $nama_penerima=$data_wa['nama_penerima'];
             $no_wa=$data_wa['no_wa'];
             $nama_penerima=$data_wa['nama_penerima'];
+            $nip_penerima = $data_wa['nip_penerima'];
         }else if($category === "send_perbaikan_author"){    //daro author kepada jm
             $get_jm=$this->getJM();
             $judul=$data_wa['judul'];
             $data_penerima=$get_jm->getData();
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
+            $nip_penerima = $data_penerima->nip;
 
             $msg="Perbaikan Artikel dengan judul : _".$judul."_ baru saja di kirimkan.";
             $msg.="\r\rSilahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.\r";
@@ -2538,17 +2551,20 @@ public function removeHasilReview(Request $request){
             $data_penerima=$get_jm->getData();
             $no_wa=$data_penerima->no_hp;
             $nama_penerima=$data_penerima->nama;
+            $nip_penerima = $data_penerima->nip;
 
             $msg="Artikel dengan judul : _".$judul."_\rtelah di Setujui oleh reviewer.";
             $msg.="\r\rSilahkan login untuk melakukan persiapan publish.".PHP_EOL;
         }else if($category === "notification_publish"){
             $nama_penerima=$data_wa['nama_penerima'];
+            $nip_penerima = $data_wa['nip_penerima'];
             $judul=$data_wa['judul'];
             $no_wa=$data_wa['no_handphone'];
             $msg="Artikel anda dengan judul ".$judul." telah publish.\r\r";
             $msg.="Silahkan kunjungi halaman arunika\r";
         }else if($category === "notification_pengembalian"){
             $nama_penerima=$data_wa['nama_penerima'];
+            $nip_penerima = $data_wa['nip_penerima'];
             $judul=$data_wa['judul'];
             $no_wa=$data_wa['no_handphone'];
             $alasan=$data_wa['alasan'];
@@ -2561,6 +2577,10 @@ public function removeHasilReview(Request $request){
             $no_wa=$data_wa['no_handphone'];
             $msg="Artikel anda dengan judul ".$judul." dibatalkan untuk dikembalikan, dan akan dilanjutkan ke proses review. ";
             $msg.="Silahkan kunjungi Halaman Arunika.\r";
+            $nip_penerima = $data_wa['nip_penerima'];
+            // $no_wa="081273861528";
+            $msg="Artikel anda dengan judul ".$judul." telah publish.".PHP_EOL;
+            $msg.="Silahkan kunjungi halaman arunika";
         }
         
         $msg.="\rTerimakasih";
@@ -2569,6 +2589,7 @@ public function removeHasilReview(Request $request){
         //$data_wa['no_wa']="081273861528";
         $data_wa['nama']=$nama_penerima;
         $data_wa['pesan']=$msg;
+        $data_wa['nip'] = $nip_penerima;
         $send_wa_notif=sendWaHelp($data_wa);
         $status=$send_wa_notif;
         return $status;
@@ -2577,9 +2598,9 @@ public function removeHasilReview(Request $request){
         $get_jm=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->where('sebagai', 'jurnal_manager')
                             ->where('editorial_team.active', true)
-                            ->select('pegawai.nama', 'pegawai.no_handphone')
+                            ->select('pegawai.nama', 'pegawai.no_handphone', 'pegawai.nip')
                             ->first();
-        return response()->json(['nama'=>$get_jm['nama'], 'no_hp'=>$get_jm['no_handphone']]);
+        return response()->json(['nama'=>$get_jm['nama'], 'no_hp'=>$get_jm['no_handphone'], 'nip'=>$get_jm['nip']]);
     }
     public function validateJM(){
         if(isJM()){
@@ -2591,7 +2612,7 @@ public function removeHasilReview(Request $request){
     }
     public function getPegawaiById($id){
         $get_data=Pegawai::where('id', $id)->first();
-        return response()->json(['nama'=>$get_data['nama'], 'no_handphone'=>$get_data['no_handphone']]);
+        return response()->json(['nama'=>$get_data['nama'], 'no_handphone'=>$get_data['no_handphone'], 'nip'=>$get_data['nip']]);
     }
     public function addPengumuman(){
         $this->validateJM();
@@ -2717,7 +2738,7 @@ public function removeHasilReview(Request $request){
                 $msg=$e->validator->errors()->first();
             }
         }else{
-            $msg=$get_data->msg;
+            $msg="Data tidak ditemukan";
         }
         return response()->json(['status'=>$update, 'msg'=>$msg, 'callLink'=>'list-pengumuman']);
     } 
@@ -2948,4 +2969,55 @@ public function removeHasilReview(Request $request){
         }
         return response()->json(['status'=>$status, 'msg'=>$msg]);
     }
+
+    public function sendWaTesting(){
+        $body = "";
+            $body .= "Kepada Yth:" . PHP_EOL . "*Fandy*" . PHP_EOL . PHP_EOL;
+            $body .= "Ini Pesan Testing";
+            $data=[
+                'token'=>config('services.WA_MA.token'),
+                'nip'=>"199306242019031004",
+                'message'=>$body,
+                'phoneNumber'=>"085880037948",
+                'name'=>"Fandy Juniario Simorangkir",
+                'serviceMode'=>config('services.WA_MA.serviceMode')
+            ];
+            
+
+            // $data=[
+            //     'token'=>config('services.WA_MA.token'),
+            //     'nip'=>$nip,
+            //     'message'=>$msg_wa,
+            //     'phoneNumber'=>$reciver,
+            //     'name'=>$nama
+            // ];
+
+            $data_post=json_encode($data);
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://bisdev.mahkamahagung.go.id:8081/api/v2/wa-notification',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $data_post,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer pBSpYVQFb3znpLfdaBdtkkJk-oPdObpt-RvGBNiF',
+                'Content-Type: application/json'
+            ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            $response_dec=json_decode($response);
+            return [
+                'status'=>$response_dec->status,
+                'msg'=>$response_dec->message
+            ];
+    }
+    
 }

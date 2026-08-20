@@ -29,5 +29,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'WA_MA' => [
+        'token'=>env('API_WA_MA'),
+        'serviceMode'=>env('WA_MA_SERVICE_MODE')
+    ],
 
 ];

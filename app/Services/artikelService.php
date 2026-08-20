@@ -142,6 +142,7 @@ use App\Step_master;
                         $data_wa['nama_penerima']=$get_penulis['nama'];
                         $data_wa['no_handphone']=$get_penulis['no_handphone'];
                         $data_wa['alasan']=$alasan_pengembalian;
+                        $data_wa['nip_penerima'] = $get_penulis['nip'];
                         
                         $status=true;
                         $msg="Berhasil mengembalikan artikel";
@@ -170,6 +171,7 @@ use App\Step_master;
                     $data_wa['judul']=$get_artikel['judul'];
                     $data_wa['nama_penerima']=$get_penulis['nama'];
                     $data_wa['no_handphone']=$get_penulis['no_handphone'];
+                    $data_wa['nip_penerima']=$get_penulis['nip'];
                     
                     //update artikel
                     $get_artikel->step=3;

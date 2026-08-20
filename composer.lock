@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "6704cebfd474317122b20aa64ea56d22",
+
     "packages": [
         {
             "name": "apereo/phpcas",
