@@ -20,7 +20,7 @@
             $data_post=json_encode($data);
             $curl = curl_init();
             curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://bisdev.mahkamahagung.go.id:8081/api/v2/wa-notification',
+            CURLOPT_URL => config('services.WA_MA.CURLOPT_URL'),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

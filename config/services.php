@@ -31,7 +31,8 @@ return [
     ],
     'WA_MA' => [
         'token'=>env('API_WA_MA'),
-        'serviceMode'=>env('WA_MA_SERVICE_MODE')
+        'serviceMode'=>env('WA_MA_SERVICE_MODE'),
+        'CURLOPT_URL'=>env('WA_MA_BASE_URL'),
     ],
 
 ];
