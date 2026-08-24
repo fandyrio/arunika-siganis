@@ -763,7 +763,7 @@ class artikelController extends Controller
             if(isYourArtikel($artikel_id) || isJM()){
                 $validate_page=$this->checkValidateTabsRequest($request->token, 3);
                 if($validate_page->status){
-                    $get_data=Artikel::where('id', $artikel_id)
+                    $get_data=Artikel::where('artikel.id', $artikel_id)
                                 ->join("penulis_artikel", "penulis_artikel.id", "=", "artikel.id_penulis")
                                 ->select("artikel.*", "penulis_artikel.nip")
                                 ->first();
