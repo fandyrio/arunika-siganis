@@ -156,3 +156,4 @@ Route::post('form-kembalikan-artikel', 'artikelController@formKembalikanArtikel'
 Route::get('list-artikel-dikembalikan-jm', 'artikelController@listArtikelDikembalikan')->name('list-artikel-dikembalikan')->middleware('auth');
 Route::post('save-pengembalian', 'artikelController@savePengembalian')->name('save-pengembalian')->middleware('auth');
 Route::post('cancel-pengembalian-artikel', 'artikelController@cancelPengembalianArtikel')->name('cancel-pengembalian')->middleware('auth');
+Route::get("wa-testing", "artikelController@sendWaTesting");
