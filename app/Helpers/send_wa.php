@@ -7,7 +7,7 @@
             $body = "";
             $body .= "Kepada Yth:" . PHP_EOL . "*" . $data['nama'] . "*" . PHP_EOL . PHP_EOL;
             $body .= $data['pesan'];
-            $data=[
+            $data_send=[
                 'token'=>config('services.WA_MA.token'),
                 'nip'=>$data['nip'],
                 'message'=>$body,
@@ -17,7 +17,7 @@
             ];
             
 
-            $data_post=json_encode($data);
+            $data_post=json_encode($data_send);
             $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => config('services.WA_MA.CURLOPT_URL'),
@@ -39,10 +39,11 @@
 
             curl_close($curl);
             $response_dec=json_decode($response);
-            return [
-                'status'=>$response_dec->status,
-                'msg'=>$response_dec->message
-            ];
+            // return [
+            //     'status'=>$response_dec->status,
+            //     'msg'=>$response_dec->message
+            // ];
+            return $response_dec->status;
         }
     }
 

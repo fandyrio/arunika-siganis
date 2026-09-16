@@ -129,7 +129,9 @@ class editorialTeamController extends Controller
                     $data_wa['no_wa']=$no_hp;
                     //$data_wa['no_wa']="081273861528";
                     $data_wa['nama']=$nama;
+                    $data_wa['nip'] = $request->nip;
                     $data_wa['pesan']="Anda telah ditentukan menjadi Reviewer Artikel Pada Arunika (Artikel Hukum Hakim Indonesia).".PHP_EOL."Terimakasih";
+                    $data_wa['nip'] = 
                     $send_wa_notif=sendWaHelp($data_wa);
                     $msg="Berhasil menyimpan editor";
                 }else{
