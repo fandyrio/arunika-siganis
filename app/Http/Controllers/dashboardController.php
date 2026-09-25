@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Artikel;
+use App\Editorial_team;
+use App\Pegawai;
 use App\Review_stage;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,15 +66,31 @@ class dashboardController extends Controller
             $jumlah_artikel_reviewer=$get_review_artikel->count();
             $data['jumlah_artikel_reviewer']=$jumlah_artikel_reviewer;
         }
-        if(isJM()){
+        if(isJM() || isSE()){
 
-            $get_data_masuk=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+            if(isSE()){
+                $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                            ->select("editorial_team.id")
+                                            ->where("p.nip", $nip)->first();
+                
+                $id_pegawai = $get_pegawai->id;
+                $get_data_masuk=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
+                            ->whereBetween('step', [3,7])
+                            ->where("section_editor_id", $id_pegawai)
+                            // ->orWhere('step', 6)
+                            //->orWhere('step', 7)
+                            ->get();
+            }else if(isJM()){
+                $get_data_masuk=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
                             ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
                             ->whereBetween('step', [3,7])
                             // ->orWhere('step', 6)
                             //->orWhere('step', 7)
                             ->get();
+            }
             $jumlah=$get_data_masuk->count();
             foreach($get_data_masuk as $list_artikel){
                 if($list_artikel['step'] === 3){

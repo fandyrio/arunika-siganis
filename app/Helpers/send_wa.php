@@ -1,6 +1,7 @@
 <?php
     use Carbon\Carbon;
     use App\Config;
+use Illuminate\Support\Facades\Http;
 
     if(! function_exists('sendWaHelp')){
         function sendWaHelp($data){
@@ -47,8 +48,28 @@
         }
     }
 
-    function sendWAlama($data){
-        
+    function sendWAlama($reciver, $msg){
+        $status = false;
+        $url = "https://api.pt-bengkulu.go.id/api";
+        $response = Http::acceptJson()->get($url);
+        if($response->successful()){
+            $send = Http::acceptJson()
+                            ->withHeaders([
+                                'Authorization' => "simpeg-wa_live_ptd8defb6bd3338c6c56b4aa35a500a0280be2e328668c9d2879545a3accb02676",
+                                'Accept' => 'application/json'
+                            ])
+                            ->post($url."/v1/send-wa", [
+                                'reciver'=>"081273861528",
+                                'msg'=>$msg,
+                                'type'=>'text'
+                            ]);
+            $result = json_decode($send);
+            $status = $result->status;
+            $msg = $result->msg;
+        }else{
+            $msg = "Server WA tidak dapat dihubungi";
+        }
+        return $status;
     }
 
 ?>

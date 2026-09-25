@@ -106,6 +106,16 @@ $(document).on("submit", "form", function(e){
                     console.log(data.btnBack);
                     $("."+data.btnBack).trigger('click');
                 }
+
+                if(typeof data.callForm !== "undefined"){
+                    // eval(data.callForm);
+                    if (data.function && typeof window[data.function] === 'function') {
+                        const args = Array.isArray(data.args) ? data.args : [data.args];
+                        window[data.function](...args);
+                    } else {
+                        console.warn("Fungsi tidak ditemukan:", data.function);
+                    }
+                }
             }
             callSwal(icon, data.msg, true);
         }

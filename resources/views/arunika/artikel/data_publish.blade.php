@@ -39,7 +39,7 @@
                     <a href="download/{!! Crypt::encrypt($data['edoc']) !!}/edoc_artikel_doc">
                         <span class='far fa-file-word'></span> Download Doc</a>
                     @if($data['step'] === 7)
-                        @if(isJM())
+                        @if(isJM() || isSEOwn($data['id']))
                             <form action="update-edoc-pub">
                                 <button class='btn btn-success btn-sm changeDocPub' style='float:right;'>Ganti Edoc</button>
                                 <br /><br />
@@ -60,7 +60,7 @@
                     <th>Tema</th>
                     <td>
                         <span style='color:green;font-size:1.2rem;font-weight:bold;'>{!! $data['name'] !!}</span>
-                        @if(isJM() && $data['step'] === 7)
+                        @if((isJM() && $data['step'] === 7) || (isSEOwn($data['id']) && $data['step'] === 7))
                             <button class='btn btn-success btn-sm addTema' data-target="{!! Crypt::encrypt($data['id']) !!}" style='float:right;'>Ganti Tema</button>
                         @endif
                     </td>
@@ -71,7 +71,7 @@
     <div class='col-4'>
         <span class='imagePreview'><img src="{!! assets_storage($data['foto_penulis']) !!}" width='100%'></span>
         <br /><br />
-        @if(($data['step'] === 7 || $data['step'] === 8)  && isJM())
+        @if((($data['step'] === 7 || $data['step'] === 8)  && isJM()) || ($data['step'] === 7 || $data['step'] === 8)  && isSEOwn($data['id']))
             <form id="updateFotoPenulis">
                 <input type='hidden' name='token_a' value="{!! Crypt::encrypt($data['id']) !!}">
                 <input type='file' class='form-control changePhotoPenulis' name='foto_penulis' style='display:none;'>
@@ -91,7 +91,7 @@
         <hr />
         @if($data['step'] === 7)
         <a href="preview/{!! Crypt::encrypt($data['id']) !!}" target="_blank"><button class='btn btn-info btn-sm' style='float:right;'><span class='fas fa-search'></span> Preview</button></a>
-            @if(isJM())
+            @if(isJM() || isSEOwn($data['id']))
                 @if($data['code_issue'] === null)
                     <button class='btn btn-success btn-sm' disabled><span class='fab fa-telegram-plane'></span> Direct Publish</button>
                 @else

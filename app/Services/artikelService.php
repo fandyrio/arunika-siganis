@@ -10,6 +10,8 @@
 use App\Penulis_artikel;
 use App\Services\notificationWA;
 use App\Step_master;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
     class artikelService{
 
@@ -125,6 +127,26 @@ use App\Step_master;
             return ['data'=>$get_data, 'jumlah'=>$jumlah];
         }
 
+         public function listArtikelDikembalikanSE($nip){
+            $get_step=$this->getStepArtikelByStepId(9);
+            if(is_null($get_step)){
+                $this->saveNewStepArtikel(9, "Ditolak");
+            }
+            $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                        ->where("p.nip", $nip)->first();
+            
+            $id_pegawai = $get_pegawai->id;
+
+            $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'step_master.step_text')
+                            ->where('step', 9)
+                            ->where("artikel.section_editor_id", $id_pegawai)
+                            ->get();
+            $jumlah=$get_data->count();
+            return ['data'=>$get_data, 'jumlah'=>$jumlah];
+        }
+
         public function savePengembalian($artikel_id, $alasan_pengembalian){
             $data_wa=[];
             $status=false;
@@ -191,6 +213,131 @@ use App\Step_master;
             }
 
             return ['status'=>$status, 'msg'=>$msg, 'data_wa'=>$data_wa];
+        }
+
+        public function getSectionEditor(){
+            $data = [];
+            $get_se = Editorial_team::join("pegawai as p", "p.id", "editorial_team.id_pegawai")
+                                    ->select("p.nama", "editorial_team.id", "p.id_pegawai")
+                                    ->where("editorial_team.sebagai", "section_editor")
+                                    ->get();
+            $jumlah = $get_se->count();
+            if($jumlah > 0){
+                foreach($get_se as $list){
+                    $data[]=[
+                        "nama"=>$list['nama'],
+                        "editorial_token"=>Crypt::encrypt($list['id']),
+                        "pegawai_token"=>Crypt::encrypt($list['id_pegawai'])
+                    ];
+                }
+            }
+
+            return ['jumlah'=>$jumlah, 'data'=>$data];
+        }
+
+        public function getActiveSectionEditor(){
+            $data = [];
+            $get_data = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                    ->leftJoin("artikel as a", function($join){
+                                        $join->on("a.section_editor_id", "=", 'editorial_team.id')
+                                            ->where("a.step", "<", 8);
+                                    })
+                                ->where("editorial_team.sebagai", "section_editor")
+                                ->select("p.nama", DB::raw('count(a.id) as jumlah'))
+                                ->groupBy('p.nama')
+                                ->get();
+            $jumlah = $get_data->count();
+            if($jumlah > 0){
+                foreach($get_data as $list){
+                    $data[] = [
+                        'nama'=>$list['nama'],
+                        'jumlah'=>$list['jumlah']
+                    ];
+                }
+            }
+            return ['jumlah'=>$jumlah, 'data'=>$data];
+        }
+
+        public function getSectionEditorArtikel($artikel_id){
+            $ada_se = false;
+            $data_artikel = null;
+            $get_data = Artikel::join("editorial_team as et", "et.id", "artikel.section_editor_id")
+                                ->join("pegawai as p", "p.id", "et.id_pegawai")
+                                ->where("artikel.id", $artikel_id)
+                                ->select("p.nama", "artikel.judul")
+                                ->first();
+            if(!is_null($get_data)){
+                $ada_se = true;
+                // $nama = $get_data->nama;
+                $data_artikel['judul'] = $get_data->judul;
+                $data_artikel['nama'] = $get_data->nama;
+            }
+
+            return ['ada_se'=>$ada_se, 'data'=>$data_artikel];
+        }
+
+        public function getSectionEditorById($section_editor_id){
+            $get_data = Editorial_team::join("pegawai as p", "p.id", "editorial_team.id_pegawai")
+                                        ->where("editorial_team.id", $section_editor_id)
+                                        ->where("editorial_team.sebagai", "section_editor")
+                                        ->where("editorial_team.active", true)
+                                        ->select("editorial_team.*", "p.no_handphone", "p.nama", "p.nip")
+                                        ->first();
+            return $get_data;
+        }
+
+        public function assignSectionEditor($artikel_id, $section_editor_id){
+            $status = false;
+            $judul = "";
+            $msg = "Tidak dapat menambahkan Section Editor. Artikel sudah dipublish atau sudah dihapus";
+            $get_data = Artikel::where("id", $artikel_id)
+                            ->whereRaw("section_editor_id is null")
+                            ->where("visible", true)
+                            ->whereRaw("step < 8")
+                            ->first();
+            if(!is_null($get_data)){
+                $get_data->section_editor_id = $section_editor_id;
+                $status = $get_data->update();
+                if($status === true){
+                    $msg = "Berhasil menambahkan Section Editor";
+                    $judul = $get_data->judul;
+                }
+            }
+            return ['status'=>$status, 'msg'=>$msg, 'judul'=>$judul];
+        }
+
+        public function getSE($artikel_id){
+            $get_data = Artikel::join("editorial_team as et", "et.id", "=", "artikel.section_editor_id")
+                                ->join("pegawai as p", "p.id", '=', 'et.id_pegawai')
+                                ->where("artikel.id", $artikel_id)
+                                ->select("artikel.judul", "p.nama", "p.no_handphone", "p.nip")
+                                ->first();
+            return ['nama'=>$get_data->nama, 'no_hp'=>$get_data->no_handphone, 'nip'=>$get_data->nip, 'judul'=>$get_data->judul];
+        }
+
+        public function sendwalocal(){
+            $msg = "";
+            $status = false;
+            $url = "https://api.pt-bengkulu.go.id/api";
+            $response = Http::acceptJson()->get($url);
+            if($response->successful()){
+                $send = Http::acceptJson()
+                                ->withHeaders([
+                                    'Authorization' => "simpeg-wa_live_ptd8defb6bd3338c6c56b4aa35a500a0280be2e328668c9d2879545a3accb02676",
+                                    'Accept' => 'application/json'
+                                ])
+                                ->post($url."/v1/send-wa", [
+                                    'reciver'=>"081273861528",
+                                    'msg'=>"test",
+                                    'type'=>'text'
+                                ]);
+                $result = json_decode($send);
+                $status = $result->status;
+                $msg = $result->msg;
+            }else{
+                $msg = "Server WA tidak dapat dihubungi";
+            }
+            return ['status'=>$status, 'msg'=>$msg];
         }
 
     }

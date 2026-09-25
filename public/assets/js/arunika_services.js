@@ -1,5 +1,7 @@
 //const { before } = require("lodash");
 
+// const { before } = require("lodash");
+
 //const { before } = require("lodash");
 
 $.ajaxSetup({
@@ -986,6 +988,30 @@ $(document).on("click", ".removeArtikel", function(e){
         }
     })
 });
+
+$(document).on("click", ".formSectionEditor", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target = $(this).data("target");
+
+    $.ajax({
+        beforeSend:function(){
+            $("#modal-data-review").modal("show");
+            $(".modal-title").html("Form Tambah Section Editor");
+            $(".modal-body").html("Loading ...");
+        },
+        url:'form-section-editor/'+target,
+        type:'GET',
+        success:function(data){
+            $(".modal-body").html(data);
+        },error:function(data){
+            console.log(data);
+            alert("Error Program");
+        }
+    })
+})
+
 $(document).on("click",".editDataPribadi", function(e){
     e.preventDefault();
     e.stopPropagation();

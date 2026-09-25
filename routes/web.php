@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -157,3 +158,10 @@ Route::get('list-artikel-dikembalikan-jm', 'artikelController@listArtikelDikemba
 Route::post('save-pengembalian', 'artikelController@savePengembalian')->name('save-pengembalian')->middleware('auth');
 Route::post('cancel-pengembalian-artikel', 'artikelController@cancelPengembalianArtikel')->name('cancel-pengembalian')->middleware('auth');
 Route::get("wa-testing", "artikelController@sendWaTesting");
+// Route::get('test-hash', function(){
+//     $check = Hash::check('123', '$2y$10$J/GrI4ZM0GvEGowd5ssXzO7yuxfR1zlgVKkquoaCu5kLZfkhrlGQS');
+//     var_dump($check);
+// });
+//tambahan: 2026-09-24
+Route::get("form-section-editor/{id}", "artikelController@formSectionEditor")->name("form-section-editor")->middleware('auth');
+Route::post("save-section-editor", "artikelController@saveSectionEditor")->name("save-section-editor")->middleware('auth');

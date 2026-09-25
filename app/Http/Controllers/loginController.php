@@ -132,6 +132,7 @@ class loginController extends Controller
         //return response()->json(['data'=>$get_data, 'msg'=>$msg]);
     }
 
+
     public function logoutSso()
     {
         // Invalidasi session Laravel

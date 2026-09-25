@@ -7,7 +7,8 @@
     use App\Resize;
     use App\Reviewer_artikel;
     use App\Config;
-    use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
     if(!function_exists('checkUserByNip')){
         function checkUserByNip($nip, $action){
@@ -87,6 +88,53 @@
             return false;
         }
     }
+
+    if(!function_exists('isSE')){
+        function isSE(){
+            if(isProd()){
+                $nip=Session::get('cas')['nip'];
+            }else{
+                $nip=Auth::user()->nip;
+            }
+            $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
+                            ->where('editorial_team.active', true)
+                            ->where('editorial_team.sebagai', 'section_editor')
+                            ->where('pegawai.nip', $nip)
+                            ->first();
+            if(!is_null($get_editorial_team)){
+                return true;
+            }
+            return false;
+        }
+    }
+
+    if(!function_exists('isSEOwn')){
+        function isSEOwn($artikel_id){
+            if(isProd()){
+                $nip=Session::get('cas')['nip'];
+            }else{
+                $nip=Auth::user()->nip;
+            }
+
+            $get_editorial_team=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
+                            ->where('editorial_team.active', true)
+                            ->where('editorial_team.sebagai', 'section_editor')
+                            ->where('pegawai.nip', $nip)
+                            ->select("editorial_team.id as editorial_id")
+                            ->first();
+            if(!is_null($get_editorial_team)){
+                // $artikel_id_dec =Crypt::decrypt($artikel_id);
+                $get_artikel= Artikel::where("section_editor_id", $get_editorial_team->editorial_id)
+                                ->where("id", $artikel_id)
+                                ->first();
+                if(!is_null($get_artikel)){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     if(!function_exists('isYourArtikel')){
         function isYourArtikel($artikel_id){
             $get_data=Artikel::join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')

@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Config;
 use Illuminate\Http\Request;
 use App\Editorial_team;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\DB;
 use App\Pegawai;
+use App\Services\userService;
 
 class editorialTeamController extends Controller
 {
+    protected $userService;
+
+    public function __construct(userService $user_service)
+    {
+        $this->userService = $user_service;
+        // throw new \Exception('Not implemented');
+    }
+
     public function listTeam(){
         $get_data=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                     ->select('pegawai.*', 'editorial_team.sebagai')   
@@ -99,6 +109,7 @@ class editorialTeamController extends Controller
                                 $sebagai=$request->sebagai;
                             }
                             //$data_wa['no_wa']="081273861528";
+                            $data_wa['nip'] = $request->nip;
                             $data_wa['no_wa']=$check['no_handphone'];
                             $data_wa['nama']=$check['nama'];
                             $data_wa['pesan']="Anda telah ditentukan kembali menjadi ".$sebagai." Artikel Pada Arunika (Artikel Hukum Hakim Indonesia).".PHP_EOL."Terimakasih";
@@ -132,8 +143,19 @@ class editorialTeamController extends Controller
                     $data_wa['nip'] = $request->nip;
                     $data_wa['pesan']="Anda telah ditentukan menjadi Reviewer Artikel Pada Arunika (Artikel Hukum Hakim Indonesia).".PHP_EOL."Terimakasih";
                     $data_wa['nip'] = 
-                    $send_wa_notif=sendWaHelp($data_wa);
+
+                    //untuk testing
+                    $get_config = Config::where("config_name", 'environment')->first();
+                    // var_dump($get_config->config_value);
+                    if($get_config->config_value === "local"){
+                        $this->userService->generateUser($nama, $request->nip);
+                        $msg = "Anda telah ditentukan menjadi ".$request->sebagai." Artikel Pada Arunika (Artikel Hukum Hakim Indonesia).".PHP_EOL."Terimakasih";
+                        sendWAlama($no_hp, $msg);
+                    }else{
+                         $send_wa_notif=sendWaHelp($data_wa);
+                    }
                     $msg="Berhasil menyimpan editor";
+
                 }else{
                     $msg="Terjadi kesalahan pada saat penyimpanan data editor";
                 }

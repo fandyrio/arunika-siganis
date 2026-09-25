@@ -46,7 +46,9 @@
                                     <span style='color:orange;font-size:1rem;font-weight:bold;'>(Review ke {!! $list_data['review_ke'] !!})</span>
                                     @endif
                                 </td>
-                                <td><button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button></td>
+                                <td>
+                                    <button class='btn btn-success btn-sm {!! $class !!}' data-target="{!! $target !!}" data-endpoint="{!! $end_point !!}" data-v_init="{!! Crypt::encrypt($v_init) !!}" type='button' style='border-radius:10%'><span class='fas fa-edit'></span> Detil</button>
+                                </td>
                             </tr>
                         @endforeach
                     @endif

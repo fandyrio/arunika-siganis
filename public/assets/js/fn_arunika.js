@@ -509,6 +509,8 @@ function publish(token_a){
             }else{
                 checkStop("data_publish", data.msg);  
             }
+        },error:function(){
+            $(".msg_check").append("<br /><span style='color:orange;'>Error Saat Publish. Silahkan hubungi TIM Pengembang.</span>");
         }
     })
 }
@@ -526,6 +528,8 @@ function checkDataPublish(token_a){
             }else{
                 checkStop("data_publish", data.msg);  
             }
+        },error:function(){
+             $(".msg_check").append("<br /><span style='color:orange;'>Error Saat Check data Publish. Silahkan hubungi TIM Pengembang.</span>");
         }
     })
 }

@@ -14,6 +14,9 @@
                         <!-- <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button> -->
                     @endif
                 <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button>
+                @if(is_null($section_editor_id) || $section_editor_id === 0)
+                    <button class='btn btn-warning btn-sm formSectionEditor' data-target="{!! $id_artikel !!}">Section Editor</button>
+                @endif
                 </span>
             @endif
             </div>

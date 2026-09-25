@@ -2,7 +2,7 @@
     <div class="col-12 mb-3" style='min-height:100px;'>
         <br />
         <h5 style='color:#1BC5BD;font-weight:bold;'>Reviewer</h5>
-        @if(isJM())
+        @if(isJM() || isSEOwn($artikel_id))
             @if($data_review->artikel->step !== 9)
                 <button class='btn btn-success btn-xs addReviewer' style='float:right;'>Tambah Reviewer</button>
             <br /><br /><br />
@@ -25,7 +25,7 @@
                     <th>Status</th>
                 </tr>
                 @foreach($reviewer as $list_reviewer)
-                    @if(($list_reviewer['status'] === 0 || $list_reviewer['status'] === 1) && isJM())
+                    @if(($list_reviewer['status'] === 0 || $list_reviewer['status'] === 1) && (isJM() || isSEOwn($artikel_id)))
                         <tr>
                             <td>{!! $list_reviewer['nama'] !!}  <br /> <span style='color:orange;font-weight:bold;'>(Reviewer ke {!! $list_reviewer['review_ke'] !!})</span> </td>
                             <td>{!! date('d-m-Y', strtotime($list_reviewer['tgl_pilih'])) !!}</td>
@@ -98,7 +98,7 @@
                                     @endif
                                 </span>
                                 <span class="text-muted text-right">
-                                    @if($data_review->data_review[$x]->step_id === 6 && isJM() === true)
+                                    @if(($data_review->data_review[$x]->step_id === 6 && isJM()) || ($data_review->data_review[$x]->step_id === 6 && isSEOwn($artikel_id)))
                                         <button class='btn btn-success btn-sm acceptToPublish' data-token_a='{!! Crypt::encrypt($token_a) !!}' data-token_r="{!! Crypt::encrypt($token_r) !!} "><span class='fas fa-check'></span> Setuju Publish</button>
                                         <button class='btn btn-danger btn-sm cancelPublish' data-token_a="{!! Crypt::encrypt($token_a) !!}" data-token_r="{!! Crypt::encrypt($token_r) !!}"> X Belum dapat dipublish</button>
                                    @endif

@@ -116,6 +116,11 @@ class registerController extends Controller
         }
         return false;
     }
+
+    public function hash($str){
+        echo Hash::make("123");
+    }
+
     public function createUserAdmin(){
         //$check_user=$this->checkUsers($data['NipBaru']);
         //if(is_null($check_user)){

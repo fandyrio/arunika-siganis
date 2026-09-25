@@ -19,7 +19,9 @@
                 <div class='col-lg-5'>
                 <label>Sebagai</label>
                 <select class='form-control required_field' name='sebagai'>
+                    <option value=''>Pilih Role</option>
                     <option value='editor'>Reviewer</option>
+                    <option value='section_editor'>Section Editor</option>
                     <option value='jurnal_manager'>Jurnal Manager</option>
                 </select>
                 </div>

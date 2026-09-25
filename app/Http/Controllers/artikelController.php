@@ -883,6 +883,23 @@ class artikelController extends Controller
                             //->orWhere('step', 7)
                             ->get();
             $jumlah=$get_data->count();
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses Journal Manager', 'keterangan_title'=> 'Dafar artikel yang dalam Proses Review', 'v_init'=>'list_artikel_proses_jm', 'set_se'=>true]);
+        }elseif(isSE()){
+            $nip=Auth::user()->nip;
+            $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                        ->select("editorial_team.id")
+                                        ->where("p.nip", $nip)->first();
+            
+            $section_editor_id = $get_pegawai->id;
+            $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text')
+                            ->whereBetween('step', [3,6])
+                            ->where("artikel.section_editor_id", $section_editor_id)
+                            // ->orWhere('step', 6)
+                            //->orWhere('step', 7)
+                            ->get();
+            $jumlah=$get_data->count();
             return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses Journal Manager', 'keterangan_title'=> 'Dafar artikel yang dalam Proses Review', 'v_init'=>'list_artikel_proses_jm']);
         }else{
             echo "Access denied";
@@ -912,6 +929,24 @@ class artikelController extends Controller
                             ->get();
             $jumlah=$get_data->count();
             return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Published', 'keterangan_title'=>'List Artikel yang telah Publish', 'v_init'=>'list_artikel_publish_jm']);
+        }elseif(isSE()){
+            $nip=Auth::user()->nip;
+            $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                        ->select("editorial_team.id")
+                                        ->where("p.nip", $nip)->first();
+            
+            $section_editor_id = $get_pegawai->id;
+           $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                            ->join('issue_artikel', 'issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'issue_artikel.name')
+                            ->where('step', 8)
+                            ->where("artikel.section_editor_id", $section_editor_id)
+                            ->get();
+                            
+            $jumlah=$get_data->count();
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Proses Journal Manager', 'keterangan_title'=> 'Dafar artikel yang dalam Proses Review', 'v_init'=>'list_artikel_proses_jm']);
         }else{
             echo "Akses ditolak";
         }
@@ -924,6 +959,23 @@ class artikelController extends Controller
                             ->leftJoin('issue_artikel', 'issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
                             ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'issue_artikel.name')
                             ->where('step', 7)
+                            ->get();
+            $jumlah=$get_data->count();
+            return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Menunggu Publish (Early View)', 'keterangan_title'=>'List Artikel Menunggu Publish (Early View)', 'v_init'=>'list_artikel_waiting_publish_jm']);
+        }else if(isSE()){
+            $nip=Auth::user()->nip;
+            $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                        ->select("editorial_team.id")
+                                        ->where("p.nip", $nip)->first();
+            
+            $section_editor_id = $get_pegawai->id;
+            $get_data=Artikel::join('step_master', 'step_master.step_id', '=', 'artikel.step')
+                            ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
+                            ->join('publish_artikel', 'publish_artikel.id_artikel', '=', 'artikel.id')
+                            ->leftJoin('issue_artikel', 'issue_artikel.code_issue', '=', 'publish_artikel.code_issue')
+                            ->select('artikel.*', 'penulis_artikel.nama', 'penulis_artikel.nip', 'penulis_artikel.satker', 'penulis_artikel.jabatan', 'penulis_artikel.pangkat', 'step_master.step_text', 'issue_artikel.name')
+                            ->where('step', 7)
+                            ->where("artikel.section_editor_id", $section_editor_id)
                             ->get();
             $jumlah=$get_data->count();
             return view('arunika/artikel/list_artikel', ['data'=>$get_data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Menunggu Publish (Early View)', 'keterangan_title'=>'List Artikel Menunggu Publish (Early View)', 'v_init'=>'list_artikel_waiting_publish_jm']);
@@ -979,7 +1031,8 @@ class artikelController extends Controller
             $step=$get_artikel['step'];
             $judul=$get_artikel['judul'];
             $visible=$get_artikel['visible'];
-            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul, 'visible'=>$visible]);
+            $section_editor_id = $get_artikel['section_editor_id'];
+            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul, 'visible'=>$visible, 'section_editor_id'=>$section_editor_id]);
         }catch(DecryptException $e){
             echo "invalid token";
         }
@@ -1174,6 +1227,7 @@ class artikelController extends Controller
             $get_reviewer=Editorial_team::join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
                             ->select('pegawai.*', 'editorial_team.sebagai')
                             ->where('editorial_team.active', true)
+                            ->where('sebagai', '<>', 'section_editor')
                             ->get();
             $get_reviewer_active=Editorial_team::leftJoin('reviewer_artikel', function($q){
                                         $q->on('reviewer_artikel.id_pegawai','=', 'editorial_team.id_pegawai')
@@ -1185,6 +1239,7 @@ class artikelController extends Controller
                                         ->where('step', 4);
                                     })
                                     ->join('pegawai', 'pegawai.id', '=', 'editorial_team.id_pegawai')
+                                    ->where('sebagai', '<>', 'section_editor')
                                     ->select('pegawai.nama',  DB::raw('count(review_stage.id) as jumlah_aktif'))
                                     ->groupBy('pegawai.nama')
                                     ->get();
@@ -1198,9 +1253,9 @@ class artikelController extends Controller
     public function saveReviewer(Request $request){
         $update_step=false;
         try{
-            if(isJM()){
-                $artikel_id=Crypt::decrypt($request->token_a);
-                $artikel_id_compare=Crypt::decrypt($request->token);
+            $artikel_id=Crypt::decrypt($request->token_a);
+            $artikel_id_compare=Crypt::decrypt($request->token);
+            if(isJM() || isSEOwn($artikel_id)){
                 if($artikel_id === $artikel_id_compare){
                     $id_pegawai=Crypt::decrypt($request->nama);
                     $get_artikel=Artikel::where('id', $artikel_id)
@@ -1654,6 +1709,7 @@ public function removeHasilReview(Request $request){
                                     $artikel=Artikel::where('id', $artikel_id)
                                                 ->where('step', 4)
                                                 ->first();
+                                    $section_editor_id = $artikel->section_editor_id;
                                     try{
                                         DB::beginTransaction();
                                     
@@ -1691,7 +1747,12 @@ public function removeHasilReview(Request $request){
 
                                         //kirim kepada jm bila accepted
                                         if($get_review_stage['step_id'] === 6){
-                                            $this->sendWaNotification('artikel_accepted', $data_wa);
+                                            if(!is_null($section_editor_id)){
+                                                $data_se['artikel_id'] = $artikel_id;
+                                                $this->sendWaNotification('artikel_accepted_se', $data_se);
+                                            }else{
+                                                 $this->sendWaNotification('artikel_accepted', $data_wa);
+                                            }
                                         }
                                     }
                                 }else{
@@ -1948,7 +2009,7 @@ public function removeHasilReview(Request $request){
         try{
             $review_id=Crypt::decrypt($request->token_r);
             $artikel_id=Crypt::decrypt($request->token_a);
-            if(isJm()){
+            if(isJm() || isSEOwn($artikel_id)){
                 $get_data=Artikel::join('review_stage', function($q) use($review_id){
                                         $q->on('review_stage.id_artikel', '=', 'artikel.id')
                                         ->where('review_stage.id', $review_id);
@@ -1977,7 +2038,7 @@ public function removeHasilReview(Request $request){
                 $validate=$request->validate([
                     'catatan_jm'=> 'required',
                 ]);
-                if(isJm()){
+                if(isJm() || isSEOwn($artikel_id)){
                     $get_data=Artikel::join('review_stage', function($q) use($review_id){
                                             $q->on('review_stage.id_artikel', '=', 'artikel.id')
                                             ->where('review_stage.id', $review_id);
@@ -2024,7 +2085,7 @@ public function removeHasilReview(Request $request){
         try{
             $review_id=Crypt::decrypt($request->token_r);
             $artikel_id=Crypt::decrypt($request->token_a);
-            if(isJM()){
+            if(isJM() || isSEOwn($artikel_id)){
                 $check_data=Artikel::join('review_stage', function($q) use($review_id){
                                 $q->on('review_stage.id_artikel', '=', 'artikel.id')
                                     ->where('review_stage.step', 6)
@@ -2095,7 +2156,7 @@ public function removeHasilReview(Request $request){
         try{
             $artikel_id=Crypt::decrypt($request->target);
             //$artikel_id=Crypt::decrypt($request->token_a);
-            if(isJM()){
+            if(isJM() || isSEOwn($artikel_id)){
                 $check_data=Artikel::select('artikel.*')
                             ->where('artikel.id', $artikel_id)
                             ->first();
@@ -2239,9 +2300,9 @@ public function removeHasilReview(Request $request){
         return response()->json(['status'=>$update, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>true, 'msg'=>$msg]);
     }
     public function previewArtikel($artikel_id){
-        if(isJM()){
-            try{
-                $artikel_id_dec=Crypt::decrypt($artikel_id);
+        try{
+            $artikel_id_dec=Crypt::decrypt($artikel_id);
+            if(isJM() || isSEOwn($artikel_id_dec)){
                 $get_artikel=Publish_artikel::join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')
                             ->join('penulis_artikel', 'artikel.id_penulis', '=', 'penulis_artikel.id')
                             ->select('artikel.*', 'publish_artikel.edoc', 'penulis_artikel.nama', 'publish_artikel.text_tulisan')
@@ -2253,12 +2314,12 @@ public function removeHasilReview(Request $request){
                     return view('web/preview_artikel', ['artikel'=>$get_artikel, 'text'=>$text, 'keyword'=>$get_keyword, 'jumlah_similar'=>0, 'jlh_other'=>0]);
                 }else{
                     echo "Artikel tidak ditemukan";
-                }
-            }catch(DecryptException $e){
-                echo "Error 404";
+                }       
+            }else{
+                echo "Akses ditolak";
             }
-        }else{
-            echo "Akses ditolak";
+        }catch(DecryptException $e){
+            echo "Error 404";
         }
     }
     public function generatePDF($text, $judul, $penulis){
@@ -2272,6 +2333,11 @@ public function removeHasilReview(Request $request){
         //$filename=str_replace(' ', '-',$judul);
         $judul=preg_replace('/[^A-Za-z0-9\-]/', '-', $judul);
         $filename="public/upload/edoc/artikel/pdf/".$judul.".pdf";
+        // if(!File::isDirectory('public/upload/edoc/artikel/pdf')){
+        //         File::makeDirectory('public/upload/edoc/artikel/pdf', 0755, true);
+        // }
+        // $path_strg = storage_path('public/upload/edoc/artikel/pdf');
+
         file_put_contents(storage_path('app/'.$filename), $output);
         return $filename;
         //$dompdf->stream("codexworld",array("Attachment"=>1));
@@ -2279,9 +2345,9 @@ public function removeHasilReview(Request $request){
     public function publishArtikel(Request $request){
         $publish=false;
         $msg="";
-        if(isJM()){
-            try{
-                $artikel_id=Crypt::decrypt($request->token_a);
+        try{
+            $artikel_id=Crypt::decrypt($request->token_a);
+            if(isJM() || isSEOwn($artikel_id)){
                 $get_publish=Publish_artikel::join('artikel', 'artikel.id', '=', 'publish_artikel.id_artikel')
                                 ->join('penulis_artikel', 'penulis_artikel.id', '=', 'artikel.id_penulis')
                                 ->select('publish_artikel.edoc', 'artikel.judul', 'penulis_artikel.nama')
@@ -2347,11 +2413,11 @@ public function removeHasilReview(Request $request){
                 }else{
                     $msg="Data tidak ditemukan";
                 }
-            }catch(DecryptException $e){
-                $msg="Invalid token";
+            }else{
+                $msg="Akses ditolak";
             }
-        }else{
-            $msg="Akses ditolak";
+        }catch(DecryptException $e){
+            $msg="Invalid token";
         }
         return response()->json(['status'=>$publish, 'msg'=>$msg, 'callForm'=>true, 'args'=>[], 'function'=>'loadDataPublish']);
     }
@@ -2377,11 +2443,12 @@ public function removeHasilReview(Request $request){
     public function checkDataArtikel(Request $request){
         $msg="";
         $check=false;
-        if(isJM()){
-            try{
-                $artikel_id=Crypt::decrypt($request->token_a);
+        try{
+            $artikel_id=Crypt::decrypt($request->token_a);
+            if(isJM() || isSEOwn($artikel_id)){   
                 $get_artikel=Artikel::join('kategori_artikel', 'kategori_artikel.kode', '=', 'artikel.kategori_artikel_kode')
                                 ->where('artikel.step', 7)
+                                ->where("artikel.id", $artikel_id)
                                 ->whereRaw('foto_penulis is not null')
                                 ->first();
                 if(!is_null($get_artikel)){
@@ -2394,11 +2461,11 @@ public function removeHasilReview(Request $request){
                 }else{
                     $msg="Data artikel tidak lengkap";
                 }
-            }catch(DecryptException $e){
-                $msg="Invalid token";
+            }else{
+                $msg="Akses ditolak";
             }
-        }else{
-            $msg="Akses ditolak";
+        }catch(DecryptException $e){
+            $msg="Invalid token";
         }
         return response()->json(['status'=>$check, 'msg'=>$msg]);
     }
@@ -2406,9 +2473,9 @@ public function removeHasilReview(Request $request){
         $check=false;
         $msg="";
         $warning=null;
-        if(isJM()){
-            try{
-                $artikel_id=Crypt::decrypt($request->token_a);
+        try{
+            $artikel_id=Crypt::decrypt($request->token_a);
+            if(isJM() || isSEOwn($artikel_id)){
                 $get_data_review=Review_stage::where('step', 7)
                                 ->whereRaw('edoc_catatan_reviewer is null')
                                 ->whereRaw('edoc_perbaikan_penulis is null')
@@ -2419,20 +2486,20 @@ public function removeHasilReview(Request $request){
                 if(is_null($get_data_review)){
                     $warning="Artikel ini akan dipublish tanpa review.";
                 }
-            }catch(DecryptException $e){
-                $msg="Invalid token";
+            }else{
+                $msg="Akses ditolak";
             }
-        }else{
-            $msg="Akses ditolak";
+        }catch(DecryptException $e){
+                $msg="Invalid token";
         }
         return response()->json(['status'=>$check, 'msg'=>$msg, 'warning'=>$warning]);
     }
     public function checkDataPublish(Request $request){
         $check=false;
         $msg="";
-        if(isJM()){
-            try{
-                $artikel_id=Crypt::decrypt($request->token_a);
+        try{
+            $artikel_id=Crypt::decrypt($request->token_a);
+            if(isJM() || isSEOwn($artikel_id)){
                 $get_data=Publish_artikel::where('id_artikel', $artikel_id)
                                         ->whereRaw('text_tulisan is null')
                                         ->whereRaw('edoc is not null')
@@ -2442,11 +2509,11 @@ public function removeHasilReview(Request $request){
                 }else{
                     $msg="Data publish artikel tidak ditemukan";
                 }
-            }catch(DecryptException $e){
-                $msg="Invalid token";
+            }else{
+                $msg="AKses ditolak";
             }
-        }else{
-            $msg="AKses ditolak";
+        }catch(DecryptException $e){
+            $msg="Invalid token";
         }
         return response()->json(['status'=>$check, 'msg'=>$msg]);
     }
@@ -2512,7 +2579,7 @@ public function removeHasilReview(Request $request){
             $nama_penerima=$data_penerima->nama;
             $nip_penerima = $data_penerima->nip;
 
-            $msg="Artikel dengan judul : *_".$judul."_* baru saja di kirimkan.";
+            $msg="Yth. Jurnal Manager Arunika. \nArtikel dengan judul : *_".$judul."_* baru saja di kirimkan.";
             $msg.="\r\rSilahkan untuk menentukan reviewer untuk dapat melanjutkan proses review.";
             
         }else if($category === "assign_reviewer"){
@@ -2525,11 +2592,11 @@ public function removeHasilReview(Request $request){
 
         }else if($category === "reviewer_result"){    //hasil review reviewer kepada author
             $judul=$data_wa['judul'];
-            $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  \rdengan hasil : _".$data_wa['hasil_reviewer']."_\r\r";
+            $msg="Artikel anda dengan judul _".$judul."_ telah selesai direview,  \ndengan hasil : _".$data_wa['hasil_reviewer']. "_\n\n";
             if($data_wa['hasil_reviewer']){
                 $msg.="Untuk melihat catatan reviewer, silahkan login kehalaman arunika\r";
             }else{
-                $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.\r";
+                $msg.="Silahkan login kehalaman arunika untuk melihat lebih detil.\n";
             }
             $nama_penerima=$data_wa['nama_penerima'];
             $no_wa=$data_wa['no_wa'];
@@ -2554,7 +2621,15 @@ public function removeHasilReview(Request $request){
             $nip_penerima = $data_penerima->nip;
 
             $msg="Artikel dengan judul : _".$judul."_\rtelah di Setujui oleh reviewer.";
-            $msg.="\r\rSilahkan login untuk melakukan persiapan publish.".PHP_EOL;
+            $msg.="\n\nSilahkan login untuk melakukan persiapan publish.".PHP_EOL;
+        }else if($category === "artikel_accepted_se"){
+            $data_penerima = $this->artikelServices->getSE($data_wa['artikel_id']);
+            $no_wa=$data_penerima['no_hp'];
+            $nama_penerima=$data_penerima['nama'];
+            $nip_penerima = $data_penerima['nip'];
+
+            $msg="Yth. Bapak / Ibu Section Editor. \n\nArtikel dengan judul : _".$data_penerima['judul']."_\rtelah di Setujui oleh reviewer. ";
+            $msg.="\n\nSilahkan login untuk melakukan persiapan publish.".PHP_EOL;
         }else if($category === "notification_publish"){
             $nama_penerima=$data_wa['nama_penerima'];
             $nip_penerima = $data_wa['nip_penerima'];
@@ -2579,18 +2654,35 @@ public function removeHasilReview(Request $request){
             $msg.="Silahkan kunjungi Halaman Arunika.\r";
             $nip_penerima = $data_wa['nip_penerima'];
             // $no_wa="081273861528";
-            $msg="Artikel anda dengan judul ".$judul." telah publish.".PHP_EOL;
-            $msg.="Silahkan kunjungi halaman arunika";
+            // $msg="Artikel anda dengan judul ".$judul." telah publish.".PHP_EOL;
+            // $msg.="Silahkan kunjungi halaman arunika";
+        }else if($category === "assign_section_editor"){
+            $nama_penerima=$data_wa['nama_penerima'];
+            $judul=$data_wa['judul'];
+            $no_wa=$data_wa['no_handphone'];
+            $msg="Anda di tambahkan sebagai *Section Editor* untuk Artikel dengan judul ".$judul.".\r\r";
+            $msg.="Silahkan kunjungi Halaman Arunika.\r";
+            $nip_penerima = $data_wa['nip_penerima'];
+            // $no_wa="081273861528";
         }
         
-        $msg.="\rTerimakasih";
+        $msg.="\rTerimakasih. ";
         $msg.="\r\rHalaman arunika dapat diakses melalui : ".strip_tags($domain);
         $data_wa['no_wa']=$no_wa;
         //$data_wa['no_wa']="081273861528";
         $data_wa['nama']=$nama_penerima;
         $data_wa['pesan']=$msg;
         $data_wa['nip'] = $nip_penerima;
-        $send_wa_notif=sendWaHelp($data_wa);
+        
+        $get_config = Config::where("config_name", 'environment')->first();
+        // var_dump($get_config->config_value);
+        if($get_config->config_value === "local"){
+            $send_wa_notif = sendWAlama("081273861528", $msg);
+        }else{
+            $send_wa_notif=sendWaHelp($data_wa);
+        }
+
+        // $send_wa_notif=sendWaHelp($data_wa);
         $status=$send_wa_notif;
         return $status;
     }
@@ -2860,13 +2952,16 @@ public function removeHasilReview(Request $request){
 
     public function listArtikelDikembalikan(){
         if(isJM()){
-            $get_data=$this->artikelServices->listArtikelDikembalikan();
-            $data=$get_data['data'];
-            $jumlah=$get_data['jumlah'];
-            return view('arunika/artikel/list_artikel', ['data'=>$data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Dikembalikan', 'keterangan_title'=>'List Artikel Dikembalikan', 'v_init'=>'list_artikel_dikembalikan_jm']);
+            $get_data=$this->artikelServices->listArtikelDikembalikan();    
+        }else if(isSE()){
+            $nip=Auth::user()->nip;
+            $get_data = $this->artikelServices->listArtikelDikembalikanSE($nip);
         }else{
             echo "Access denied";die();
         }
+        $data=$get_data['data'];
+        $jumlah=$get_data['jumlah'];
+        return view('arunika/artikel/list_artikel', ['data'=>$data, 'jumlah'=>$jumlah, 'class'=>'detil_artikel', 'target'=>'', 'title'=> 'Artikel Dikembalikan', 'keterangan_title'=>'List Artikel Dikembalikan', 'v_init'=>'list_artikel_dikembalikan_jm']);
     }
 
     public function formKembalikanArtikel(Request $request){
@@ -2968,6 +3063,69 @@ public function removeHasilReview(Request $request){
             $msg=$e->validator->errors()->first();
         }
         return response()->json(['status'=>$status, 'msg'=>$msg]);
+    }
+
+    public function formSectionEditor($id){
+        try{
+            $artikel_id = Crypt::decrypt($id);
+            $list_se = $this->artikelServices->getSectionEditor();
+            $active_se = $this->artikelServices->getActiveSectionEditor();
+            $get_section_editor = $this->artikelServices->getSectionEditorArtikel($artikel_id);
+            if($get_section_editor['ada_se'] === true){
+                echo "Tidak dapat menambahkan Section Editor.";die();
+            }
+            return view("arunika/artikel/form_tambah_sectioneditor", ['token'=>Crypt::encrypt($artikel_id),'list_se'=>$list_se, 'active_se'=>$active_se]);
+        }catch(DecryptException $e){
+            echo "Invalid data token";die();
+        }
+    }
+
+    public function saveSectionEditor(Request $request){
+        $status = false;
+        try{
+            $request->validate([
+                'nama'=>['required', 'string']
+            ]);
+            $token_artikel_umum = $request->token_a;
+            $token_artikel = $request->token;
+            try{
+                $artikel_id_umum = Crypt::decrypt($token_artikel_umum);
+                $artikel_id = Crypt::decrypt($token_artikel);
+                $section_editor_id = Crypt::decrypt($request->nama);
+                if((int)$artikel_id_umum === (int)$artikel_id){
+                    $check_current_se = $this->artikelServices->getSectionEditorArtikel($artikel_id);
+                    if(!$check_current_se['ada_se']){
+                        $check_selected_se = $this->artikelServices->getSectionEditorById($section_editor_id);
+                        if(!is_null($check_selected_se)){
+                            $assign = $this->artikelServices->assignSectionEditor($artikel_id, $section_editor_id);
+                            $status = $assign['status'];
+                            $msg = $assign['msg'];
+
+                            // $get_pegawai=$this->getPegawaiById($id_pegawai);
+                            // $data_pegawai=$get_pegawai->getData();
+                            $data_wa['judul']=$assign['judul'];
+                            $data_wa['no_handphone']=$check_selected_se->no_handphone;
+                            $data_wa['nama_penerima']=$check_selected_se->nama;
+                            $data_wa['nip_penerima'] = $check_selected_se->nip;
+                            $this->sendWaNotification('assign_section_editor', $data_wa);
+
+                        }else{
+                            $msg = "Section Editor yang dipilih tidak valid ";
+                        }
+                    }else{
+                        $msg = "Tidak dapat menambahkan Section Editor. Section Editor yang lama masih ada.";
+                    }
+                }else{
+                    $msg = "Unconsistent Data Found";
+                }
+            }catch(DecryptException $e){
+                $msg = "Invalid token";
+            }
+        }catch(ValidationException $e){
+            $msg = $e->validator->errors()->first();
+        }
+
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'token_id'=>Crypt::encrypt($artikel_id), 'callForm'=>true, 'function'=>'    loadDataDetilArtikel', 'args'=>[], 'closeModal'=>true]);
     }
 
     public function sendWaTesting(){
