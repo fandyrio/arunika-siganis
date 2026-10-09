@@ -133,6 +133,7 @@ use Illuminate\Support\Facades\Http;
                 $this->saveNewStepArtikel(9, "Ditolak");
             }
             $get_pegawai = Editorial_team::join("pegawai as p", "p.id", "=", "editorial_team.id_pegawai")
+                                        ->select("editorial_team.id")
                                         ->where("p.nip", $nip)->first();
             
             $id_pegawai = $get_pegawai->id;

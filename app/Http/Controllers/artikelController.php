@@ -1027,12 +1027,16 @@ class artikelController extends Controller
         try{
             $artikel_id_dec=Crypt::decrypt($artikel_id);
             $v_init_dec=Crypt::decrypt($v_init);
-            $get_artikel=Artikel::where('id', $artikel_id_dec)->first();
+            $get_artikel=Artikel::leftjoin("editorial_team as et", "et.id", "=", "artikel.section_editor_id")
+                                    ->leftjoin("pegawai as p", "p.id", "et.id_pegawai")
+                                    ->select("artikel.*", "p.nama")
+                                    ->where('artikel.id', $artikel_id_dec)->first();
             $step=$get_artikel['step'];
             $judul=$get_artikel['judul'];
             $visible=$get_artikel['visible'];
             $section_editor_id = $get_artikel['section_editor_id'];
-            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul, 'visible'=>$visible, 'section_editor_id'=>$section_editor_id]);
+            $nama_se = $get_artikel['nama'];
+            return view("arunika/artikel/detil_artikel", ["id_artikel" => $artikel_id, 'step'=>$step, 'target'=>$v_init_dec, 'judul'=>$judul, 'visible'=>$visible, 'section_editor_id'=>$section_editor_id, 'nama_se'=>$nama_se]);
         }catch(DecryptException $e){
             echo "invalid token";
         }
@@ -2973,7 +2977,7 @@ public function removeHasilReview(Request $request){
             $artikel_id_enc=$request->target;
             try{
                 $artikel_id=Crypt::decrypt($request->target);
-                if(isJM()){
+                if(isJM() || isSEOwn($artikel_id)){
                     $get_artikel=Artikel::where('id', $artikel_id)
                             ->where('step', '<', 6)
                             ->where('step', '>', 2)
@@ -3005,7 +3009,7 @@ public function removeHasilReview(Request $request){
             $artikel_id_enc=$request->token;
             try{
                 $artikel_id=Crypt::decrypt($artikel_id_enc);
-                if(isJM()){
+                if(isJM() ||isSEOwn($artikel_id)){
                     $save=$this->artikelServices->savePengembalian($artikel_id, $request->alasan_pengembalian);
                     $status=$save['status'];
                     $msg=$save['msg'];
@@ -3039,7 +3043,7 @@ public function removeHasilReview(Request $request){
             $artikel_id_enc=$request->target;
             try{
                 $artikel_id=Crypt::decrypt($artikel_id_enc);
-                if(isJM()){
+                if(isJM() || isSEOwn($artikel_id)){
                     $cancel=$this->artikelServices->cancelPengembalianArtikel($artikel_id);
                     $status=$cancel['status'];
                     $msg=$cancel['msg'];

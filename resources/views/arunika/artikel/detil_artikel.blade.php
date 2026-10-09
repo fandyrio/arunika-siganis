@@ -5,6 +5,7 @@
                 <button class='btn btn-light list_menu' data-target='{!! $target !!}' style='background-color:white;border-color:white;font-size:1.8rem;font-weight:bold;'><span class='fas fa-angle-left' style='cursor:pointer;'></span> Detil Artikel </button><br />
                 <span style='font-size:1.3rem;'>Judul</span> : <span style='color:#1BC5BD;font-size:1rem;font-weight:bold;font-size:1.3rem;'>{!! $judul !!}</span>
                 {!! (!$visible) ? '<br /><span style="color:red;font-weight:bold;">(This article hide from public)</span>' : '' !!}
+                <br /><span style="color:green;font-weight:bold;">{{!is_null($nama_se) && isJM() ? '(Section Editor : '.$nama_se.')' : ''}}</span>
             </div>
             <div class="col-md-4">
             @if(isJM())
@@ -15,7 +16,9 @@
                     @endif
                 <button class='btn btn-danger btn-sm removeArtikel' data-target="{!! $id_artikel !!}">Hapus</button>
                 @if(is_null($section_editor_id) || $section_editor_id === 0)
-                    <button class='btn btn-warning btn-sm formSectionEditor' data-target="{!! $id_artikel !!}">Section Editor</button>
+                    @if((int)$step < 6)
+                        <button class='btn btn-warning btn-sm formSectionEditor' data-target="{!! $id_artikel !!}">Section Editor</button>
+                    @endif
                 @endif
                 </span>
             @endif
