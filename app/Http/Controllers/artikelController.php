@@ -2252,55 +2252,55 @@ public function removeHasilReview(Request $request){
     }
     public function updateEdocPub(Request $request){
         $update=false;
-        if(isJM()){
             try{
                 $artikel_id=Crypt::decrypt($request->token_a);
                 $get_data=Publish_artikel::where('id_artikel', $artikel_id)
                             ->first();
-                if(!is_null($get_data)){
-                    try{
-                        $validate=$request->validate([
-                            'new_edoc' => ['required', 'file'],
-                        ]);
-                        $file=$request->new_edoc;
-                        $size=$file->getSize();
-                        $type=$file->getMimeType();
-                        if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "pplication/msword"){
-                            if($size <= 6291456){
-                                $destination="public/upload/edoc/artikel";
-                                $filename=date('YmdHis')."-".$file->getClientOriginalName();
-                                // $path=$destination."/".$filename;
-                                // $file->move($destination, $filename);
-                                $path=$file->storeAs($destination, $filename);
-                                if(Storage::exists($path)){
-                                    $get_data->edoc=$path;
-                                    $update=$get_data->update();
-                                    if($update){
-                                        $msg="Berhasil mengubah edoc";
+                if(isJM() || isSEOwn($artikel_id)){
+                    if(!is_null($get_data)){
+                        try{
+                            $validate=$request->validate([
+                                'new_edoc' => ['required', 'file'],
+                            ]);
+                            $file=$request->new_edoc;
+                            $size=$file->getSize();
+                            $type=$file->getMimeType();
+                            if($type === "application/pdf" || $type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || $type === "pplication/msword"){
+                                if($size <= 6291456){
+                                    $destination="public/upload/edoc/artikel";
+                                    $filename=date('YmdHis')."-".$file->getClientOriginalName();
+                                    // $path=$destination."/".$filename;
+                                    // $file->move($destination, $filename);
+                                    $path=$file->storeAs($destination, $filename);
+                                    if(Storage::exists($path)){
+                                        $get_data->edoc=$path;
+                                        $update=$get_data->update();
+                                        if($update){
+                                            $msg="Berhasil mengubah edoc";
+                                        }else{
+                                            $msg="Terjadi kesalahan pada saat mengubah edoc";
+                                        }
                                     }else{
-                                        $msg="Terjadi kesalahan pada saat mengubah edoc";
+                                        $msg="Tidak dapat melakukan upload edoc. Silahkan hubungi tim pengembang";
                                     }
                                 }else{
-                                    $msg="Tidak dapat melakukan upload edoc. Silahkan hubungi tim pengembang";
+                                    $msg="Ukuran file harus lebih kecil dari 6mb";
                                 }
                             }else{
-                                $msg="Ukuran file harus lebih kecil dari 6mb";
+                                $msg="Tipe data harus Document *.docx / *.doc / *.rtf / *.pdf";
                             }
-                        }else{
-                            $msg="Tipe data harus Document *.docx / *.doc / *.rtf / *.pdf";
+                        }catch(ValidationException $e){
+                            $msg=$e->validator->errors()->first();
                         }
-                    }catch(ValidationException $e){
-                        $msg=$e->validator->errors()->first();
+                    }else{
+                        $msg="Data tidak ditemukan";
                     }
                 }else{
-                    $msg="Data tidak ditemukan";
+                    $msg="Akses ditolak";
                 }
             }catch(DecryptException $e){
                 $msg="Invalid token";
             }
-        }else{
-            $msg="Akses ditolak";
-        }
         return response()->json(['status'=>$update, 'callForm'=>true, 'function'=>'loadDataPublish', 'args'=>true, 'msg'=>$msg]);
     }
     public function previewArtikel($artikel_id){
