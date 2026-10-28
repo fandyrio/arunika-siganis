@@ -72,7 +72,7 @@ Route::get('link-artikel-publish-jm', 'artikelController@linkArtikelPublishJM')-
 Route::get('detil-artikel/{id}/{v_init}', 'artikelController@detilArtikel')->name('detil-artikel')->middleware('auth');
 Route::post('data-umum-artikel', 'artikelController@dataUmumArtikel')->name('data-umum-artikel')->middleware('auth');
 Route::post('data-review', 'artikelController@dataReview')->name('data-review')->middleware('auth');
-Route::post('data-review-author', 'artikelController@dataReviewAuthor')->name('data-review')->middleware('auth');
+Route::post('data-review-author', 'artikelController@dataReviewAuthor')->name('data-review-author')->middleware('auth');
 Route::post('form-tambah-reviewer', 'artikelController@formTambahReviewer')->name('form-tambah-reviewer')->middleware('auth');
 Route::post('save-reviewer', 'artikelController@saveReviewer')->name('save-reviewer')->middleware('auth');//harus admin
 Route::get('list-pertanyaan-review/{page}', 'configController@listPertanyaan')->name('list-pertanyaan-review')->middleware('auth');
