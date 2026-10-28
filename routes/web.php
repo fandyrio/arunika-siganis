@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 /* Route::get('/', function () {
     return view('welcome');
 }); */
-Route::get('/', 'arunikaController@index');
+Route::get('/', 'arunikaController@index')->name('home');
 
 // Route::get('register', 'registerController@index')->name('register')->middleware('isNotLogin');
 Route::post('validate-input', 'registerController@validateNIP')->name('validate-nip')->middleware('isNotLogin');
@@ -124,7 +124,7 @@ Route::get('list-pengguna/{page?}', 'configController@listPengguna')->name('list
 Route::post('remove-pengguna', 'configController@removePengguna')->name('remove-pengguna')->middleware('auth');
 Route::get('list-draft', 'artikelController@listDraft')->name('list-draft')->middleware('auth');
 
-Route::get('home', 'arunikaController@index')->name('home');
+// Route::get('home', 'arunikaController@index')->name('home');
 Route::post('edit-issue-artikel', 'issueArtikelController@getIssueById')->name('edit-issue-artikel')->middleware('auth');
 Route::post('delete-issue-artikel', 'issueArtikelController@deleteIssueArtikel')->name('delete-issue-artikel')->middleware('auth');
 Route::post('form-tambah-tema', 'artikelController@formTambahTema')->name('form-tambah-tema')->middleware('auth');
