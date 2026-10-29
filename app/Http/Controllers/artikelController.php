@@ -238,7 +238,7 @@ class artikelController extends Controller
             if($request->isManual === "true"){
                 $jm=Crypt::decrypt($request->token_n);
                 $access_validation=false;
-                if(isJM()){
+                if(isJM() || isSE()){
                     $access_validation=true;
                     $dec_nip=$nip;
                     $login_nip=$nip;
@@ -328,13 +328,13 @@ class artikelController extends Controller
                     $dec_nip=Crypt::decrypt($request->nip_baru);
                 }
                 $id_pegawai=Crypt::decrypt($request->token);
-                if($dec_nip === Auth::user()->nip || isJM()){
+                if($dec_nip === Auth::user()->nip || isJM() || isSE()){
                     $data_sikep=DB::select('CALL SPGetHakimByNip('.$dec_nip.')');
                     $jumlah_data=count($data_sikep);
                     if($jumlah_data === 1){
 
                         $json_data=(array)$data_sikep[0];
-                        if($dec_nip === Auth::user()->nip || isJM()){
+                        if($dec_nip === Auth::user()->nip || isJM() || isSE()){
                             $file_foto=$request->foto_hakim;
                             $processImg=$this->uploadService->uploadImage($file_foto);
 
@@ -412,7 +412,7 @@ class artikelController extends Controller
             }else{
                 $nip=Crypt::decrypt($request->nip_baru);
             }
-            if(isYourArtikel($artikel_id) || isJM()){
+            if(isYourArtikel($artikel_id) || isJM() || isSE()){
                 if($artikel_id !== "null"){
                     $get_data=Penulis_artikel::where('id', $id_pegawai)
                                 ->first();
@@ -499,7 +499,7 @@ class artikelController extends Controller
         $save_keyword=false;
         try{
             $artikel_id=Crypt::decrypt($request->token_a);
-            if(isYourArtikel($artikel_id) || isJM()){
+            if(isYourArtikel($artikel_id) || isJM() || isSE()){
                 $step_id=[1,2,5];
                 $check_data=Artikel::where('id', $artikel_id)
                         ->whereIn('step', $step_id)
@@ -698,7 +698,7 @@ class artikelController extends Controller
             $explode=explode("::", $id_art_key);
             $id_artikel=$explode[0];
             $id_keyword=$explode[1];
-            if(isYourArtikel($id_artikel) || isJM()){
+            if(isYourArtikel($id_artikel) || isJM() || isSE()){
                 $step_id=[2, 5];
                 $get_keyword=Keyword::where('keyword_artikel.id_artikel', $id_artikel)
                 ->where('keyword_artikel.id', $id_keyword)
@@ -760,7 +760,7 @@ class artikelController extends Controller
         $update=false;
         try{
             $artikel_id=Crypt::decrypt($request->token);
-            if(isYourArtikel($artikel_id) || isJM()){
+            if(isYourArtikel($artikel_id) || isJM() || isSE()){
                 $validate_page=$this->checkValidateTabsRequest($request->token, 3);
                 if($validate_page->status){
                     $get_data=Artikel::where('artikel.id', $artikel_id)

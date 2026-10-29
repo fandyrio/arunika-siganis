@@ -23,7 +23,7 @@
        </div>
       </div>
       <div class='row mb-6'>
-               @if(isJM())
+               @if(isJM() || isSE())
                <div class='col-lg-10 mb-6'>
                    <div class="form-check">
                        <input class="form-check-input input_manual" name='input_manual' type="checkbox" value="{!! $is_manual === 1 ? 'true' : 'false' !!}" id="flexCheckDefault">
