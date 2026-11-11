@@ -106,7 +106,7 @@ class arunikaController extends Controller
         $data_new_artikel=[];
         $x=0;
         foreach($get_new_artikel as $list_new_artikel){
-            $explode_edoc=explode('/', $list_artikel_populer['edoc_pdf']);
+            $explode_edoc=explode('/', $list_new_artikel['edoc_pdf']);
             $jumlah_explode=count($explode_edoc);
             $edoc_real=$explode_edoc[$jumlah_explode-1];
             
